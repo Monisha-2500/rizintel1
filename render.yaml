@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: rizintel-backend
+    runtime: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: python backend/main.py
+    plan: free
+    envVars:
+      - key: RIZINTEL_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: RIZINTEL_ALLOWED_ORIGINS
+        value: "https://*.vercel.app,http://localhost:5173,http://127.0.0.1:5173"
+      # To enable persistent storage on Render Disks:
+      # - key: RIZINTEL_DB_PATH
+      #   value: /var/data/audit_trail.db
+      # disk:
+      #   name: rizintel-data
+      #   mountPath: /var/data
+      #   sizeGB: 1

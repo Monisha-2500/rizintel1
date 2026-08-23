@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "finding_id": "DEDUP-000017",
+  "cve_id": null,
+  "vulnerability_name": "Unclassified Vulnerability",
+  "vulnerability_type": "CROSS_SITE_SCRIPTING",
+  "severity": "MEDIUM",
+  "asset": {
+    "asset_id": "ASSET-LINUX-006",
+    "host": "linux-srv-006.example.com",
+    "endpoint": "/etc/passwd",
+    "port": 80,
+    "parameter": "cmd"
+  },
+  "scanner_consensus": {
+    "scanner_names": ["ZAP", "NUCLEI", "OPENVAS", "NMAP"],
+    "detected_by_count": 4,
+    "total_scanners": 4,
+    "score": 1.0
+  },
+  "finding_confidence": {
+    "score": 0.6659,
+    "classification": "NEEDS_REVIEW",
+    "signals": {
+      "scanner_consensus": 1.0,
+      "evidence_quality": 0.9373,
+      "cve_mapping": 0.2697,
+      "repeatability": 0.605
+    },
+    "review_required": true
+  },
+  "noise_assessment": {
+    "likely_noise": true,
+    "reason": "Response body mismatch suggests scanner misidentification"
+  },
+  "source_findings": ["ZAP-938742", "NUCLEI-950155", "OPENVAS-285652", "NMAP-532322"]
+}

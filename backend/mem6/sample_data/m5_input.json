@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "finding_id": "DEDUP-0001",
+  "cve_id": "CVE-2026-1234",
+  "vulnerability_name": "SQL Injection",
+  "description": "Unauthenticated SQL injection in login endpoint allows arbitrary query execution.",
+
+  "asset_context": {
+    "asset_id": "ASSET-WEB-001",
+    "asset_name": "payments-prod-api-01",
+    "environment": "PRODUCTION",
+    "criticality": "CRITICAL",
+    "internet_facing": true,
+    "data_sensitivity": "PCI"
+  },
+
+  "threat_intelligence": {
+    "cvss_score": 8.5,
+    "cvss_vector": "AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+    "epss_score": 0.72,
+    "epss_percentile": 0.91,
+    "kev_listed": true,
+    "exploit_available": true,
+    "exploit_sources": ["METASPLOIT"]
+  },
+
+  "scanner_consensus": {
+    "score": 1.0,
+    "scanner_names": ["ZAP", "NUCLEI", "OPENVAS"],
+    "detected_by_count": 3,
+    "total_scanners": 3
+  },
+
+  "finding_confidence": {
+    "score": 0.96,
+    "classification": "CONFIRMED"
+  },
+
+  "risk_assessment": {
+    "risk_score": 94,
+    "risk_level": "CRITICAL",
+    "score_breakdown": {
+      "cvss_contribution": 28,
+      "epss_contribution": 20,
+      "kev_contribution": 15,
+      "exploit_contribution": 10,
+      "asset_criticality_contribution": 12,
+      "exposure_contribution": 6,
+      "scanner_confidence_contribution": 3
+    },
+    "scoring_version": "M5-v1.0"
+  },
+
+  "metadata": {
+    "generated_by": "M5",
+    "timestamp": "2026-08-15T09:00:00Z"
+  }
+}

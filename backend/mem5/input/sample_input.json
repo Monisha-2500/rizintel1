@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "finding_id": "FIND-2026-0892",
+  "cve_id": "CVE-2021-44228",
+  "vulnerability_name": "Apache Log4j Remote Code Execution (Log4Shell)",
+  "vulnerability_type": "Remote Code Execution",
+  "scanner_sources": [
+    "Trivy",
+    "Snyk",
+    "Qualys"
+  ],
+  "scanner_consensus_score": 0.95,
+  "finding_confidence_score": 0.98,
+  "finding_confidence_classification": "CONFIRMED",
+  "threat_intelligence": {
+    "cvss_score": 10.0,
+    "epss_score": 0.975,
+    "epss_percentile": 0.998,
+    "kev_listed": true,
+    "exploit_available": true
+  },
+  "asset_context": {
+    "asset_id": "AST-PROD-PAY-001",
+    "asset_name": "payment-auth-service",
+    "environment": "PRODUCTION",
+    "asset_criticality": "CRITICAL",
+    "internet_exposure": true,
+    "data_sensitivity": "RESTRICTED"
+  }
+}

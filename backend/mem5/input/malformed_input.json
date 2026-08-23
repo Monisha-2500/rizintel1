@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "finding_id": "FIND-2026-9999-MALFORMED",
+  "cve_id": "CVE-2026-0001",
+  "vulnerability_name": "Test Malformed Vulnerability",
+  "vulnerability_type": "Buffer Overflow",
+  "scanner_sources": [
+    "TestScanner"
+  ],
+  "scanner_consensus_score": 2.5,
+  "finding_confidence_score": -0.5,
+  "finding_confidence_classification": "INVALID_CLASS",
+  "threat_intelligence": {
+    "cvss_score": 15.0,
+    "epss_score": 1.75,
+    "epss_percentile": -0.2,
+    "kev_listed": "Yes",
+    "exploit_available": "No"
+  },
+  "asset_context": {
+    "asset_id": "AST-INVALID-001",
+    "asset_name": "invalid-asset",
+    "environment": "UNKNOWN_ENV",
+    "asset_criticality": "EXTREME",
+    "internet_exposure": "true",
+    "data_sensitivity": "HIGH"
+  }
+}

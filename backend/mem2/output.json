@@ -1,0 +1,449 @@
+{
+  "schema_version": "1.0",
+  "findings": [
+    {
+      "schema_version": "1.0",
+      "finding_id": "DEDUP-C91D73AB",
+      "member_source": "M2",
+      "cve_id": "CVE-2024-1234",
+      "vulnerability_name": "SQL Injection",
+      "vulnerability_type": "SQL_INJECTION",
+      "severity": "HIGH",
+      "asset": {
+        "asset_id": "ASSET-WEB-001",
+        "host": "example.com",
+        "endpoint": "/login",
+        "port": 443,
+        "parameter": "username"
+      },
+      "deduplication": {
+        "duplicate_count": 3,
+        "merged_finding_ids": [
+          "ZAP-001",
+          "NUCLEI-001",
+          "OPENVAS-001"
+        ],
+        "match_method": "HYBRID",
+        "match_score": 1.0,
+        "match_features": {
+          "cve_match": 1.0,
+          "host_match": 1.0,
+          "endpoint_similarity": 1.0,
+          "parameter_match": 1.0,
+          "vulnerability_similarity": 1.0
+        }
+      },
+      "scanner_consensus": {
+        "scanner_names": [
+          "ZAP",
+          "NUCLEI",
+          "OPENVAS"
+        ],
+        "detected_by_count": 3,
+        "total_scanners": 3,
+        "score": 1.0
+      },
+      "source_findings": [
+        {
+          "finding_id": "ZAP-001",
+          "scanner": "ZAP",
+          "evidence": "Payload: ' OR '1'='1"
+        },
+        {
+          "finding_id": "NUCLEI-001",
+          "scanner": "NUCLEI",
+          "evidence": "SQL injection confirmed"
+        },
+        {
+          "finding_id": "OPENVAS-001",
+          "scanner": "OPENVAS",
+          "evidence": "SQL injection detected at /login"
+        }
+      ],
+      "first_seen": "2026-08-14T05:39:23Z",
+      "last_seen": "2026-08-14T05:41:00Z"
+    },
+    {
+      "schema_version": "1.0",
+      "finding_id": "DEDUP-817DB38A",
+      "member_source": "M2",
+      "cve_id": "CVE-2024-5678",
+      "vulnerability_name": "Cross-Site Scripting",
+      "vulnerability_type": "XSS",
+      "severity": "MEDIUM",
+      "asset": {
+        "asset_id": "ASSET-WEB-001",
+        "host": "example.com",
+        "endpoint": "/search",
+        "port": 443,
+        "parameter": "q"
+      },
+      "deduplication": {
+        "duplicate_count": 2,
+        "merged_finding_ids": [
+          "ZAP-002",
+          "NUCLEI-002"
+        ],
+        "match_method": "HYBRID",
+        "match_score": 0.67,
+        "match_features": {
+          "cve_match": 1.0,
+          "host_match": 1.0,
+          "endpoint_similarity": 1.0,
+          "parameter_match": 1.0,
+          "vulnerability_similarity": 1.0
+        }
+      },
+      "scanner_consensus": {
+        "scanner_names": [
+          "ZAP",
+          "NUCLEI"
+        ],
+        "detected_by_count": 2,
+        "total_scanners": 3,
+        "score": 0.67
+      },
+      "source_findings": [
+        {
+          "finding_id": "ZAP-002",
+          "scanner": "ZAP",
+          "evidence": "Payload: <script>alert(1)</script>"
+        },
+        {
+          "finding_id": "NUCLEI-002",
+          "scanner": "NUCLEI",
+          "evidence": "XSS confirmed"
+        }
+      ],
+      "first_seen": "2026-08-14T05:42:00Z",
+      "last_seen": "2026-08-14T05:43:00Z"
+    },
+    {
+      "schema_version": "1.0",
+      "finding_id": "DEDUP-01B502CC",
+      "member_source": "M2",
+      "cve_id": null,
+      "vulnerability_name": "Path Traversal",
+      "vulnerability_type": "PATH_TRAVERSAL",
+      "severity": "HIGH",
+      "asset": {
+        "asset_id": "ASSET-WEB-001",
+        "host": "example.com",
+        "endpoint": "/download",
+        "port": 443,
+        "parameter": "file"
+      },
+      "deduplication": {
+        "duplicate_count": 1,
+        "merged_finding_ids": [
+          "OPENVAS-002"
+        ],
+        "match_method": "HYBRID",
+        "match_score": 0.33,
+        "match_features": {
+          "cve_match": 0.0,
+          "host_match": 1.0,
+          "endpoint_similarity": 1.0,
+          "parameter_match": 1.0,
+          "vulnerability_similarity": 1.0
+        }
+      },
+      "scanner_consensus": {
+        "scanner_names": [
+          "OPENVAS"
+        ],
+        "detected_by_count": 1,
+        "total_scanners": 3,
+        "score": 0.33
+      },
+      "source_findings": [
+        {
+          "finding_id": "OPENVAS-002",
+          "scanner": "OPENVAS",
+          "evidence": "http://example.com/download?file=../../etc/passwd"
+        }
+      ],
+      "first_seen": "2026-08-14T05:44:00Z",
+      "last_seen": "2026-08-14T05:44:00Z"
+    },
+    {
+      "schema_version": "1.0",
+      "finding_id": "DEDUP-874546DD",
+      "member_source": "M2",
+      "cve_id": "CVE-2024-9012",
+      "vulnerability_name": "Remote Code Execution",
+      "vulnerability_type": "RCE",
+      "severity": "CRITICAL",
+      "asset": {
+        "asset_id": "ASSET-WEB-003",
+        "host": "app.example.com",
+        "endpoint": "/upload",
+        "port": 443,
+        "parameter": "file"
+      },
+      "deduplication": {
+        "duplicate_count": 3,
+        "merged_finding_ids": [
+          "ZAP-003",
+          "NUCLEI-003",
+          "OPENVAS-003"
+        ],
+        "match_method": "HYBRID",
+        "match_score": 1.0,
+        "match_features": {
+          "cve_match": 1.0,
+          "host_match": 1.0,
+          "endpoint_similarity": 1.0,
+          "parameter_match": 1.0,
+          "vulnerability_similarity": 1.0
+        }
+      },
+      "scanner_consensus": {
+        "scanner_names": [
+          "ZAP",
+          "NUCLEI",
+          "OPENVAS"
+        ],
+        "detected_by_count": 3,
+        "total_scanners": 3,
+        "score": 1.0
+      },
+      "source_findings": [
+        {
+          "finding_id": "ZAP-003",
+          "scanner": "ZAP",
+          "evidence": "Shell injection possible"
+        },
+        {
+          "finding_id": "NUCLEI-003",
+          "scanner": "NUCLEI",
+          "evidence": "RCE confirmed"
+        },
+        {
+          "finding_id": "OPENVAS-003",
+          "scanner": "OPENVAS",
+          "evidence": "Command injection confirmed"
+        }
+      ],
+      "first_seen": "2026-08-14T05:45:00Z",
+      "last_seen": "2026-08-14T05:47:00Z"
+    },
+    {
+      "schema_version": "1.0",
+      "finding_id": "DEDUP-EA916BBF",
+      "member_source": "M2",
+      "cve_id": null,
+      "vulnerability_name": "Missing Security Headers",
+      "vulnerability_type": "SECURITY_HEADER",
+      "severity": "LOW",
+      "asset": {
+        "asset_id": "ASSET-WEB-002",
+        "host": "api.example.com",
+        "endpoint": "/",
+        "port": 443,
+        "parameter": null
+      },
+      "deduplication": {
+        "duplicate_count": 2,
+        "merged_finding_ids": [
+          "ZAP-004",
+          "NUCLEI-004"
+        ],
+        "match_method": "HYBRID",
+        "match_score": 0.67,
+        "match_features": {
+          "cve_match": 0.0,
+          "host_match": 1.0,
+          "endpoint_similarity": 1.0,
+          "parameter_match": 1.0,
+          "vulnerability_similarity": 1.0
+        }
+      },
+      "scanner_consensus": {
+        "scanner_names": [
+          "ZAP",
+          "NUCLEI"
+        ],
+        "detected_by_count": 2,
+        "total_scanners": 3,
+        "score": 0.67
+      },
+      "source_findings": [
+        {
+          "finding_id": "ZAP-004",
+          "scanner": "ZAP",
+          "evidence": "No CSP header found"
+        },
+        {
+          "finding_id": "NUCLEI-004",
+          "scanner": "NUCLEI",
+          "evidence": "CSP header missing"
+        }
+      ],
+      "first_seen": "2026-08-14T05:48:00Z",
+      "last_seen": "2026-08-14T05:49:00Z"
+    },
+    {
+      "schema_version": "1.0",
+      "finding_id": "DEDUP-FD7E1A3E",
+      "member_source": "M2",
+      "cve_id": null,
+      "vulnerability_name": "Info Disclosure",
+      "vulnerability_type": "INFO_DISCLOSURE",
+      "severity": "LOW",
+      "asset": {
+        "asset_id": "ASSET-WEB-004",
+        "host": "test.example.com",
+        "endpoint": "/",
+        "port": 80,
+        "parameter": null
+      },
+      "deduplication": {
+        "duplicate_count": 1,
+        "merged_finding_ids": [
+          "OPENVAS-004"
+        ],
+        "match_method": "HYBRID",
+        "match_score": 0.33,
+        "match_features": {
+          "cve_match": 0.0,
+          "host_match": 1.0,
+          "endpoint_similarity": 1.0,
+          "parameter_match": 1.0,
+          "vulnerability_similarity": 1.0
+        }
+      },
+      "scanner_consensus": {
+        "scanner_names": [
+          "OPENVAS"
+        ],
+        "detected_by_count": 1,
+        "total_scanners": 3,
+        "score": 0.33
+      },
+      "source_findings": [
+        {
+          "finding_id": "OPENVAS-004",
+          "scanner": "OPENVAS",
+          "evidence": "Apache 2.4.49 revealed"
+        }
+      ],
+      "first_seen": "2026-08-14T05:50:00Z",
+      "last_seen": "2026-08-14T05:50:00Z"
+    },
+    {
+      "schema_version": "1.0",
+      "finding_id": "DEDUP-8FF037CF",
+      "member_source": "M2",
+      "cve_id": null,
+      "vulnerability_name": "CSRF Token Missing",
+      "vulnerability_type": "CSRF",
+      "severity": "MEDIUM",
+      "asset": {
+        "asset_id": "ASSET-WEB-001",
+        "host": "example.com",
+        "endpoint": "/profile",
+        "port": 443,
+        "parameter": "email"
+      },
+      "deduplication": {
+        "duplicate_count": 2,
+        "merged_finding_ids": [
+          "ZAP-005",
+          "NUCLEI-005"
+        ],
+        "match_method": "HYBRID",
+        "match_score": 0.67,
+        "match_features": {
+          "cve_match": 0.0,
+          "host_match": 1.0,
+          "endpoint_similarity": 1.0,
+          "parameter_match": 1.0,
+          "vulnerability_similarity": 1.0
+        }
+      },
+      "scanner_consensus": {
+        "scanner_names": [
+          "ZAP",
+          "NUCLEI"
+        ],
+        "detected_by_count": 2,
+        "total_scanners": 3,
+        "score": 0.67
+      },
+      "source_findings": [
+        {
+          "finding_id": "ZAP-005",
+          "scanner": "ZAP",
+          "evidence": "No CSRF token found"
+        },
+        {
+          "finding_id": "NUCLEI-005",
+          "scanner": "NUCLEI",
+          "evidence": "CSRF token missing"
+        }
+      ],
+      "first_seen": "2026-08-14T05:51:00Z",
+      "last_seen": "2026-08-14T05:52:00Z"
+    },
+    {
+      "schema_version": "1.0",
+      "finding_id": "DEDUP-6C3E4858",
+      "member_source": "M2",
+      "cve_id": "CVE-2024-9999",
+      "vulnerability_name": "SQL Injection",
+      "vulnerability_type": "SQL_INJECTION",
+      "severity": "CRITICAL",
+      "asset": {
+        "asset_id": "ASSET-WEB-005",
+        "host": "shop.example.com",
+        "endpoint": "/product",
+        "port": 443,
+        "parameter": "id"
+      },
+      "deduplication": {
+        "duplicate_count": 1,
+        "merged_finding_ids": [
+          "OPENVAS-005"
+        ],
+        "match_method": "HYBRID",
+        "match_score": 0.33,
+        "match_features": {
+          "cve_match": 1.0,
+          "host_match": 1.0,
+          "endpoint_similarity": 1.0,
+          "parameter_match": 1.0,
+          "vulnerability_similarity": 1.0
+        }
+      },
+      "scanner_consensus": {
+        "scanner_names": [
+          "OPENVAS"
+        ],
+        "detected_by_count": 1,
+        "total_scanners": 3,
+        "score": 0.33
+      },
+      "source_findings": [
+        {
+          "finding_id": "OPENVAS-005",
+          "scanner": "OPENVAS",
+          "evidence": "Time-based blind SQL injection"
+        }
+      ],
+      "first_seen": "2026-08-14T05:53:00Z",
+      "last_seen": "2026-08-14T05:53:00Z"
+    }
+  ],
+  "deduplication_metrics": {
+    "total_raw_findings": 15,
+    "unique_findings": 8,
+    "duplicates_removed": 7,
+    "duplicate_reduction_rate": 0.4666666666666667,
+    "scanner_breakdown": {
+      "ZAP": 5,
+      "NUCLEI": 5,
+      "OPENVAS": 5
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "asset_id": "AST-PROD-PAY-001",
+  "asset_name": "payment-auth-service",
+  "environment": "PRODUCTION",
+  "asset_criticality": "CRITICAL",
+  "internet_exposure": true,
+  "data_sensitivity": "RESTRICTED"
+}

@@ -1,0 +1,4786 @@
+[
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0001",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 50,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-15T22:00:00Z",
+    "discovered_at": "2026-08-13T00:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0002",
+    "cve_id": "CVE-2026-1004",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Authentication Bypass",
+    "risk_score": 92,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Authentication Bypass requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-18T20:00:00Z",
+    "discovered_at": "2026-08-15T22:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0003",
+    "cve_id": "CVE-2026-1001",
+    "asset_id": "ASSET-CUST-002",
+    "vulnerability_name": "SQL Injection",
+    "risk_score": 69,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "SQL Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-19T10:00:00Z",
+    "discovered_at": "2026-08-17T14:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CUST-002",
+      "asset_name": "customer-prod-web-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0004",
+    "cve_id": "CVE-2026-1007",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Sensitive Data Exposure",
+    "risk_score": 20,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Sensitive Data Exposure requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-20T07:00:00Z",
+    "discovered_at": "2026-08-18T06:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0005",
+    "cve_id": "CVE-2026-1001",
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "SQL Injection",
+    "risk_score": 44,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "SQL Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-19T22:00:00Z",
+    "discovered_at": "2026-08-18T16:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0006",
+    "cve_id": null,
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Outdated TLS Configuration",
+    "risk_score": 41,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Outdated TLS Configuration requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-19T00:00:00Z",
+    "discovered_at": "2026-08-18T14:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0007",
+    "cve_id": "CVE-2026-1005",
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "Path Traversal",
+    "risk_score": 86,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Path Traversal requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-19T11:00:00Z",
+    "discovered_at": "2026-08-19T03:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0008",
+    "cve_id": "CVE-2026-1005",
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Path Traversal",
+    "risk_score": 42,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Path Traversal requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-19T04:00:00Z",
+    "discovered_at": "2026-08-17T11:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0009",
+    "cve_id": "CVE-2026-1003",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Cross-Site Scripting",
+    "risk_score": 32,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Cross-Site Scripting requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-16T18:00:00Z",
+    "discovered_at": "2026-08-14T11:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0010",
+    "cve_id": "CVE-2026-1001",
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "SQL Injection",
+    "risk_score": 34,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "SQL Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-17T15:00:00Z",
+    "discovered_at": "2026-08-17T06:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0011",
+    "cve_id": "CVE-2026-1001",
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "SQL Injection",
+    "risk_score": 29,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "SQL Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-16T19:00:00Z",
+    "discovered_at": "2026-08-14T23:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0012",
+    "cve_id": "CVE-2026-1005",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Path Traversal",
+    "risk_score": 37,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Path Traversal requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-18T17:00:00Z",
+    "discovered_at": "2026-08-17T02:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0013",
+    "cve_id": "CVE-2026-1006",
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Command Injection",
+    "risk_score": 91,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Command Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "CRITICAL_ASSET",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-20T07:00:00Z",
+    "discovered_at": "2026-08-18T08:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0014",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 77,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-18T05:00:00Z",
+    "discovered_at": "2026-08-17T12:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0015",
+    "cve_id": null,
+    "asset_id": "ASSET-CUST-002",
+    "vulnerability_name": "Missing Security Header",
+    "risk_score": 84,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Missing Security Header requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-19T04:00:00Z",
+    "discovered_at": "2026-08-17T12:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CUST-002",
+      "asset_name": "customer-prod-web-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0016",
+    "cve_id": "CVE-2026-1006",
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Command Injection",
+    "risk_score": 30,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Command Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-15T11:00:00Z",
+    "discovered_at": "2026-08-12T12:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0017",
+    "cve_id": "CVE-2026-1001",
+    "asset_id": "ASSET-CUST-002",
+    "vulnerability_name": "SQL Injection",
+    "risk_score": 23,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "SQL Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-15T18:00:00Z",
+    "discovered_at": "2026-08-13T00:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CUST-002",
+      "asset_name": "customer-prod-web-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0018",
+    "cve_id": "CVE-2026-1007",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Sensitive Data Exposure",
+    "risk_score": 75,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Sensitive Data Exposure requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-17T13:00:00Z",
+    "discovered_at": "2026-08-16T12:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0019",
+    "cve_id": null,
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "Insecure Direct Object Reference",
+    "risk_score": 21,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Insecure Direct Object Reference requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-15T21:00:00Z",
+    "discovered_at": "2026-08-15T13:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0020",
+    "cve_id": null,
+    "asset_id": "ASSET-CUST-002",
+    "vulnerability_name": "Insecure Direct Object Reference",
+    "risk_score": 69,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Insecure Direct Object Reference requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-20T00:00:00Z",
+    "discovered_at": "2026-08-19T14:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CUST-002",
+      "asset_name": "customer-prod-web-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0021",
+    "cve_id": "CVE-2026-1006",
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Command Injection",
+    "risk_score": 26,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Command Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-16T06:00:00Z",
+    "discovered_at": "2026-08-14T01:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0022",
+    "cve_id": "CVE-2026-1001",
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "SQL Injection",
+    "risk_score": 48,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "SQL Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-16T21:00:00Z",
+    "discovered_at": "2026-08-14T14:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0023",
+    "cve_id": "CVE-2026-1007",
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "Sensitive Data Exposure",
+    "risk_score": 84,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Sensitive Data Exposure requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-15T15:00:00Z",
+    "discovered_at": "2026-08-13T01:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0024",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 23,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-16T00:00:00Z",
+    "discovered_at": "2026-08-14T16:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0025",
+    "cve_id": null,
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Outdated TLS Configuration",
+    "risk_score": 41,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Outdated TLS Configuration requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-16T18:00:00Z",
+    "discovered_at": "2026-08-14T15:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0026",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 73,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-15T21:00:00Z",
+    "discovered_at": "2026-08-15T11:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0027",
+    "cve_id": "CVE-2026-1004",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Authentication Bypass",
+    "risk_score": 51,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Authentication Bypass requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-19T03:00:00Z",
+    "discovered_at": "2026-08-17T12:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0028",
+    "cve_id": "CVE-2026-1003",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Cross-Site Scripting",
+    "risk_score": 29,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Cross-Site Scripting requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-16T04:00:00Z",
+    "discovered_at": "2026-08-14T17:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0029",
+    "cve_id": "CVE-2026-1005",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Path Traversal",
+    "risk_score": 77,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Path Traversal requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-15T15:00:00Z",
+    "discovered_at": "2026-08-15T03:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0030",
+    "cve_id": null,
+    "asset_id": "ASSET-CUST-002",
+    "vulnerability_name": "Outdated TLS Configuration",
+    "risk_score": 96,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Outdated TLS Configuration requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-17T17:00:00Z",
+    "discovered_at": "2026-08-14T18:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CUST-002",
+      "asset_name": "customer-prod-web-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0031",
+    "cve_id": "CVE-2026-1003",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Cross-Site Scripting",
+    "risk_score": 19,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Cross-Site Scripting requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-16T03:00:00Z",
+    "discovered_at": "2026-08-13T19:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0032",
+    "cve_id": "CVE-2026-1001",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "SQL Injection",
+    "risk_score": 41,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "SQL Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-17T06:00:00Z",
+    "discovered_at": "2026-08-14T06:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0033",
+    "cve_id": "CVE-2026-1003",
+    "asset_id": "ASSET-CUST-002",
+    "vulnerability_name": "Cross-Site Scripting",
+    "risk_score": 67,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Cross-Site Scripting requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-17T03:00:00Z",
+    "discovered_at": "2026-08-14T22:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CUST-002",
+      "asset_name": "customer-prod-web-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0034",
+    "cve_id": "CVE-2026-1001",
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "SQL Injection",
+    "risk_score": 43,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "SQL Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-17T05:00:00Z",
+    "discovered_at": "2026-08-15T13:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0035",
+    "cve_id": "CVE-2026-1005",
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Path Traversal",
+    "risk_score": 50,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Path Traversal requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-18T23:00:00Z",
+    "discovered_at": "2026-08-16T02:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0036",
+    "cve_id": "CVE-2026-1003",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Cross-Site Scripting",
+    "risk_score": 48,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Cross-Site Scripting requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-17T05:00:00Z",
+    "discovered_at": "2026-08-15T12:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0037",
+    "cve_id": "CVE-2026-1005",
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Path Traversal",
+    "risk_score": 70,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Path Traversal requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-18T05:00:00Z",
+    "discovered_at": "2026-08-17T03:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0038",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 53,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-17T02:00:00Z",
+    "discovered_at": "2026-08-14T22:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0039",
+    "cve_id": "CVE-2026-1003",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Cross-Site Scripting",
+    "risk_score": 87,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Cross-Site Scripting requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-15T09:00:00Z",
+    "discovered_at": "2026-08-13T18:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0040",
+    "cve_id": null,
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Outdated TLS Configuration",
+    "risk_score": 71,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Outdated TLS Configuration requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-17T21:00:00Z",
+    "discovered_at": "2026-08-16T23:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0041",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-CUST-002",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 54,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-15T12:00:00Z",
+    "discovered_at": "2026-08-15T06:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CUST-002",
+      "asset_name": "customer-prod-web-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0042",
+    "cve_id": null,
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "Missing Security Header",
+    "risk_score": 88,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Missing Security Header requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-18T00:00:00Z",
+    "discovered_at": "2026-08-15T20:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0043",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 43,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-18T03:00:00Z",
+    "discovered_at": "2026-08-15T15:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0044",
+    "cve_id": "CVE-2026-1006",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Command Injection",
+    "risk_score": 91,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Command Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-17T17:00:00Z",
+    "discovered_at": "2026-08-15T00:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0045",
+    "cve_id": null,
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Insecure Direct Object Reference",
+    "risk_score": 48,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Insecure Direct Object Reference requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-16T20:00:00Z",
+    "discovered_at": "2026-08-14T01:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0046",
+    "cve_id": "CVE-2026-1004",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Authentication Bypass",
+    "risk_score": 57,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Authentication Bypass requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-16T02:00:00Z",
+    "discovered_at": "2026-08-15T06:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0047",
+    "cve_id": null,
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Missing Security Header",
+    "risk_score": 84,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Missing Security Header requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-19T19:00:00Z",
+    "discovered_at": "2026-08-17T13:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0048",
+    "cve_id": null,
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Missing Security Header",
+    "risk_score": 15,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Missing Security Header requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-17T10:00:00Z",
+    "discovered_at": "2026-08-15T04:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0049",
+    "cve_id": null,
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "Outdated TLS Configuration",
+    "risk_score": 66,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Outdated TLS Configuration requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-20T06:00:00Z",
+    "discovered_at": "2026-08-19T13:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0050",
+    "cve_id": null,
+    "asset_id": "ASSET-CUST-002",
+    "vulnerability_name": "Missing Security Header",
+    "risk_score": 74,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Missing Security Header requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-17T02:00:00Z",
+    "discovered_at": "2026-08-15T22:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CUST-002",
+      "asset_name": "customer-prod-web-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0051",
+    "cve_id": null,
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Missing Security Header",
+    "risk_score": 25,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Missing Security Header requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-15T15:00:00Z",
+    "discovered_at": "2026-08-13T18:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0052",
+    "cve_id": "CVE-2026-1004",
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Authentication Bypass",
+    "risk_score": 94,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Authentication Bypass requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "CRITICAL_ASSET",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-18T22:00:00Z",
+    "discovered_at": "2026-08-18T07:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0053",
+    "cve_id": "CVE-2026-1007",
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "Sensitive Data Exposure",
+    "risk_score": 29,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Sensitive Data Exposure requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-17T00:00:00Z",
+    "discovered_at": "2026-08-16T10:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0054",
+    "cve_id": "CVE-2026-1004",
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Authentication Bypass",
+    "risk_score": 90,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Authentication Bypass requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "CRITICAL_ASSET"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-15T22:00:00Z",
+    "discovered_at": "2026-08-14T07:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0055",
+    "cve_id": null,
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Outdated TLS Configuration",
+    "risk_score": 79,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Outdated TLS Configuration requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-17T14:00:00Z",
+    "discovered_at": "2026-08-14T23:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0056",
+    "cve_id": "CVE-2026-1003",
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Cross-Site Scripting",
+    "risk_score": 37,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Cross-Site Scripting requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-16T19:00:00Z",
+    "discovered_at": "2026-08-13T22:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0057",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 72,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-18T15:00:00Z",
+    "discovered_at": "2026-08-16T14:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0058",
+    "cve_id": "CVE-2026-1004",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Authentication Bypass",
+    "risk_score": 48,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Authentication Bypass requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-19T02:00:00Z",
+    "discovered_at": "2026-08-17T14:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0059",
+    "cve_id": null,
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Missing Security Header",
+    "risk_score": 86,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Missing Security Header requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-18T19:00:00Z",
+    "discovered_at": "2026-08-16T04:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0060",
+    "cve_id": "CVE-2026-1004",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Authentication Bypass",
+    "risk_score": 99,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Authentication Bypass requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-18T04:00:00Z",
+    "discovered_at": "2026-08-16T07:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0061",
+    "cve_id": null,
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Insecure Direct Object Reference",
+    "risk_score": 54,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Insecure Direct Object Reference requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-16T09:00:00Z",
+    "discovered_at": "2026-08-14T16:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0062",
+    "cve_id": null,
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Insecure Direct Object Reference",
+    "risk_score": 90,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Insecure Direct Object Reference requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-16T21:00:00Z",
+    "discovered_at": "2026-08-16T08:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0063",
+    "cve_id": "CVE-2026-1006",
+    "asset_id": "ASSET-CUST-002",
+    "vulnerability_name": "Command Injection",
+    "risk_score": 50,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Command Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-16T22:00:00Z",
+    "discovered_at": "2026-08-16T05:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CUST-002",
+      "asset_name": "customer-prod-web-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0064",
+    "cve_id": null,
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Insecure Direct Object Reference",
+    "risk_score": 71,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Insecure Direct Object Reference requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-16T17:00:00Z",
+    "discovered_at": "2026-08-14T03:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0065",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 95,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-19T16:00:00Z",
+    "discovered_at": "2026-08-18T01:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0066",
+    "cve_id": "CVE-2026-1007",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Sensitive Data Exposure",
+    "risk_score": 94,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Sensitive Data Exposure requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-17T18:00:00Z",
+    "discovered_at": "2026-08-15T09:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0067",
+    "cve_id": "CVE-2026-1007",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Sensitive Data Exposure",
+    "risk_score": 22,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Sensitive Data Exposure requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-19T10:00:00Z",
+    "discovered_at": "2026-08-18T07:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0068",
+    "cve_id": "CVE-2026-1003",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Cross-Site Scripting",
+    "risk_score": 24,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Cross-Site Scripting requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-19T01:00:00Z",
+    "discovered_at": "2026-08-16T12:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0069",
+    "cve_id": null,
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Insecure Direct Object Reference",
+    "risk_score": 44,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Insecure Direct Object Reference requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-18T17:00:00Z",
+    "discovered_at": "2026-08-17T15:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0070",
+    "cve_id": "CVE-2026-1005",
+    "asset_id": "ASSET-CUST-002",
+    "vulnerability_name": "Path Traversal",
+    "risk_score": 24,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Path Traversal requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-18T13:00:00Z",
+    "discovered_at": "2026-08-17T00:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CUST-002",
+      "asset_name": "customer-prod-web-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0071",
+    "cve_id": "CVE-2026-1005",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Path Traversal",
+    "risk_score": 84,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Path Traversal requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-15T14:00:00Z",
+    "discovered_at": "2026-08-13T06:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0072",
+    "cve_id": "CVE-2026-1007",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Sensitive Data Exposure",
+    "risk_score": 17,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Sensitive Data Exposure requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-16T19:00:00Z",
+    "discovered_at": "2026-08-16T13:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0073",
+    "cve_id": "CVE-2026-1007",
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Sensitive Data Exposure",
+    "risk_score": 96,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Sensitive Data Exposure requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-17T21:00:00Z",
+    "discovered_at": "2026-08-16T00:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0074",
+    "cve_id": null,
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Outdated TLS Configuration",
+    "risk_score": 78,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Outdated TLS Configuration requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-19T17:00:00Z",
+    "discovered_at": "2026-08-16T18:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0075",
+    "cve_id": null,
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Missing Security Header",
+    "risk_score": 15,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Missing Security Header requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-17T13:00:00Z",
+    "discovered_at": "2026-08-17T06:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0076",
+    "cve_id": "CVE-2026-1004",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Authentication Bypass",
+    "risk_score": 85,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Authentication Bypass requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-20T01:00:00Z",
+    "discovered_at": "2026-08-17T10:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0077",
+    "cve_id": "CVE-2026-1003",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Cross-Site Scripting",
+    "risk_score": 85,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Cross-Site Scripting requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-16T13:00:00Z",
+    "discovered_at": "2026-08-15T22:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0078",
+    "cve_id": "CVE-2026-1005",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Path Traversal",
+    "risk_score": 49,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Path Traversal requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-17T21:00:00Z",
+    "discovered_at": "2026-08-16T13:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0079",
+    "cve_id": "CVE-2026-1006",
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "Command Injection",
+    "risk_score": 32,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Command Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-19T14:00:00Z",
+    "discovered_at": "2026-08-17T08:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0080",
+    "cve_id": "CVE-2026-1005",
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "Path Traversal",
+    "risk_score": 53,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Path Traversal requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-18T21:00:00Z",
+    "discovered_at": "2026-08-16T06:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0081",
+    "cve_id": "CVE-2026-1006",
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Command Injection",
+    "risk_score": 73,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Command Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-19T02:00:00Z",
+    "discovered_at": "2026-08-17T19:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0082",
+    "cve_id": null,
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "Insecure Direct Object Reference",
+    "risk_score": 63,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Insecure Direct Object Reference requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-19T18:00:00Z",
+    "discovered_at": "2026-08-18T22:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0083",
+    "cve_id": "CVE-2026-1007",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Sensitive Data Exposure",
+    "risk_score": 27,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Sensitive Data Exposure requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-18T04:00:00Z",
+    "discovered_at": "2026-08-15T17:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0084",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 48,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-18T20:00:00Z",
+    "discovered_at": "2026-08-18T09:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0085",
+    "cve_id": null,
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Insecure Direct Object Reference",
+    "risk_score": 19,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Insecure Direct Object Reference requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-19T00:00:00Z",
+    "discovered_at": "2026-08-17T11:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0086",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 36,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-15T14:00:00Z",
+    "discovered_at": "2026-08-13T20:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0087",
+    "cve_id": "CVE-2026-1006",
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Command Injection",
+    "risk_score": 87,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Command Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-16T07:00:00Z",
+    "discovered_at": "2026-08-15T20:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0088",
+    "cve_id": "CVE-2026-1004",
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Authentication Bypass",
+    "risk_score": 96,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Authentication Bypass requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-15T10:00:00Z",
+    "discovered_at": "2026-08-12T22:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0089",
+    "cve_id": "CVE-2026-1007",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Sensitive Data Exposure",
+    "risk_score": 96,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Sensitive Data Exposure requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-17T19:00:00Z",
+    "discovered_at": "2026-08-16T04:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0090",
+    "cve_id": "CVE-2026-1004",
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Authentication Bypass",
+    "risk_score": 88,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Authentication Bypass requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-19T02:00:00Z",
+    "discovered_at": "2026-08-17T12:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0091",
+    "cve_id": "CVE-2026-1001",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "SQL Injection",
+    "risk_score": 21,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "SQL Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-19T19:00:00Z",
+    "discovered_at": "2026-08-18T06:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0092",
+    "cve_id": "CVE-2026-1005",
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "Path Traversal",
+    "risk_score": 99,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Path Traversal requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-15T21:00:00Z",
+    "discovered_at": "2026-08-15T15:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0093",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 56,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-16T01:00:00Z",
+    "discovered_at": "2026-08-13T03:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0094",
+    "cve_id": null,
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Insecure Direct Object Reference",
+    "risk_score": 58,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Insecure Direct Object Reference requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-15T18:00:00Z",
+    "discovered_at": "2026-08-14T23:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0095",
+    "cve_id": null,
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Outdated TLS Configuration",
+    "risk_score": 65,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Outdated TLS Configuration requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-17T19:00:00Z",
+    "discovered_at": "2026-08-15T19:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0096",
+    "cve_id": null,
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Insecure Direct Object Reference",
+    "risk_score": 94,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Insecure Direct Object Reference requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "CRITICAL_ASSET"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-20T06:00:00Z",
+    "discovered_at": "2026-08-19T01:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0097",
+    "cve_id": null,
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Missing Security Header",
+    "risk_score": 32,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Missing Security Header requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-18T00:00:00Z",
+    "discovered_at": "2026-08-17T09:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0098",
+    "cve_id": null,
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "Outdated TLS Configuration",
+    "risk_score": 84,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Outdated TLS Configuration requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-16T04:00:00Z",
+    "discovered_at": "2026-08-13T22:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0099",
+    "cve_id": "CVE-2026-1001",
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "SQL Injection",
+    "risk_score": 62,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "SQL Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-16T15:00:00Z",
+    "discovered_at": "2026-08-14T16:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0100",
+    "cve_id": null,
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Outdated TLS Configuration",
+    "risk_score": 65,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Outdated TLS Configuration requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-19T21:00:00Z",
+    "discovered_at": "2026-08-17T10:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0101",
+    "cve_id": "CVE-2026-1004",
+    "asset_id": "ASSET-CUST-002",
+    "vulnerability_name": "Authentication Bypass",
+    "risk_score": 87,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Authentication Bypass requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-18T07:00:00Z",
+    "discovered_at": "2026-08-17T04:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CUST-002",
+      "asset_name": "customer-prod-web-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0102",
+    "cve_id": "CVE-2026-1003",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Cross-Site Scripting",
+    "risk_score": 15,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Cross-Site Scripting requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-16T01:00:00Z",
+    "discovered_at": "2026-08-13T03:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0103",
+    "cve_id": "CVE-2026-1001",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "SQL Injection",
+    "risk_score": 45,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "SQL Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-16T18:00:00Z",
+    "discovered_at": "2026-08-16T11:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0104",
+    "cve_id": null,
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Outdated TLS Configuration",
+    "risk_score": 90,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Outdated TLS Configuration requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-18T15:00:00Z",
+    "discovered_at": "2026-08-18T09:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0105",
+    "cve_id": null,
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Missing Security Header",
+    "risk_score": 28,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Missing Security Header requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-15T18:00:00Z",
+    "discovered_at": "2026-08-15T07:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0106",
+    "cve_id": "CVE-2026-1007",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Sensitive Data Exposure",
+    "risk_score": 56,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Sensitive Data Exposure requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-16T22:00:00Z",
+    "discovered_at": "2026-08-14T11:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0107",
+    "cve_id": "CVE-2026-1006",
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "Command Injection",
+    "risk_score": 42,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Command Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-17T13:00:00Z",
+    "discovered_at": "2026-08-15T17:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0108",
+    "cve_id": "CVE-2026-1005",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Path Traversal",
+    "risk_score": 34,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Path Traversal requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-15T20:00:00Z",
+    "discovered_at": "2026-08-15T09:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0109",
+    "cve_id": "CVE-2026-1007",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Sensitive Data Exposure",
+    "risk_score": 86,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Sensitive Data Exposure requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-17T06:00:00Z",
+    "discovered_at": "2026-08-14T23:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0110",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 79,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-16T13:00:00Z",
+    "discovered_at": "2026-08-15T23:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0111",
+    "cve_id": "CVE-2026-1005",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Path Traversal",
+    "risk_score": 43,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Path Traversal requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-19T11:00:00Z",
+    "discovered_at": "2026-08-16T11:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0112",
+    "cve_id": "CVE-2026-1005",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Path Traversal",
+    "risk_score": 59,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Path Traversal requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-18T09:00:00Z",
+    "discovered_at": "2026-08-16T05:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0113",
+    "cve_id": "CVE-2026-1006",
+    "asset_id": "ASSET-CUST-002",
+    "vulnerability_name": "Command Injection",
+    "risk_score": 63,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Command Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-17T08:00:00Z",
+    "discovered_at": "2026-08-15T16:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CUST-002",
+      "asset_name": "customer-prod-web-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0114",
+    "cve_id": "CVE-2026-1007",
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Sensitive Data Exposure",
+    "risk_score": 25,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Sensitive Data Exposure requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-17T23:00:00Z",
+    "discovered_at": "2026-08-15T14:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0115",
+    "cve_id": null,
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Missing Security Header",
+    "risk_score": 51,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Missing Security Header requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-18T04:00:00Z",
+    "discovered_at": "2026-08-16T12:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0116",
+    "cve_id": "CVE-2026-1004",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Authentication Bypass",
+    "risk_score": 42,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Authentication Bypass requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-16T22:00:00Z",
+    "discovered_at": "2026-08-15T04:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0117",
+    "cve_id": null,
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Missing Security Header",
+    "risk_score": 44,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Missing Security Header requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-19T16:00:00Z",
+    "discovered_at": "2026-08-17T18:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0118",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 88,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-18T18:00:00Z",
+    "discovered_at": "2026-08-16T12:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0119",
+    "cve_id": "CVE-2026-1003",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Cross-Site Scripting",
+    "risk_score": 73,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Cross-Site Scripting requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-15T20:00:00Z",
+    "discovered_at": "2026-08-13T12:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0120",
+    "cve_id": null,
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Missing Security Header",
+    "risk_score": 58,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Missing Security Header requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-15T18:00:00Z",
+    "discovered_at": "2026-08-13T00:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0121",
+    "cve_id": "CVE-2026-1003",
+    "asset_id": "ASSET-CUST-002",
+    "vulnerability_name": "Cross-Site Scripting",
+    "risk_score": 28,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Cross-Site Scripting requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-18T14:00:00Z",
+    "discovered_at": "2026-08-17T18:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CUST-002",
+      "asset_name": "customer-prod-web-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0122",
+    "cve_id": "CVE-2026-1007",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Sensitive Data Exposure",
+    "risk_score": 72,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Sensitive Data Exposure requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-18T19:00:00Z",
+    "discovered_at": "2026-08-17T01:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0123",
+    "cve_id": "CVE-2026-1005",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Path Traversal",
+    "risk_score": 90,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Path Traversal requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-17T00:00:00Z",
+    "discovered_at": "2026-08-14T12:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0124",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 91,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-18T07:00:00Z",
+    "discovered_at": "2026-08-18T01:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0125",
+    "cve_id": "CVE-2026-1007",
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Sensitive Data Exposure",
+    "risk_score": 79,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Sensitive Data Exposure requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-15T22:00:00Z",
+    "discovered_at": "2026-08-14T02:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0126",
+    "cve_id": null,
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Insecure Direct Object Reference",
+    "risk_score": 82,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Insecure Direct Object Reference requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-17T08:00:00Z",
+    "discovered_at": "2026-08-15T19:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0127",
+    "cve_id": null,
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Outdated TLS Configuration",
+    "risk_score": 57,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Outdated TLS Configuration requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-16T21:00:00Z",
+    "discovered_at": "2026-08-15T12:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0128",
+    "cve_id": null,
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Outdated TLS Configuration",
+    "risk_score": 98,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Outdated TLS Configuration requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-18T13:00:00Z",
+    "discovered_at": "2026-08-18T02:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0129",
+    "cve_id": "CVE-2026-1006",
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Command Injection",
+    "risk_score": 97,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Command Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "CRITICAL_ASSET"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-15T11:00:00Z",
+    "discovered_at": "2026-08-13T12:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0130",
+    "cve_id": null,
+    "asset_id": "ASSET-CUST-002",
+    "vulnerability_name": "Insecure Direct Object Reference",
+    "risk_score": 43,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Insecure Direct Object Reference requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-16T22:00:00Z",
+    "discovered_at": "2026-08-16T09:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CUST-002",
+      "asset_name": "customer-prod-web-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0131",
+    "cve_id": "CVE-2026-1003",
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "Cross-Site Scripting",
+    "risk_score": 94,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Cross-Site Scripting requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-17T17:00:00Z",
+    "discovered_at": "2026-08-17T11:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0132",
+    "cve_id": null,
+    "asset_id": "ASSET-CUST-002",
+    "vulnerability_name": "Insecure Direct Object Reference",
+    "risk_score": 83,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Insecure Direct Object Reference requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-19T13:00:00Z",
+    "discovered_at": "2026-08-17T00:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CUST-002",
+      "asset_name": "customer-prod-web-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0133",
+    "cve_id": null,
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Missing Security Header",
+    "risk_score": 82,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Missing Security Header requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-16T10:00:00Z",
+    "discovered_at": "2026-08-15T16:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0134",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 81,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-19T10:00:00Z",
+    "discovered_at": "2026-08-18T13:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0135",
+    "cve_id": "CVE-2026-1004",
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Authentication Bypass",
+    "risk_score": 59,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Authentication Bypass requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-17T11:00:00Z",
+    "discovered_at": "2026-08-14T18:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0136",
+    "cve_id": "CVE-2026-1001",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "SQL Injection",
+    "risk_score": 27,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "SQL Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-19T14:00:00Z",
+    "discovered_at": "2026-08-18T19:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0137",
+    "cve_id": "CVE-2026-1003",
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "Cross-Site Scripting",
+    "risk_score": 75,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Cross-Site Scripting requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-15T19:00:00Z",
+    "discovered_at": "2026-08-15T16:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0138",
+    "cve_id": "CVE-2026-1007",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Sensitive Data Exposure",
+    "risk_score": 69,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Sensitive Data Exposure requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-16T23:00:00Z",
+    "discovered_at": "2026-08-16T07:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0139",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 78,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "CRITICAL_ASSET",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-18T02:00:00Z",
+    "discovered_at": "2026-08-16T19:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0140",
+    "cve_id": "CVE-2026-1004",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Authentication Bypass",
+    "risk_score": 68,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Authentication Bypass requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-18T04:00:00Z",
+    "discovered_at": "2026-08-16T05:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0141",
+    "cve_id": null,
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "Insecure Direct Object Reference",
+    "risk_score": 96,
+    "risk_level": "CRITICAL",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Insecure Direct Object Reference requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected critical-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "INTERNET_FACING",
+        "CRITICAL_ASSET",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Patch immediately. Remove public exposure or apply an interim mitigation.",
+      "priority": "IMMEDIATE",
+      "references": []
+    },
+    "generated_at": "2026-08-19T08:00:00Z",
+    "discovered_at": "2026-08-19T05:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-PAY-001",
+      "asset_name": "payments-prod-api-01",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0142",
+    "cve_id": "CVE-2026-1002",
+    "asset_id": "ASSET-CRM-005",
+    "vulnerability_name": "Remote Code Execution",
+    "risk_score": 57,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Remote Code Execution requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING",
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-17T04:00:00Z",
+    "discovered_at": "2026-08-16T05:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CRM-005",
+      "asset_name": "crm-prod-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0143",
+    "cve_id": "CVE-2026-1003",
+    "asset_id": "ASSET-CUST-002",
+    "vulnerability_name": "Cross-Site Scripting",
+    "risk_score": 23,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "HIGH_CONFIDENCE",
+    "explanation": {
+      "technical": "Cross-Site Scripting requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected high-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "INTERNET_FACING"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-15T13:00:00Z",
+    "discovered_at": "2026-08-13T23:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-CUST-002",
+      "asset_name": "customer-prod-web-01",
+      "criticality": "HIGH",
+      "internet_facing": true,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0144",
+    "cve_id": null,
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Outdated TLS Configuration",
+    "risk_score": 80,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Outdated TLS Configuration requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE",
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-17T21:00:00Z",
+    "discovered_at": "2026-08-16T12:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0145",
+    "cve_id": "CVE-2026-1001",
+    "asset_id": "ASSET-LOG-006",
+    "vulnerability_name": "SQL Injection",
+    "risk_score": 57,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "SQL Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-17T16:00:00Z",
+    "discovered_at": "2026-08-15T12:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-LOG-006",
+      "asset_name": "logging-prod-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0146",
+    "cve_id": "CVE-2026-1003",
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Cross-Site Scripting",
+    "risk_score": 78,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Cross-Site Scripting requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-16T19:00:00Z",
+    "discovered_at": "2026-08-16T08:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0147",
+    "cve_id": "CVE-2026-1006",
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Command Injection",
+    "risk_score": 56,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Command Injection requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_EPSS",
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-16T22:00:00Z",
+    "discovered_at": "2026-08-15T06:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0148",
+    "cve_id": null,
+    "asset_id": "ASSET-DEV-004",
+    "vulnerability_name": "Outdated TLS Configuration",
+    "risk_score": 20,
+    "risk_level": "LOW",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Outdated TLS Configuration requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected low-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "LOWER_CONTEXTUAL_RISK"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Address during normal maintenance within 30 days.",
+      "priority": "LOW",
+      "references": []
+    },
+    "generated_at": "2026-08-18T15:00:00Z",
+    "discovered_at": "2026-08-16T07:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-DEV-004",
+      "asset_name": "developer-test-01",
+      "criticality": "LOW",
+      "internet_facing": false,
+      "data_sensitivity": "INTERNAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0149",
+    "cve_id": null,
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Missing Security Header",
+    "risk_score": 80,
+    "risk_level": "HIGH",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Missing Security Header requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "HIGH_RISK_SCORE"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Remediate within 24 hours and apply compensating controls if required.",
+      "priority": "HIGH",
+      "references": []
+    },
+    "generated_at": "2026-08-15T12:00:00Z",
+    "discovered_at": "2026-08-14T17:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0150",
+    "cve_id": null,
+    "asset_id": "ASSET-INT-003",
+    "vulnerability_name": "Outdated TLS Configuration",
+    "risk_score": 64,
+    "risk_level": "MEDIUM",
+    "finding_confidence_classification": "CONFIRMED",
+    "explanation": {
+      "technical": "Outdated TLS Configuration requires remediation based on its calculated organizational risk and asset context.",
+      "management": "The affected medium-criticality asset requires action according to the prioritized risk level.",
+      "top_risk_drivers": [
+        "KEV_LISTED"
+      ]
+    },
+    "remediation": {
+      "recommended_action": "Schedule remediation within 7 days and monitor the affected asset.",
+      "priority": "MEDIUM",
+      "references": []
+    },
+    "generated_at": "2026-08-16T04:00:00Z",
+    "discovered_at": "2026-08-13T18:00:00Z",
+    "asset_context": {
+      "asset_id": "ASSET-INT-003",
+      "asset_name": "internal-hr-app-01",
+      "criticality": "MEDIUM",
+      "internet_facing": false,
+      "data_sensitivity": "CONFIDENTIAL"
+    }
+  }
+]

@@ -1,0 +1,85 @@
+{
+  "schema_version": "1.0",
+  "scoring_version": "1.0",
+  "finding_id": "FIND-2026-0892",
+  "cve_id": "CVE-2021-44228",
+  "vulnerability_name": "Apache Log4j Remote Code Execution (Log4Shell)",
+  "scanner_consensus": {
+    "scanner_sources": [
+      "Trivy",
+      "Snyk",
+      "Qualys"
+    ],
+    "scanner_consensus_score": 0.95
+  },
+  "finding_confidence": {
+    "finding_confidence_score": 0.98,
+    "finding_confidence_classification": "CONFIRMED"
+  },
+  "threat_intelligence": {
+    "cvss_score": 10.0,
+    "epss_score": 0.975,
+    "epss_percentile": 0.998,
+    "kev_listed": true,
+    "exploit_available": true
+  },
+  "asset_context": {
+    "asset_id": "AST-PROD-PAY-001",
+    "asset_name": "payment-auth-service",
+    "environment": "PRODUCTION",
+    "asset_criticality": "CRITICAL",
+    "internet_exposure": true,
+    "data_sensitivity": "RESTRICTED"
+  },
+  "risk_assessment": {
+    "risk_score": 100.0,
+    "risk_level": "CRITICAL",
+    "score_breakdown": {
+      "cvss": {
+        "input": 10.0,
+        "points": 25
+      },
+      "epss": {
+        "input": 0.975,
+        "points": 20
+      },
+      "kev": {
+        "input": true,
+        "points": 15
+      },
+      "exploit_available": {
+        "input": true,
+        "points": 10
+      },
+      "asset_criticality": {
+        "input": "CRITICAL",
+        "points": 10
+      },
+      "internet_exposure": {
+        "input": true,
+        "points": 10
+      },
+      "finding_confidence": {
+        "input": 0.98,
+        "points": 10
+      }
+    },
+    "risk_drivers": [
+      "HIGH_CVSS",
+      "HIGH_EPSS",
+      "KEV_LISTED",
+      "EXPLOIT_AVAILABLE",
+      "CRITICAL_ASSET",
+      "INTERNET_EXPOSED",
+      "HIGH_CONFIDENCE"
+    ],
+    "scoring_version": "1.0"
+  },
+  "metadata": {
+    "engine_name": "M5_Risk_Engine",
+    "engine_version": "1.0.0",
+    "assessed_at": "2026-08-20T14:00:00Z",
+    "status": "SUCCESS",
+    "notes": "Evaluated by Module M5 Deterministic Rule-Based Scoring Engine."
+  }
+}

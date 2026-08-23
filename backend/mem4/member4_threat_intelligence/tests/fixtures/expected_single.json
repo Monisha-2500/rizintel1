@@ -1,0 +1,26 @@
+{
+  "_comment": "Expected output for DEDUP-000001 / CVE-2018-7600 (Drupalgeddon2 RCE).",
+  "_note": "threat_intelligence fields contain null because Phase 1 does NOT call external APIs. The enrichment service is not yet implemented. This fixture validates only the structural shape and field names of ThreatEnrichedFinding.",
+
+  "schema_version": "1.0",
+  "finding_id": "DEDUP-000001",
+  "cve_id": "CVE-2018-7600",
+  "asset_id": "ASSET-DB-083",
+  "vulnerability_name": "Drupalgeddon2 RCE",
+  "vulnerability_type": "REMOTE_CODE_EXECUTION",
+  "scanner_sources": ["ZAP", "NMAP"],
+  "scanner_consensus_score": 0.5,
+  "finding_confidence_score": 0.6967,
+  "finding_confidence_classification": "NEEDS_REVIEW",
+  "threat_intelligence": {
+    "cvss_score": null,
+    "cvss_vector": null,
+    "epss_score": null,
+    "epss_percentile": null,
+    "kev_listed": null,
+    "kev_date_added": null,
+    "exploit_available": null,
+    "exploit_sources": [],
+    "last_updated": null
+  }
+}

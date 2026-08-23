@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "finding_id": "FIND-2026-1044",
+  "cve_id": null,
+  "vulnerability_name": "Hardcoded Cloud Provider Secret Key",
+  "vulnerability_type": "CWE-798: Use of Hard-coded Credentials",
+  "scanner_sources": [
+    "Semgrep",
+    "Gitleaks"
+  ],
+  "scanner_consensus_score": 0.90,
+  "finding_confidence_score": 0.92,
+  "finding_confidence_classification": "HIGH",
+  "threat_intelligence": {
+    "cvss_score": 8.5,
+    "epss_score": 0.05,
+    "epss_percentile": 0.35,
+    "kev_listed": false,
+    "exploit_available": true
+  },
+  "asset_context": {
+    "asset_id": "AST-PROD-AUTH-002",
+    "asset_name": "identity-provider-backend",
+    "environment": "PRODUCTION",
+    "asset_criticality": "CRITICAL",
+    "internet_exposure": true,
+    "data_sensitivity": "RESTRICTED"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "finding_id": "DEDUP-0001",
+  "cve_id": "CVE-2026-1234",
+  "asset_id": "ASSET-WEB-001",
+  "vulnerability_name": "SQL Injection",
+  "risk_score": 94.0,
+  "risk_level": "CRITICAL",
+  "finding_confidence_classification": "CONFIRMED",
+  "explanation": {
+    "technical": "SQL Injection (CVE-2026-1234) on asset payments-prod-api-01 was scored 94.0/100 (CRITICAL) by the risk engine (M5). Evidence: CVSS 8.5 (AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H), EPSS 0.72 (91th percentile), CISA KEV listed = True, exploit available = True (sources: METASPLOIT). Asset context: criticality = CRITICAL, environment = PRODUCTION, internet-facing = True, data sensitivity = PCI. Detected by 3 of 3 scanners (consensus score 1.0). Finding confidence: 0.96 (CONFIRMED). Recommended next step for the analyst: validate the finding against the live asset, apply the vendor fix or compensating control below, and confirm remediation before closing.",
+    "management": "A critical severity security issue (SQL Injection) was found on payments-prod-api-01, which is CRITICAL-criticality and internet-facing. This system handles PCI-classified data. This finding requires immediate attention, based on the risk score assigned by the risk engine. This vulnerability is confirmed to be actively exploited in the wild (CISA KEV).",
+    "top_risk_drivers": [
+      "HIGH_CVSS",
+      "HIGH_EPSS",
+      "KEV_LISTED",
+      "CRITICAL_ASSET"
+    ]
+  },
+  "remediation": {
+    "recommended_action": "Apply the vendor patch or code fix addressing CVE-2026-1234. As a general security best practice (not a guarantee specific to this finding), consider an interim WAF or network-layer control while the fix is tested. General best practice: confirm no signs of prior exploitation via log review, and re-scan after remediation to verify closure.",
+    "priority": "IMMEDIATE",
+    "references": [
+      "https://nvd.nist.gov/vuln/detail/CVE-2026-1234"
+    ]
+  },
+  "generated_at": "2026-08-15T10:58:36Z"
+}

@@ -1,0 +1,139 @@
+{
+  "schema_version": "1.0",
+  "finding_id": "DEDUP-0001",
+  "cve_id": "CVE-2026-1234",
+  "asset_id": "ASSET-WEB-001",
+  "vulnerability_name": "SQL Injection",
+  "vulnerability_type": "SQL_INJECTION",
+  "risk_score": 94,
+  "risk_level": "CRITICAL",
+  "confidence_classification": "CONFIRMED",
+  "asset_criticality": "CRITICAL",
+  "internet_exposure": true,
+  "recommended_action": "Patch immediately. Remove public exposure or apply a WAF rule as an interim mitigation.",
+  "workflow": {
+    "ticket_id": "VULN-0001",
+    "status": "OPEN",
+    "assigned_to": null,
+    "sla_hours": 4,
+    "sla_due_at": "2026-08-20T13:00:00Z",
+    "sla_status": "ON_TRACK",
+    "escalation_level": 0
+  },
+  "discovered_at": "2026-08-20T05:39:23Z",
+  "updated_at": "2026-08-20T09:05:00Z",
+  "detail": {
+    "scanner_consensus": {
+      "score": 1.0,
+      "scanner_names": [
+        "ZAP",
+        "NUCLEI",
+        "OPENVAS"
+      ],
+      "detected_by_count": 3,
+      "total_scanners": 3
+    },
+    "finding_confidence": {
+      "score": 0.96,
+      "classification": "CONFIRMED"
+    },
+    "threat_intelligence": {
+      "cvss_score": 9.1,
+      "epss_score": 0.91,
+      "kev_listed": true,
+      "exploit_available": true
+    },
+    "asset_context": {
+      "asset_name": "payments-prod-api-01",
+      "environment": "PRODUCTION",
+      "criticality": "CRITICAL",
+      "internet_facing": true,
+      "data_sensitivity": "PCI"
+    },
+    "risk_assessment": {
+      "score_breakdown": {
+        "cvss_contribution": 28,
+        "epss_contribution": 20,
+        "kev_contribution": 15,
+        "exploit_contribution": 10,
+        "asset_criticality_contribution": 12,
+        "exposure_contribution": 6,
+        "scanner_confidence_contribution": 3
+      },
+      "scoring_version": "M5-v1.0"
+    },
+    "explanation": {
+      "technical": "Known exploitation, high EPSS, internet exposure and scanner corroboration make this finding urgent.",
+      "management": "A critical internet-facing payment service is exposed to a vulnerability with strong exploitation evidence.",
+      "top_risk_drivers": [
+        "KEV_LISTED",
+        "HIGH_EPSS",
+        "CRITICAL_ASSET",
+        "INTERNET_FACING"
+      ]
+    },
+    "provenance": {
+      "source_findings": [
+        {
+          "finding_id": "ZAP-001",
+          "scanner": "ZAP"
+        },
+        {
+          "finding_id": "NUCLEI-044",
+          "scanner": "NUCLEI"
+        },
+        {
+          "finding_id": "OPENVAS-102",
+          "scanner": "OPENVAS"
+        }
+      ],
+      "journey": [
+        {
+          "stage": "DETECTED",
+          "status": "DONE"
+        },
+        {
+          "stage": "CORRELATED",
+          "status": "DONE"
+        },
+        {
+          "stage": "VALIDATED",
+          "status": "DONE"
+        },
+        {
+          "stage": "ENRICHED",
+          "status": "DONE"
+        },
+        {
+          "stage": "PRIORITIZED",
+          "status": "DONE"
+        },
+        {
+          "stage": "EXPLAINED",
+          "status": "DONE"
+        },
+        {
+          "stage": "ASSIGNED",
+          "status": "PENDING"
+        }
+      ]
+    },
+    "risk_delta": {
+      "previous_score": 77,
+      "current_score": 94,
+      "delta": 17,
+      "changed_factors": [
+        {
+          "factor": "KEV_LISTED",
+          "from": false,
+          "to": true
+        },
+        {
+          "factor": "EPSS_SCORE",
+          "from": 0.61,
+          "to": 0.91
+        }
+      ]
+    }
+  }
+}

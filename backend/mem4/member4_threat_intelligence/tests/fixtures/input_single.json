@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0",
+  "finding_id": "DEDUP-000001",
+  "cve_id": "CVE-2018-7600",
+  "vulnerability_name": "Drupalgeddon2 RCE",
+  "vulnerability_type": "REMOTE_CODE_EXECUTION",
+  "severity": "CRITICAL",
+  "asset": {
+    "asset_id": "ASSET-DB-083",
+    "host": "db-083.example.net",
+    "endpoint": "/backup",
+    "port": 5432,
+    "parameter": "limit"
+  },
+  "scanner_consensus": {
+    "scanner_names": ["ZAP", "NMAP"],
+    "detected_by_count": 2,
+    "total_scanners": 4,
+    "score": 0.5
+  },
+  "finding_confidence": {
+    "score": 0.6967,
+    "classification": "NEEDS_REVIEW",
+    "signals": {
+      "scanner_consensus": 0.4765,
+      "evidence_quality": 0.661,
+      "cve_mapping": 0.9342,
+      "repeatability": 0.6314
+    },
+    "review_required": true
+  },
+  "noise_assessment": {
+    "likely_noise": false,
+    "reason": "Reproducible across multiple scan sessions"
+  },
+  "source_findings": ["ZAP-195325", "NMAP-892495"]
+}
