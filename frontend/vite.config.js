@@ -13,9 +13,28 @@ export default defineConfig({
       }
     }
   },
+  build: {
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('recharts')) {
+              return 'vendor-recharts';
+            }
+            if (id.includes('reactflow')) {
+              return 'vendor-reactflow';
+            }
+            return 'vendor-deps';
+          }
+        }
+      }
+    }
+  },
   test: {
     environment: 'jsdom',
     globals: true,
     setupFiles: ['./tests/setup.js'],
+    exclude: ['**/node_modules/**', '**/e2e/**'],
   }
 })

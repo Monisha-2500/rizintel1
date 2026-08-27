@@ -5,6 +5,7 @@ import {
   Network, ArrowRight, Shield, Flame, Globe
 } from 'lucide-react';
 import { buildDecisionProvenanceChain } from '../../utils/provenanceGraph';
+import '../../pages/RizTracePage.css';
 
 const STAGE_ICONS = {
   1: Search,      // Scanner Ingestion

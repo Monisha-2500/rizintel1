@@ -37,6 +37,7 @@ from adapters.m1_adapter import M1NormalizedFindingAdapter
 from adapters.m5_adapter import M5RiskEngineAdapter
 from adapters.m7_adapter import M7ActionableFindingAdapter
 from models import FindingSchema
+from services.asset_resolver import AssetResolver, UNMAPPED_ASSET_ID
 
 logger = logging.getLogger("rizintel.pipeline")
 
@@ -73,11 +74,12 @@ def _isolated_module_context(module_dir: Path):
                     break
 
 
-# Default Asset Catalog
+# Default Enterprise & Lab Asset Catalog
 DEFAULT_ASSET_CATALOG: Dict[str, Dict[str, Any]] = {
     "ASSET-WEB-001": {
         "asset_id": "ASSET-WEB-001",
         "asset_name": "payments-prod-api-01",
+        "hosts": ["payments.internal.corp", "https://payments.internal.corp", "example.com"],
         "environment": "PRODUCTION",
         "criticality": "CRITICAL",
         "asset_criticality": "CRITICAL",
@@ -88,6 +90,7 @@ DEFAULT_ASSET_CATALOG: Dict[str, Dict[str, Any]] = {
     "ASSET-PAY-001": {
         "asset_id": "ASSET-PAY-001",
         "asset_name": "payment-gateway-core",
+        "hosts": ["pay.internal.corp", "payment-gateway.internal.corp"],
         "environment": "PRODUCTION",
         "criticality": "CRITICAL",
         "asset_criticality": "CRITICAL",
@@ -98,6 +101,7 @@ DEFAULT_ASSET_CATALOG: Dict[str, Dict[str, Any]] = {
     "ASSET-AUTH-002": {
         "asset_id": "ASSET-AUTH-002",
         "asset_name": "auth-service-prod",
+        "hosts": ["auth.internal.corp", "auth-service.internal.corp"],
         "environment": "PRODUCTION",
         "criticality": "HIGH",
         "asset_criticality": "HIGH",
@@ -108,7 +112,41 @@ DEFAULT_ASSET_CATALOG: Dict[str, Dict[str, Any]] = {
     "ASSET-DEV-003": {
         "asset_id": "ASSET-DEV-003",
         "asset_name": "internal-tool-staging",
+        "hosts": ["staging.internal.corp", "internal-tool.staging.corp"],
         "environment": "STAGING",
+        "criticality": "LOW",
+        "asset_criticality": "LOW",
+        "internet_facing": False,
+        "internet_exposure": False,
+        "data_sensitivity": "INTERNAL",
+    },
+    "ASSET-LAB-WEBGOAT": {
+        "asset_id": "ASSET-LAB-WEBGOAT",
+        "asset_name": "WebGoat Vulnerable Lab",
+        "hosts": ["127.0.0.1:8001", "localhost:8001", "http://127.0.0.1:8001", "http://localhost:8001"],
+        "environment": "DEVELOPMENT",
+        "criticality": "LOW",
+        "asset_criticality": "LOW",
+        "internet_facing": False,
+        "internet_exposure": False,
+        "data_sensitivity": "INTERNAL",
+    },
+    "ASSET-LAB-JUICESHOP": {
+        "asset_id": "ASSET-LAB-JUICESHOP",
+        "asset_name": "OWASP Juice Shop Lab",
+        "hosts": ["localhost:3000", "127.0.0.1:3000", "http://localhost:3000", "http://127.0.0.1:3000"],
+        "environment": "DEVELOPMENT",
+        "criticality": "LOW",
+        "asset_criticality": "LOW",
+        "internet_facing": False,
+        "internet_exposure": False,
+        "data_sensitivity": "INTERNAL",
+    },
+    "ASSET-LAB-DVWA": {
+        "asset_id": "ASSET-LAB-DVWA",
+        "asset_name": "DVWA Vulnerable Lab",
+        "hosts": ["127.0.0.1:80", "127.0.0.1", "http://127.0.0.1"],
+        "environment": "DEVELOPMENT",
         "criticality": "LOW",
         "asset_criticality": "LOW",
         "internet_facing": False,
@@ -136,7 +174,12 @@ class UnifiedPipelineRunner:
     # -------------------------------------------------------------------------
     # Stage 1: M1 Normalization & Adaptation
     # -------------------------------------------------------------------------
-    def run_m1(self, raw_sources: Dict[str, str], default_asset_id: str = "ASSET-WEB-001") -> List[Dict[str, Any]]:
+    def run_m1(
+        self,
+        raw_sources: Dict[str, str],
+        asset_catalog: Optional[Dict[str, Dict[str, Any]]] = None,
+        default_asset_id: Optional[str] = None
+    ) -> List[Dict[str, Any]]:
         """
         Runs M1 scanner parsers and adapts to Schema v1.0 Section 3 (NormalizedFinding[]).
         """
@@ -154,8 +197,14 @@ class UnifiedPipelineRunner:
                     except Exception as e:
                         logger.warning(f"M1 parser failed for scanner {scanner_name}: {e}")
 
-        # Adapt M1 StandardFinding -> Schema v1.0 Section 3
-        return M1NormalizedFindingAdapter.adapt_batch(raw_findings, default_asset_id=default_asset_id)
+        catalog = asset_catalog or DEFAULT_ASSET_CATALOG
+        resolver = AssetResolver(catalog) if catalog else None
+        # Adapt M1 StandardFinding -> Schema v1.0 Section 3 resolving against catalog
+        return M1NormalizedFindingAdapter.adapt_batch(
+            raw_findings,
+            default_asset_id=default_asset_id,
+            asset_resolver=resolver
+        )
 
     # -------------------------------------------------------------------------
     # Stage 2: M2 Deduplication & Scanner Consensus
@@ -236,6 +285,9 @@ class UnifiedPipelineRunner:
                 valid_confs = {e.value for e in ConfidenceClassification}
                 conf_class = raw_conf if raw_conf in valid_confs else "CONFIRMED"
 
+                raw_aid = asset_obj.get("asset_id") or item.get("asset_id") or UNMAPPED_ASSET_ID
+                raw_h = asset_obj.get("host") or item.get("host") or "localhost"
+
                 m4_input = {
                     "schema_version": "1.0",
                     "finding_id": item["finding_id"],
@@ -244,17 +296,17 @@ class UnifiedPipelineRunner:
                     "vulnerability_type": v_type,
                     "severity": sev,
                     "asset": {
-                        "asset_id": asset_obj.get("asset_id", "ASSET-WEB-001"),
-                        "host": asset_obj.get("host", "localhost"),
-                        "endpoint": asset_obj.get("endpoint"),
-                        "port": asset_obj.get("port"),
-                        "parameter": asset_obj.get("parameter"),
+                        "asset_id": raw_aid,
+                        "host": raw_h,
+                        "endpoint": asset_obj.get("endpoint") or item.get("endpoint"),
+                        "port": asset_obj.get("port") or item.get("port"),
+                        "parameter": asset_obj.get("parameter") or item.get("parameter"),
                     },
                     "scanner_consensus": {
                         "scanner_names": sc_obj.get("scanner_names", ["UNKNOWN"]),
                         "detected_by_count": sc_obj.get("detected_by_count", 1),
-                        "total_scanners": sc_obj.get("total_scanners", 1),
-                        "score": sc_obj.get("score", 1.0),
+                        "total_scanners": max(sc_obj.get("total_scanners", 1), sc_obj.get("detected_by_count", 1)),
+                        "score": min(1.0, max(0.0, float(sc_obj.get("score", 1.0)))),
                     },
                     "finding_confidence": {
                         "score": fc_obj.get("score", 0.9),
@@ -291,6 +343,7 @@ class UnifiedPipelineRunner:
         Joins Asset Context and runs M5 deterministic scoring. Returns Section 8 findings.
         """
         catalog = asset_catalog or DEFAULT_ASSET_CATALOG
+        resolver = AssetResolver(catalog)
         assessed = []
 
         with _isolated_module_context(self.mem5_dir):
@@ -299,19 +352,13 @@ class UnifiedPipelineRunner:
             engine = RiskEngine()
 
             for item in threat_findings:
-                asset_id = item.get("asset_id") or "ASSET-WEB-001"
-                asset_ctx = catalog.get(asset_id) or catalog.get("ASSET-WEB-001", {
-                    "asset_id": asset_id,
-                    "asset_name": f"host-{asset_id.lower()}",
-                    "environment": "PRODUCTION",
-                    "asset_criticality": "MEDIUM",
-                    "internet_exposure": True,
-                    "data_sensitivity": "INTERNAL",
-                })
+                resolved_asset_id, asset_ctx = resolver.resolve(item)
+                item["asset_id"] = resolved_asset_id
 
                 m5_input = M5RiskEngineAdapter.prepare_m5_input(item, asset_ctx)
                 m5_output = engine.assess_finding(m5_input)
                 section8_finding = M5RiskEngineAdapter.adapt_to_section8(m5_output)
+                section8_finding["asset_id"] = resolved_asset_id
                 assessed.append(section8_finding)
 
         return assessed
@@ -345,6 +392,8 @@ class UnifiedPipelineRunner:
     ) -> List[Dict[str, Any]]:
         """
         Runs M7 SLA calculations and packages final ActionableFindings (Schema v1.0).
+        Only generates remediation tickets for findings eligible for remediation
+        (CONFIRMED / HIGH_CONFIDENCE without review_required / likely_noise).
         """
         actionable_findings = []
         with _isolated_module_context(self.mem7_dir):
@@ -355,11 +404,11 @@ class UnifiedPipelineRunner:
                 finding_id = item["finding_id"]
                 ctx = pipeline_context_map.get(finding_id, {})
 
-                # Build ticket
+                # Compute M7 ticket and SLA metrics based on M5 risk score
                 ticket = createticket(item)
                 checksla(ticket)
 
-                # Format into canonical FindingSchema
+                # Format into canonical FindingSchema with M3 routing rules applied
                 final_finding = M7ActionableFindingAdapter.build_actionable_finding(
                     m6_finding=item,
                     m7_ticket=ticket,
@@ -369,6 +418,7 @@ class UnifiedPipelineRunner:
 
         return actionable_findings
 
+
     # -------------------------------------------------------------------------
     # End-to-End Pipeline Execution
     # -------------------------------------------------------------------------
@@ -377,31 +427,53 @@ class UnifiedPipelineRunner:
         raw_sources: Optional[Dict[str, str]] = None,
         normalized_input: Optional[List[Dict[str, Any]]] = None,
         asset_catalog: Optional[Dict[str, Dict[str, Any]]] = None,
+        pipeline_run_id: Optional[str] = None,
+        data_origin: Optional[str] = None,
+        allow_demo_fallback: bool = True,
     ) -> Tuple[List[FindingSchema], Dict[str, Any]]:
         """
         Executes complete M1 -> M7 pipeline and produces validated M8 FindingSchema[]
         along with summary metrics.
         """
+        import secrets
+        if not pipeline_run_id:
+            now_str = datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S")
+            pipeline_run_id = f"RUN-{now_str}-{secrets.token_hex(4).upper()}"
+
         catalog = asset_catalog or DEFAULT_ASSET_CATALOG
+        env = os.getenv("RIZINTEL_ENV", "development").strip().lower()
 
         # Stage 1: M1
+        resolver = AssetResolver(catalog)
         if normalized_input:
-            s1_normalized = [M1NormalizedFindingAdapter.adapt_single(f) for f in normalized_input]
+            s1_normalized = [M1NormalizedFindingAdapter.adapt_single(f, asset_resolver=resolver) for f in normalized_input]
             raw_count = len(s1_normalized)
+            resolved_origin = data_origin or "LIVE_SCAN"
         elif raw_sources:
-            s1_normalized = self.run_m1(raw_sources)
+            s1_normalized = self.run_m1(raw_sources, asset_catalog=catalog)
             raw_count = len(s1_normalized)
+            resolved_origin = data_origin or "LIVE_SCAN"
         else:
-            # Fallback to load M2 sample input
+            # Check production safety: in production, missing scanner input MUST fail
+            if env == "production":
+                raise ValueError("Scanner input data is required in production environment. Bundled demo data cannot be silently executed in production.")
+
+            if not allow_demo_fallback:
+                logger.warning("No scanner input provided and demo fallback is disabled.")
+                return [], {}
+
+            # Explicit demo dataset loading in development / demo environment
             sample_input_path = self.mem2_dir / "data" / "sample_input.json"
             if sample_input_path.exists():
                 with open(sample_input_path, "r") as f:
                     s_data = json.load(f)
-                    s1_normalized = [M1NormalizedFindingAdapter.adapt_single(f) for f in s_data.get("findings", [])]
+                    s1_normalized = [M1NormalizedFindingAdapter.adapt_single(f, asset_resolver=resolver) for f in s_data.get("findings", [])]
                 raw_count = len(s1_normalized)
+                resolved_origin = "DEMO_DATASET"
             else:
                 s1_normalized = []
                 raw_count = 0
+                resolved_origin = "DEMO_DATASET"
 
         if not s1_normalized:
             logger.warning("No findings normalized in pipeline.")
@@ -450,6 +522,7 @@ class UnifiedPipelineRunner:
         for a in s5_assessed:
             fid = a["finding_id"]
             if fid in context_map:
+                context_map[fid]["asset_id"] = a.get("asset_id") or a.get("asset_context", {}).get("asset_id") or UNMAPPED_ASSET_ID
                 context_map[fid]["risk_assessment"] = a.get("risk_assessment", {})
                 context_map[fid]["asset_context"] = a.get("asset_context", {})
                 context_map[fid]["risk_score"] = a.get("risk_assessment", {}).get("risk_score", 0)
@@ -459,18 +532,27 @@ class UnifiedPipelineRunner:
         s7_actionable = self.run_m7(s6_explained, context_map)
 
         # Validate each against M8's Pydantic FindingSchema
-        validated_findings = [FindingSchema(**item) for item in s7_actionable]
+        validated_findings = []
+        for item in s7_actionable:
+            finding_obj = FindingSchema(**item)
+            validated_findings.append(finding_obj)
 
-        # Calculate Summary Metrics
-        critical_count = sum(1 for f in validated_findings if f.risk_level == "CRITICAL")
-        high_count = sum(1 for f in validated_findings if f.risk_level == "HIGH")
-        medium_count = sum(1 for f in validated_findings if f.risk_level == "MEDIUM")
-        low_count = sum(1 for f in validated_findings if f.risk_level == "LOW")
-        breach_count = sum(1 for f in validated_findings if f.workflow.sla_status == "SLA_BREACHED")
-        noise_count = sum(1 for c in s3_confidence if c.get("noise_assessment", {}).get("likely_noise", False))
+        # Calculate Summary Metrics distinguishing Actionable, Review, and Noise
+        actionable_findings = [f for f in validated_findings if f.workflow.status == "OPEN"]
+        pending_review_findings = [f for f in validated_findings if f.workflow.status == "PENDING_REVIEW"]
+        suppressed_findings = [f for f in validated_findings if f.workflow.status == "SUPPRESSED"]
+
+        critical_count = sum(1 for f in actionable_findings if f.risk_level == "CRITICAL")
+        high_count = sum(1 for f in actionable_findings if f.risk_level == "HIGH")
+        medium_count = sum(1 for f in actionable_findings if f.risk_level == "MEDIUM")
+        low_count = sum(1 for f in actionable_findings if f.risk_level == "LOW")
+        breach_count = sum(1 for f in actionable_findings if f.workflow.sla_status == "SLA_BREACHED")
+        noise_count = len(suppressed_findings)
 
         summary = {
             "schema_version": "1.0",
+            "pipeline_run_id": pipeline_run_id,
+            "data_origin": resolved_origin,
             "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
             "summary": {
                 "raw_findings": raw_count,
@@ -480,12 +562,13 @@ class UnifiedPipelineRunner:
                     (raw_count - len(validated_findings)) / raw_count, 4
                 ) if raw_count > 0 else 0.0,
                 "likely_noise_findings": noise_count,
-                "actionable_findings": len(validated_findings),
+                "pending_review_findings": len(pending_review_findings),
+                "actionable_findings": len(actionable_findings),
                 "critical": critical_count,
                 "high": high_count,
                 "medium": medium_count,
                 "low": low_count,
-                "open_tickets": len(validated_findings),
+                "open_tickets": len(actionable_findings),
                 "sla_breaches": breach_count,
             },
             "top_risks": [
@@ -498,7 +581,7 @@ class UnifiedPipelineRunner:
                     "confidence_classification": f.confidence_classification,
                     "sla_status": f.workflow.sla_status,
                 }
-                for f in sorted(validated_findings, key=lambda x: x.risk_score, reverse=True)[:5]
+                for f in sorted(actionable_findings if actionable_findings else validated_findings, key=lambda x: x.risk_score, reverse=True)[:5]
             ]
         }
 

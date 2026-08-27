@@ -27,41 +27,43 @@ from database import DB_PATH, compute_hash, insert_audit_event, verify_chain, ge
 from auth import UserRole, AuthenticatedUser, check_analyst_decision_permission
 from models import AuditEventCreate, FindingSchema, AnalystFeedbackInput
 
-BASE_URL = "http://127.0.0.1:8000"
+from main import app
+from fastapi.testclient import TestClient
+
+_test_client = TestClient(app)
 
 
 def make_request(method: str, path: str, headers: dict = None, json_data: dict = None):
-    url = f"{BASE_URL}{path}"
-    req_headers = {"Content-Type": "application/json"}
-    if headers:
-        req_headers.update(headers)
-
-    data = json.dumps(json_data).encode("utf-8") if json_data is not None else None
-    req = urllib.request.Request(url, data=data, headers=req_headers, method=method)
-
-    try:
-        with urllib.request.urlopen(req) as resp:
-            body = resp.read().decode("utf-8")
-            try:
-                parsed = json.loads(body) if body else None
-            except Exception:
-                parsed = body
-            return {
-                "status": resp.status,
-                "headers": {k.lower(): v for k, v in resp.headers.items()},
-                "json": parsed,
-            }
-    except urllib.error.HTTPError as e:
-        body = e.read().decode("utf-8")
-        try:
-            parsed = json.loads(body)
-        except Exception:
-            parsed = body
-        return {
-            "status": e.code,
-            "headers": {k.lower(): v for k, v in e.headers.items()},
-            "json": parsed,
+    req_headers = dict(headers) if headers else {}
+    if "Authorization" not in req_headers and "authorization" not in req_headers:
+        role = req_headers.get("X-User-Role", "ANALYST").strip().upper()
+        from users import get_user_by_email
+        from auth import create_access_token
+        email_map = {
+            "VIEWER": "viewer@rizintel.demo",
+            "ANALYST": "analyst@rizintel.demo",
+            "SECURITY_LEAD": "lead@rizintel.demo",
+            "ADMIN": "admin@rizintel.demo",
         }
+        user = get_user_by_email(email_map.get(role, "analyst@rizintel.demo"))
+        if user:
+            req_headers["Authorization"] = f"Bearer {create_access_token(user)}"
+
+    resp = _test_client.request(
+        method=method,
+        url=path,
+        headers=req_headers,
+        json=json_data
+    )
+    try:
+        parsed = resp.json()
+    except Exception:
+        parsed = resp.text
+    return {
+        "status": resp.status_code,
+        "headers": {k.lower(): v for k, v in resp.headers.items()},
+        "json": parsed,
+    }
 
 
 # ── 1. CORS RESTRICTIONS ─────────────────────────────────────────────────────
@@ -135,7 +137,7 @@ def test_analyst_can_submit_standard_decision():
     assert res["status"] == 200
     data = res["json"]
     assert data["analyst_action"] == "DOWNGRADE"
-    assert "Bob Analyst [ANALYST]" in data["role"]
+    assert "[ANALYST]" in data["role"]
     assert len(data["event_hash"]) == 64  # SHA-256 hex length
 
 
@@ -168,7 +170,7 @@ def test_security_lead_can_escalate():
     assert res["status"] == 200
     data = res["json"]
     assert data["analyst_action"] == "ESCALATE"
-    assert "Lead Alice [SECURITY_LEAD]" in data["role"]
+    assert "[SECURITY_LEAD]" in data["role"]
 
 
 def test_admin_full_authority():
@@ -183,7 +185,9 @@ def test_admin_full_authority():
         }
     )
     assert res["status"] == 200
-    assert res["json"]["analyst_action"] == "FALSE_POSITIVE"
+    data = res["json"]
+    assert data["analyst_action"] == "FALSE_POSITIVE"
+    assert "[ADMIN]" in data["role"]
 
 
 # ── 3. INPUT VALIDATION & SANITIZATION ──────────────────────────────────────

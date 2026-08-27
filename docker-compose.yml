@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  rizintel-backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - RIZINTEL_ENV=production
+      - RIZINTEL_DB_PATH=/app/data/rizintel.db
+      - RIZINTEL_SECRET_KEY=production_secret_key_change_me_in_prod
+      - RIZINTEL_ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
+    volumes:
+      - rizintel_data:/app/data
+
+  rizintel-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - rizintel-backend
+
+volumes:
+  rizintel_data:

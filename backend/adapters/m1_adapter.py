@@ -108,7 +108,11 @@ class M1NormalizedFindingAdapter:
     """
 
     @staticmethod
-    def adapt_single(raw_item: Any, default_asset_id: str = "ASSET-WEB-001") -> Dict[str, Any]:
+    def adapt_single(
+        raw_item: Any,
+        default_asset_id: Optional[str] = None,
+        asset_resolver: Optional[Any] = None
+    ) -> Dict[str, Any]:
         """Convert a single M1 StandardFinding or dictionary into Section 3 shape."""
         # Extract dictionary if pydantic model
         if hasattr(raw_item, "model_dump"):
@@ -140,7 +144,20 @@ class M1NormalizedFindingAdapter:
         clean_host, full_url, clean_endpoint, port = _parse_host_and_port(raw_host, raw_endpoint)
 
         # Asset ID resolution
-        asset_id = data.get("asset_id") or default_asset_id
+        raw_aid = data.get("asset_id")
+        if raw_aid and str(raw_aid).upper() != "UNMAPPED":
+            asset_id = str(raw_aid)
+        elif asset_resolver:
+            resolved_aid, _ = asset_resolver.resolve({
+                "host": clean_host,
+                "port": port,
+                "url": data.get("url") or full_url
+            })
+            asset_id = resolved_aid
+        elif default_asset_id:
+            asset_id = default_asset_id
+        else:
+            asset_id = "UNMAPPED"
 
         # Timestamp normalization
         raw_ts = data.get("timestamp")
@@ -171,6 +188,11 @@ class M1NormalizedFindingAdapter:
         }
 
     @classmethod
-    def adapt_batch(cls, raw_items: List[Any], default_asset_id: str = "ASSET-WEB-001") -> List[Dict[str, Any]]:
+    def adapt_batch(
+        cls,
+        raw_items: List[Any],
+        default_asset_id: Optional[str] = None,
+        asset_resolver: Optional[Any] = None
+    ) -> List[Dict[str, Any]]:
         """Convert a list of raw M1 findings into Section 3 list."""
-        return [cls.adapt_single(item, default_asset_id=default_asset_id) for item in raw_items]
+        return [cls.adapt_single(item, default_asset_id=default_asset_id, asset_resolver=asset_resolver) for item in raw_items]

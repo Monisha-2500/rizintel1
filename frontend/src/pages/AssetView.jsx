@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { getAssets } from '../services/assetsService';
+import { deriveAssetsFromFindings, getAssets } from '../services/assetsService';
+import { getScanRunFindings } from '../services/findingsService';
 import {
   Globe, Shield, Server, Database, ChevronRight, X, TrendingUp,
   AlertTriangle, CheckCircle, Monitor, Star, ArrowRight, LayoutGrid,
@@ -594,6 +595,8 @@ export default function AssetView() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const targetAssetId = searchParams.get('asset') || searchParams.get('id');
+  const scanRunId = searchParams.get('scan_run_id');
+  const orgId = searchParams.get('org_id');
 
   const [assets, setAssets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -604,24 +607,46 @@ export default function AssetView() {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    Promise.all([getAssets()]).then(([a]) => {
-      setAssets(a);
-      if (a.length > 0) {
-        const cleanTarget = targetAssetId ? targetAssetId.toLowerCase().replace(/[^a-z0-9]/g, '') : '';
-        const match = targetAssetId
-          ? a.find(x =>
-              x.asset_id?.toLowerCase() === targetAssetId.toLowerCase() ||
-              x.display_name?.toLowerCase().includes(targetAssetId.toLowerCase()) ||
-              (cleanTarget && x.asset_id?.toLowerCase().replace(/[^a-z0-9]/g, '').includes(cleanTarget)) ||
-              (cleanTarget && cleanTarget.includes(x.asset_id?.toLowerCase().replace(/[^a-z0-9]/g, ''))) ||
-              x.findings?.some(f => f.detail?.asset_context?.asset_name?.toLowerCase().includes(targetAssetId.toLowerCase()))
-            )
-          : null;
-        setSelectedAsset(match || a[0]);
+    let cancelled = false;
+    const loadAssets = async () => {
+      setLoading(true);
+      try {
+        let loadedAssets = [];
+        if (scanRunId && orgId) {
+          const scoped = await getScanRunFindings(orgId, scanRunId);
+          loadedAssets = deriveAssetsFromFindings(scoped.findings || []);
+        } else {
+          loadedAssets = await getAssets();
+        }
+
+        if (cancelled) return;
+        setAssets(loadedAssets);
+        if (loadedAssets.length > 0) {
+          const cleanTarget = targetAssetId ? targetAssetId.toLowerCase().replace(/[^a-z0-9]/g, '') : '';
+          const match = targetAssetId
+            ? loadedAssets.find(x =>
+                x.asset_id?.toLowerCase() === targetAssetId.toLowerCase() ||
+                x.display_name?.toLowerCase().includes(targetAssetId.toLowerCase()) ||
+                (cleanTarget && x.asset_id?.toLowerCase().replace(/[^a-z0-9]/g, '').includes(cleanTarget)) ||
+                (cleanTarget && cleanTarget.includes(x.asset_id?.toLowerCase().replace(/[^a-z0-9]/g, ''))) ||
+                x.findings?.some(f => f.detail?.asset_context?.asset_name?.toLowerCase().includes(targetAssetId.toLowerCase()))
+              )
+            : null;
+          setSelectedAsset(match || loadedAssets[0]);
+        }
+        setLoading(false);
+      } catch (err) {
+        if (!cancelled) setLoading(false);
       }
-      setLoading(false);
-    });
-  }, [targetAssetId]);
+    };
+
+    loadAssets();
+    window.addEventListener('rizintel-datamode-change', loadAssets);
+    return () => {
+      cancelled = true;
+      window.removeEventListener('rizintel-datamode-change', loadAssets);
+    };
+  }, [targetAssetId, scanRunId, orgId]);
 
   // Filtered Assets
   const filteredAssets = useMemo(() => {

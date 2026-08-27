@@ -1,0 +1,116 @@
+{
+  "dataset_id": "DS-WEBGOAT-001",
+  "dataset_name": "OWASP WebGoat Multi-Scanner Assessment",
+  "dataset_type": "REAL",
+  "organization_id": "ORG-EVAL-WEBGOAT",
+  "asset": {
+    "asset_id": "ASSET-WEBGOAT-01",
+    "asset_name": "webgoat-lab-app",
+    "host": "webgoat.demo.corp",
+    "port": 8080,
+    "environment": "STAGING",
+    "criticality": "HIGH",
+    "internet_facing": true,
+    "data_sensitivity": "CONFIDENTIAL"
+  },
+  "raw_reports": {
+    "ZAP": {
+      "site": [
+        {
+          "@name": "http://webgoat.demo.corp:8080",
+          "@host": "webgoat.demo.corp",
+          "@port": "8080",
+          "alerts": [
+            {
+              "pluginid": "40018",
+              "alert": "SQL Injection in Search Module",
+              "riskcode": "3",
+              "confidence": "3",
+              "cweid": "89",
+              "desc": "SQL injection detected in query parameter q on WebGoat search endpoint.",
+              "instances": [
+                { "uri": "http://webgoat.demo.corp:8080/WebGoat/search", "method": "GET", "param": "q" }
+              ]
+            },
+            {
+              "pluginid": "40012",
+              "alert": "Cross-Site Scripting (Reflected)",
+              "riskcode": "2",
+              "confidence": "2",
+              "cweid": "79",
+              "desc": "Reflected XSS in user profile comment parameter.",
+              "instances": [
+                { "uri": "http://webgoat.demo.corp:8080/WebGoat/profile", "method": "POST", "param": "comment" }
+              ]
+            },
+            {
+              "pluginid": "10020",
+              "alert": "X-Frame-Options Header Missing",
+              "riskcode": "1",
+              "confidence": "2",
+              "cweid": "693",
+              "desc": "Clickjacking vulnerability due to missing X-Frame-Options header.",
+              "instances": [
+                { "uri": "http://webgoat.demo.corp:8080/WebGoat/login", "method": "GET", "param": "" }
+              ]
+            },
+            {
+              "pluginid": "40026",
+              "alert": "Path Traversal in Download Endpoint",
+              "riskcode": "2",
+              "confidence": "2",
+              "cweid": "22",
+              "desc": "Path traversal allowing arbitrary file access.",
+              "instances": [
+                { "uri": "http://webgoat.demo.corp:8080/WebGoat/download", "method": "GET", "param": "filename" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "NUCLEI": [
+      {
+        "template-id": "cve-2026-9999",
+        "info": {
+          "name": "SQL Injection in Search Module",
+          "severity": "critical",
+          "description": "SQL injection vulnerability on WebGoat search endpoint.",
+          "classification": { "cve-id": ["CVE-2026-9999"], "cwe-id": ["CWE-89"] }
+        },
+        "type": "http",
+        "host": "webgoat.demo.corp",
+        "matched-at": "http://webgoat.demo.corp:8080/WebGoat/search",
+        "ip": "127.0.0.1"
+      },
+      {
+        "template-id": "webgoat-rce-exec",
+        "info": {
+          "name": "Remote Code Execution in Admin Console",
+          "severity": "critical",
+          "description": "Unauthenticated Remote Code Execution in WebGoat administrative interface.",
+          "classification": { "cve-id": ["CVE-2026-8888"], "cwe-id": ["CWE-78"] }
+        },
+        "type": "http",
+        "host": "webgoat.demo.corp",
+        "matched-at": "http://webgoat.demo.corp:8080/WebGoat/admin/exec",
+        "ip": "127.0.0.1"
+      }
+    ],
+    "WAPITI": {
+      "infos": { "target": "http://webgoat.demo.corp:8080/WebGoat" },
+      "classifications": {
+        "Cross Site Scripting": { "desc": "Reflected XSS vulnerability", "ref": { "CWE-79": "http://cwe" } },
+        "CSRF": { "desc": "Cross Site Request Forgery", "ref": { "CWE-352": "http://cwe" } }
+      },
+      "vulnerabilities": {
+        "Cross Site Scripting": [
+          { "method": "POST", "path": "/WebGoat/profile", "parameter": "comment", "level": 2 }
+        ],
+        "CSRF": [
+          { "method": "POST", "path": "/WebGoat/changePassword", "parameter": "new_password", "level": 2 }
+        ]
+      }
+    }
+  }
+}

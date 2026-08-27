@@ -1,0 +1,101 @@
+{
+  "dataset_id": "DS-SYNTH-ENTERPRISE-001",
+  "dataset_name": "Enterprise Multi-Scanner Edge-Case Corpus",
+  "dataset_type": "SYNTHETIC_EDGE_CASE",
+  "organization_id": "ORG-EVAL-CORPUS",
+  "asset": {
+    "asset_id": "ASSET-ENTERPRISE-01",
+    "asset_name": "payments-prod-gateway",
+    "host": "payments.corp.internal",
+    "port": 443,
+    "environment": "PRODUCTION",
+    "criticality": "CRITICAL",
+    "internet_facing": true,
+    "data_sensitivity": "RESTRICTED"
+  },
+  "raw_reports": {
+    "ZAP": {
+      "site": [
+        {
+          "@name": "https://payments.corp.internal:443",
+          "@host": "payments.corp.internal",
+          "@port": "443",
+          "alerts": [
+            {
+              "pluginid": "40018",
+              "alert": "SQL Injection in Transaction Query",
+              "riskcode": "3",
+              "confidence": "3",
+              "cweid": "89",
+              "desc": "SQL Injection on transaction search endpoint parameter tx_id.",
+              "instances": [
+                { "uri": "https://payments.corp.internal/v1/tx/search", "method": "POST", "param": "tx_id" }
+              ]
+            },
+            {
+              "pluginid": "40019",
+              "alert": "SQL Injection in Refund Endpoint",
+              "riskcode": "3",
+              "confidence": "3",
+              "cweid": "89",
+              "desc": "SQL Injection on refund processing endpoint parameter refund_id.",
+              "instances": [
+                { "uri": "https://payments.corp.internal/v1/refund/process", "method": "POST", "param": "refund_id" }
+              ]
+            },
+            {
+              "pluginid": "10037",
+              "alert": "Server Banner Disclosure",
+              "riskcode": "0",
+              "confidence": "3",
+              "cweid": "200",
+              "desc": "Server header exposes nginx version string.",
+              "instances": [
+                { "uri": "https://payments.corp.internal/", "method": "GET", "param": "" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "NUCLEI": [
+      {
+        "template-id": "cve-2026-5555",
+        "info": {
+          "name": "SQL Injection in Transaction Query",
+          "severity": "critical",
+          "description": "SQL Injection on transaction search endpoint parameter tx_id.",
+          "classification": { "cve-id": ["CVE-2026-5555"], "cwe-id": ["CWE-89"] }
+        },
+        "type": "http",
+        "host": "payments.corp.internal",
+        "matched-at": "https://payments.corp.internal/v1/tx/search",
+        "ip": "10.0.1.50"
+      },
+      {
+        "template-id": "cross-asset-same-cve",
+        "info": {
+          "name": "SQL Injection in Transaction Query",
+          "severity": "critical",
+          "description": "Same CVE on a completely different asset.",
+          "classification": { "cve-id": ["CVE-2026-5555"], "cwe-id": ["CWE-89"] }
+        },
+        "type": "http",
+        "host": "auth.corp.internal",
+        "matched-at": "https://auth.corp.internal/v1/tx/search",
+        "ip": "10.0.2.90"
+      }
+    ],
+    "WAPITI": {
+      "infos": { "target": "https://payments.corp.internal" },
+      "classifications": {
+        "SQL Injection": { "desc": "SQL Injection vulnerability", "ref": { "CWE-89": "http://cwe" } }
+      },
+      "vulnerabilities": {
+        "SQL Injection": [
+          { "method": "POST", "path": "/v1/tx/search", "parameter": "tx_id", "level": 3 }
+        ]
+      }
+    }
+  }
+}

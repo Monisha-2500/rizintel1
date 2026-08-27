@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { getDashboardSummary } from '../services/findingsService';
+import { getDashboardSummary, getScanRunFindings } from '../services/findingsService';
 
-export function useDashboard() {
+export function useDashboard(scanRunId = null, orgId = null) {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error,   setError]   = useState(null);
@@ -9,11 +9,29 @@ export function useDashboard() {
   useEffect(() => {
     let cancelled = false;
 
-    const loadData = () => {
+    const loadData = async () => {
       setLoading(true);
-      getDashboardSummary()
-        .then(data => { if (!cancelled) { setSummary(data); setLoading(false); } })
-        .catch(err  => { if (!cancelled) { setError(err.message); setLoading(false); } });
+      setError(null);
+      try {
+        if (scanRunId && orgId) {
+          const scoped = await getScanRunFindings(orgId, scanRunId);
+          if (!cancelled) {
+            setSummary({ summary: scoped.summary || {} });
+            setLoading(false);
+          }
+        } else {
+          const data = await getDashboardSummary();
+          if (!cancelled) {
+            setSummary(data);
+            setLoading(false);
+          }
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err.message || 'Failed to load dashboard summary');
+          setLoading(false);
+        }
+      }
     };
 
     loadData();
@@ -27,7 +45,7 @@ export function useDashboard() {
       cancelled = true;
       window.removeEventListener('rizintel-datamode-change', handleModeChange);
     };
-  }, []);
+  }, [scanRunId, orgId]);
 
   return { summary, loading, error };
 }

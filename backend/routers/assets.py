@@ -1,11 +1,12 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from typing import List, Dict
 from services.data_service import data_service
+from auth import get_current_user, AuthenticatedUser
 
 router = APIRouter(prefix="/assets", tags=["Asset views"])
 
 @router.get("", response_model=List[Dict])
-def get_assets():
+def get_assets(current_user: AuthenticatedUser = Depends(get_current_user)):
     """
     Groups findings by asset_id and yields criticality,
     environment, exposure, sensitivity, and vuln counts.

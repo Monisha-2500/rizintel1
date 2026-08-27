@@ -28,7 +28,7 @@ import json
 from datetime import datetime
 from typing import List
 
-from schema import StandardFinding, Severity, generate_finding_id
+from schema import StandardFinding, Severity, generate_source_id
 from scanner_adapters.base import BaseAdapter, register_adapter
 
 _NUCLEI_SEVERITY_MAP = {
@@ -61,25 +61,42 @@ class NucleiAdapter(BaseAdapter):
                 cwe = self._first_or_none(classification.get("cwe-id"))
 
                 host = rec.get("host", "unknown-host")
+                port = str(rec.get("port") or "").strip()
                 matched_at = rec.get("matched-at") or rec.get("url") or host
+                endpoint = self._extract_endpoint(matched_at)
+                # template-id anchors the vulnerability identity; matcher-name distinguishes
+                # individual sub-detections within multi-matcher templates (e.g.
+                # http-missing-security-headers fires once per missing header).
+                template_id = rec.get("template-id") or vuln_name
+                matcher_name = rec.get("matcher-name") or ""
+                # Canonical discriminator: template_id + matcher_name
+                discriminator = f"{template_id}|{matcher_name}"
                 evidence = self._build_evidence(rec)
 
                 findings.append(StandardFinding(
-                    finding_id=generate_finding_id("Nuclei", matched_at, vuln_name, "", ""),
+                    finding_id=generate_source_id(
+                        scanner="NUCLEI",
+                        host=matched_at,
+                        vuln_name=template_id,
+                        endpoint=endpoint,
+                        port=port,
+                        discriminator=matcher_name,
+                    ),
                     scanner="Nuclei",
                     cve=cve,
                     cwe=cwe,
                     vulnerability_name=vuln_name,
                     severity=severity,
                     host=host,
-                    endpoint=self._extract_endpoint(matched_at),
+                    endpoint=endpoint,
                     parameter=None,  # Nuclei templates don't isolate a single request parameter
                     description=info.get("description", ""),
                     evidence=evidence,
                     timestamp=self._parse_timestamp(rec.get("timestamp")),
                     raw_severity=info.get("severity"),
                     extra_fields={
-                        "template_id": rec.get("template-id"),
+                        "template_id": template_id,
+                        "matcher_name": matcher_name,
                         "tags": info.get("tags"),
                         "cvss_metrics": classification.get("cvss-metrics"),
                         "matcher_status": rec.get("matcher-status"),

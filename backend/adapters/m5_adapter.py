@@ -59,20 +59,33 @@ class M5RiskEngineAdapter:
         exploit_available = bool(ti.get("exploit_available") or False)
 
         # Asset context formatting
-        ac_asset_id = asset_context.get("asset_id") or m4_finding.get("asset_id") or "ASSET-WEB-001"
-        ac_asset_name = asset_context.get("asset_name") or f"host-{ac_asset_id}"
-        ac_env = str(asset_context.get("environment") or "PRODUCTION").upper()
-        if ac_env not in {"PRODUCTION", "STAGING", "DEVELOPMENT"}:
-            ac_env = "PRODUCTION"
+        ac_asset_id = asset_context.get("asset_id") or m4_finding.get("asset_id") or "UNMAPPED"
+        ac_asset_name = asset_context.get("asset_name") or (f"host-{ac_asset_id}" if ac_asset_id != "UNMAPPED" else "Unresolved Asset")
 
-        ac_crit = str(asset_context.get("asset_criticality") or asset_context.get("criticality") or "MEDIUM").upper()
-        if ac_crit not in {"CRITICAL", "HIGH", "MEDIUM", "LOW"}:
-            ac_crit = "MEDIUM"
+        # Environment: UNKNOWN for unresolved assets (no fabricated DEVELOPMENT/PRODUCTION)
+        ac_env = str(asset_context.get("environment") or ("UNKNOWN" if ac_asset_id == "UNMAPPED" else "PRODUCTION")).upper()
 
-        ac_exp = bool(asset_context.get("internet_exposure") if "internet_exposure" in asset_context else asset_context.get("internet_facing", True))
-        ac_sens = str(asset_context.get("data_sensitivity") or "INTERNAL").upper()
-        if ac_sens not in {"RESTRICTED", "CONFIDENTIAL", "INTERNAL", "PUBLIC"}:
-            ac_sens = "INTERNAL"
+        # Criticality: pass UNKNOWN directly — M5 now accepts it and scores it 0 pts.
+        # Known tiers (LOW/MEDIUM/HIGH/CRITICAL) pass through unchanged.
+        raw_crit = str(asset_context.get("asset_criticality") or asset_context.get("criticality") or ("UNKNOWN" if ac_asset_id == "UNMAPPED" else "MEDIUM")).upper()
+        if raw_crit in {"CRITICAL", "HIGH", "MEDIUM", "LOW", "UNKNOWN"}:
+            ac_crit = raw_crit
+        else:
+            ac_crit = "UNKNOWN" if ac_asset_id == "UNMAPPED" else "MEDIUM"
+
+        # Internet exposure: None for UNMAPPED (genuinely unknown) → M5 scores as 0 pts.
+        # True/False pass through for known assets.
+        if "internet_exposure" in asset_context and asset_context["internet_exposure"] is not None:
+            ac_exp = bool(asset_context["internet_exposure"])
+        elif "internet_facing" in asset_context and asset_context["internet_facing"] is not None:
+            ac_exp = bool(asset_context["internet_facing"])
+        elif ac_asset_id == "UNMAPPED":
+            ac_exp = None  # genuinely unknown — do NOT default to False
+        else:
+            ac_exp = True
+
+        # Data sensitivity: UNKNOWN for unresolved assets (no fabricated INTERNAL/PCI)
+        ac_sens = str(asset_context.get("data_sensitivity") or ("UNKNOWN" if ac_asset_id == "UNMAPPED" else "INTERNAL")).upper()
 
         # Scanner sources & consensus
         scanner_sources = m4_finding.get("scanner_sources") or []
@@ -116,7 +129,7 @@ class M5RiskEngineAdapter:
                 "asset_name": ac_asset_name,
                 "environment": ac_env,
                 "asset_criticality": ac_crit,
-                "internet_exposure": ac_exp,
+                "internet_exposure": ac_exp,  # None for UNMAPPED, True/False for known
                 "data_sensitivity": ac_sens,
             }
         }
@@ -177,11 +190,14 @@ class M5RiskEngineAdapter:
             "description": description or f"Vulnerability {data.get('vulnerability_name')} identified on asset {ac.get('asset_id')}.",
             "asset_context": {
                 "asset_id": ac.get("asset_id"),
-                "asset_name": ac.get("asset_name"),
-                "environment": ac.get("environment"),
-                "criticality": ac.get("asset_criticality") or ac.get("criticality") or "MEDIUM",
-                "internet_facing": ac.get("internet_exposure") if "internet_exposure" in ac else ac.get("internet_facing", True),
-                "data_sensitivity": ac.get("data_sensitivity") or "INTERNAL",
+                "asset_name": ac.get("asset_name") or ("Unresolved Asset" if str(ac.get("asset_id")).upper() == "UNMAPPED" else f"host-{ac.get('asset_id')}"),
+                "environment": ac.get("environment") or ("UNKNOWN" if str(ac.get("asset_id")).upper() == "UNMAPPED" else "PRODUCTION"),
+                "criticality": "UNKNOWN" if str(ac.get("asset_id")).upper() == "UNMAPPED" else (ac.get("asset_criticality") or ac.get("criticality") or "MEDIUM"),
+                "internet_facing": (
+                    None if str(ac.get("asset_id")).upper() == "UNMAPPED"
+                    else bool(ac.get("internet_exposure") if "internet_exposure" in ac else ac.get("internet_facing", True))
+                ),
+                "data_sensitivity": ac.get("data_sensitivity") or ("UNKNOWN" if str(ac.get("asset_id")).upper() == "UNMAPPED" else "INTERNAL"),
             },
             "threat_intelligence": {
                 "cvss_score": ti.get("cvss_score"),

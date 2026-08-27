@@ -26,6 +26,7 @@ export default function Footer() {
         {/* Right Side: 2 Navigation Links */}
         <div className="footer-slim-right">
           <button 
+            type="button"
             className={`footer-slim-link ${location.pathname === '/helpdesk' ? 'active' : ''}`} 
             onClick={() => navigate('/helpdesk')}
           >
@@ -36,6 +37,7 @@ export default function Footer() {
           <span className="footer-slim-separator">|</span>
           
           <button 
+            type="button"
             className={`footer-slim-link ${location.pathname === '/about' ? 'active' : ''}`} 
             onClick={() => navigate('/about')}
           >

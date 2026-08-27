@@ -1,0 +1,52 @@
+{
+  "metadata": {
+    "annotation_date": "2026-08-25",
+    "reviewer_count": 1,
+    "annotator_role": "Senior Security Domain Reviewer",
+    "notes": "Manual expert ordinal risk ranking for prioritization evaluation (Spearman Rank Correlation)."
+  },
+  "expert_ordinal_ranks": [
+    {
+      "rank": 1,
+      "finding_key": "webgoat_rce",
+      "vulnerability_name": "Remote Code Execution in Admin Console",
+      "rationale": "Unauthenticated RCE on administrative console provides total server takeover."
+    },
+    {
+      "rank": 2,
+      "finding_key": "juiceshop_sql_login",
+      "vulnerability_name": "SQL Injection in User Login API",
+      "rationale": "Critical authentication bypass SQL Injection on production REST API."
+    },
+    {
+      "rank": 3,
+      "finding_key": "webgoat_sql_injection",
+      "vulnerability_name": "SQL Injection in Search Module",
+      "rationale": "Critical SQL Injection vulnerability on staging application endpoint."
+    },
+    {
+      "rank": 4,
+      "finding_key": "juiceshop_idor_basket",
+      "vulnerability_name": "Broken Access Control in Shopping Basket",
+      "rationale": "High severity IDOR access control flaw on production basket REST API."
+    },
+    {
+      "rank": 5,
+      "finding_key": "juiceshop_sensitive_data",
+      "vulnerability_name": "Sensitive Data Exposure in User Profile API",
+      "rationale": "Sensitive data disclosure of user hashes on production REST API."
+    },
+    {
+      "rank": 6,
+      "finding_key": "webgoat_xss",
+      "vulnerability_name": "Cross-Site Scripting (Reflected)",
+      "rationale": "Reflected XSS requiring user interaction on staging environment."
+    },
+    {
+      "rank": 7,
+      "finding_key": "webgoat_xframe_missing",
+      "vulnerability_name": "X-Frame-Options Header Missing",
+      "rationale": "Informational clickjacking header recommendation."
+    }
+  ]
+}

@@ -24,7 +24,7 @@ import re
 from datetime import datetime
 from typing import List
 
-from schema import StandardFinding, Severity, generate_finding_id
+from schema import StandardFinding, Severity, generate_source_id
 from scanner_adapters.base import BaseAdapter, register_adapter
 
 # ZAP riskcode: "0"-"3"
@@ -57,8 +57,12 @@ class ZapAdapter(BaseAdapter):
             print(f"[ZapAdapter] Failed to parse JSON: {e}")
             return findings
 
-        for site in data.get("site", []):
+        sites = data.get("site", [])
+        if isinstance(sites, dict):
+            sites = [sites]
+        for site in sites:
             host = site.get("@name") or site.get("@host", "unknown-host")
+            site_port = str(site.get("@port") or "").strip()
 
             for alert in site.get("alerts", []):
                 vuln_name = alert.get("name") or alert.get("alert", "Unnamed ZAP Alert")
@@ -73,14 +77,45 @@ class ZapAdapter(BaseAdapter):
                 solution = _strip_html(alert.get("solution", ""))
 
                 instances = alert.get("instances") or [{}]
+                # Track seen canonical keys within this alert to detect truly identical instances
+                # that ZAP emits more than once (same url+param+evidence+method+attack)
+                _seen_instance_keys: set = set()
                 for inst in instances:
                     url = inst.get("uri", host)
                     param = inst.get("param") or None
                     evidence = inst.get("evidence") or inst.get("attack") or None
+                    method = (inst.get("method") or "GET").upper()
+                    inst_id = str(inst.get("id") or "").strip()
+
+                    # Extract query string from URL for identity: /login?error ≠ /login
+                    from urllib.parse import urlparse as _urlparse
+                    _parsed_url = _urlparse(url)
+                    query_part = _parsed_url.query.strip()  # e.g. "error" or ""
+
+                    # ZAP identity: full URL (query string included) + param + method
+                    # param is a stable per-instance field (header name, cookie, request param)
+                    # query_part differentiates /login vs /login?error
+                    canonical_key = f"{url}|{param}|{method}|{evidence}"
+                    if canonical_key in _seen_instance_keys:
+                        # Genuinely identical instance emitted by ZAP: use inst_id as final tiebreaker
+                        discriminator = f"{param or ''}|{query_part}|{inst_id}"
+                    else:
+                        _seen_instance_keys.add(canonical_key)
+                        # discriminator = param + query part: distinguishes same-path instances
+                        discriminator = f"{param or ''}|{query_part}"
+
+
 
                     try:
                         findings.append(StandardFinding(
-                            finding_id=generate_finding_id("ZAP", url, vuln_name, "", param or ""),
+                            finding_id=generate_source_id(
+                                scanner="ZAP",
+                                host=url,
+                                vuln_name=vuln_name,
+                                endpoint=self._extract_endpoint(url),
+                                port=site_port,
+                                discriminator=discriminator,
+                            ),
                             scanner="ZAP",
                             cve=cve,
                             cwe=cwe,
@@ -97,7 +132,7 @@ class ZapAdapter(BaseAdapter):
                                 "pluginid": alert.get("pluginid"),
                                 "wascid": alert.get("wascid"),
                                 "confidence": alert.get("confidence"),
-                                "method": inst.get("method"),
+                                "method": method,
                                 "solution": solution,
                             },
                         ))

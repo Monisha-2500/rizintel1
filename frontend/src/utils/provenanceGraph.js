@@ -89,7 +89,7 @@ export function buildProvenanceGraph(finding) {
   // Risk assessment node
   const raId = `RA_${rootId}`;
   const ra = finding.detail?.risk_assessment ?? {};
-  addNode(raId, 'risk_assessment', 'Risk Assessment (M5)', {
+  addNode(raId, 'risk_assessment', 'Risk Assessment', {
     score: finding.risk_score,
     level: finding.risk_level,
     breakdown: ra.score_breakdown,
@@ -435,14 +435,14 @@ export function buildDecisionProvenanceChain(finding, feedbackHistory = []) {
     {
       risk_score: finding.risk_score,
       risk_level: finding.risk_level,
-      scoring_version: ra.scoring_version ?? 'M5 Engine',
+      scoring_version: ra.scoring_version ?? 'Risk Scoring Engine',
       score_breakdown: ra.score_breakdown ?? {}
     }
   );
   addEdge('stage_threat_asset', 'stage_risk_score', 'scored_by');
 
   // Stage 6: Explainability Rationale
-  const hasExplanation = ex.technical || ex.management || (ex.top_risk_drivers && ex.top_risk_drivers.length > 0);
+  const hasExplanation = Boolean(ex.technical || ex.management || (ex.top_risk_drivers && ex.top_risk_drivers.length > 0));
   addNode(
     'stage_explanation',
     6,
@@ -450,12 +450,19 @@ export function buildDecisionProvenanceChain(finding, feedbackHistory = []) {
     'Explainability',
     hasExplanation ? 'AVAILABLE' : 'NOT_AVAILABLE',
     hasExplanation
-      ? (ex.technical ?? ex.management ?? 'Technical risk drivers compiled')
-      : 'AI explanation not generated for this finding',
+      ? (ex.management ?? ex.technical ?? 'Contextual risk drivers and remediation rationales generated')
+      : 'Explanation provenance not available',
     {
+      status: hasExplanation ? 'Completed' : 'Unavailable',
+      explanation_generated_at: ex.generated_at || 'Not recorded',
+      technical_explanation_availability: ex.technical ? 'Available' : 'Not available',
+      management_explanation_availability: ex.management ? 'Available' : 'Not available',
+      top_risk_driver_count: Array.isArray(ex.top_risk_drivers) ? ex.top_risk_drivers.length : 0,
+      canonical_finding_id: finding.finding_id,
+      passthrough_risk_score: `${finding.risk_score} / 100 (${finding.risk_level ?? 'HIGH'})`,
       technical_explanation: ex.technical ?? 'N/A',
       management_summary: ex.management ?? 'N/A',
-      top_risk_drivers: ex.top_risk_drivers ?? ['CVSS Severity', 'Asset Exposure']
+      top_risk_drivers: ex.top_risk_drivers ?? []
     }
   );
   addEdge('stage_risk_score', 'stage_explanation', 'explained_by');

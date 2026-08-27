@@ -13,8 +13,9 @@ Rules:
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from typing import Any, Dict, List, Optional
+from mem7.sla_engine import classify
 
 
 class M7ActionableFindingAdapter:
@@ -35,7 +36,7 @@ class M7ActionableFindingAdapter:
         # Top-level identity
         finding_id = str(m6_finding.get("finding_id"))
         cve_id = m6_finding.get("cve_id")
-        asset_id = str(m6_finding.get("asset_id") or pipeline_context.get("asset_id") or "ASSET-WEB-001")
+        asset_id = str(m6_finding.get("asset_id") or pipeline_context.get("asset_id") or "UNMAPPED")
         vuln_name = str(m6_finding.get("vulnerability_name") or pipeline_context.get("vulnerability_name") or "Vulnerability")
         vuln_type = str(pipeline_context.get("vulnerability_type") or "OTHER")
 
@@ -46,16 +47,34 @@ class M7ActionableFindingAdapter:
 
         # Asset context
         ac = pipeline_context.get("asset_context") or {}
-        asset_crit = str(ac.get("criticality") or ac.get("asset_criticality") or "MEDIUM").upper()
-        internet_exp = bool(ac.get("internet_facing") if "internet_facing" in ac else ac.get("internet_exposure", True))
+        asset_crit = str(ac.get("criticality") or ac.get("asset_criticality") or ("UNKNOWN" if asset_id == "UNMAPPED" else "MEDIUM")).upper()
 
-        # Confidence classification
+        # Preserve None for UNMAPPED (genuinely unknown); cast to bool only for known assets
+        _facing = ac.get("internet_facing")
+        _exposure = ac.get("internet_exposure")
+        if _facing is not None:
+            internet_exp = bool(_facing)
+        elif _exposure is not None:
+            internet_exp = bool(_exposure)
+        elif asset_id == "UNMAPPED":
+            internet_exp = None   # genuinely unknown — preserve, don't assume False
+        else:
+            internet_exp = True
+
+        # Confidence classification & Noise assessment
+        fc = pipeline_context.get("finding_confidence") or {}
+        na = pipeline_context.get("noise_assessment") or {}
+
         raw_conf = str(
             m6_finding.get("finding_confidence_classification")
             or pipeline_context.get("finding_confidence_classification")
+            or fc.get("classification")
             or "CONFIRMED"
         ).upper()
         conf_class = raw_conf.split(".")[-1]
+
+        likely_noise = bool(na.get("likely_noise", False) or conf_class == "LIKELY_NOISE")
+        review_required = bool(fc.get("review_required", False) or conf_class == "NEEDS_REVIEW")
 
         # Explanation & Remediation
         explanation = m6_finding.get("explanation") or {}
@@ -65,29 +84,69 @@ class M7ActionableFindingAdapter:
             "Review finding details and apply vendor security updates."
         )
 
-        # M7 Workflow & SLA
-        sla_hours = m7_ticket.get("sla_hours", 24)
-        sla_deadline_str = m7_ticket.get("sla_deadline")
-        # Format SLA deadline as ISO-8601 UTC if needed
+        # Calculate SLA reference duration from M7 authoritative classify()
+        rule = classify(risk_score)
+        sla_hours = int(m7_ticket.get("sla_hours") or rule.sla_hours)
+        sla_deadline_str = m7_ticket.get("sla_deadline") or m7_ticket.get("due_at")
         if sla_deadline_str and "T" not in sla_deadline_str and " " in sla_deadline_str:
             sla_due_at = sla_deadline_str.replace(" ", "T") + "Z"
         elif sla_deadline_str:
             sla_due_at = sla_deadline_str
         else:
-            sla_due_at = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+            disc_dt = datetime.now(timezone.utc)
+            due_dt = disc_dt + timedelta(hours=sla_hours)
+            sla_due_at = due_dt.isoformat().replace("+00:00", "Z")
 
         sla_status = str(m7_ticket.get("sla_status") or "ON_TRACK").upper()
         ticket_id = str(m7_ticket.get("ticket_id") or f"VULN-{finding_id[-4:]}")
+        is_assigned = bool(m7_ticket.get("assigned_to") and m7_ticket.get("assigned_to") != "Unassigned")
 
-        workflow = {
-            "ticket_id": ticket_id,
-            "status": str(m7_ticket.get("status") or "OPEN").upper(),
-            "assigned_to": m7_ticket.get("assigned_to") if m7_ticket.get("assigned_to") != "Unassigned" else None,
-            "sla_hours": sla_hours,
-            "sla_due_at": sla_due_at,
-            "sla_status": sla_status,
-            "escalation_level": 0,
-        }
+        # Operational Routing Policy:
+        # Track 1: SUPPRESSED (Likely Noise)
+        if likely_noise:
+            workflow = {
+                "ticket_id": None,
+                "status": "SUPPRESSED",
+                "assigned_to": None,
+                "sla_hours": None,
+                "sla_due_at": None,
+                "sla_status": "NOT_APPLICABLE",
+                "escalation_level": 0,
+            }
+            validated_stage_status = "SUPPRESSED_NOISE"
+            assigned_stage_status = "SUPPRESSED"
+            remediated_stage_status = "NOT_APPLICABLE"
+
+        # Track 2: PENDING_REVIEW (Needs Analyst Review)
+        elif review_required:
+            workflow = {
+                "ticket_id": None,
+                "status": "PENDING_REVIEW",
+                "assigned_to": None,
+                "sla_hours": sla_hours,
+                "sla_due_at": None,
+                "sla_status": "PENDING_REVIEW",
+                "escalation_level": 0,
+            }
+            validated_stage_status = "NEEDS_REVIEW"
+            assigned_stage_status = "PENDING"
+            remediated_stage_status = "PENDING"
+
+        # Track 3: OPEN (Actionable / Confirmed Remediation)
+        else:
+            workflow = {
+                "ticket_id": ticket_id,
+                "status": str(m7_ticket.get("status") or "OPEN").upper(),
+                "assigned_to": m7_ticket.get("assigned_to") if m7_ticket.get("assigned_to") != "Unassigned" else None,
+                "sla_hours": sla_hours,
+                "sla_due_at": sla_due_at,
+                "sla_status": sla_status,
+                "escalation_level": 0,
+            }
+            validated_stage_status = "DONE"
+            assigned_stage_status = "DONE" if is_assigned else "PENDING"
+            remediated_stage_status = "DONE" if workflow["status"] == "RESOLVED" else "PENDING"
+
 
         # Timestamps
         discovered_at = pipeline_context.get("discovered_at") or pipeline_context.get("first_seen") or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
@@ -114,19 +173,16 @@ class M7ActionableFindingAdapter:
                 "scanner": "SCANNER"
             }]
 
-        # Determine assignment state for journey provenance
-        is_assigned = bool(workflow.get("assigned_to") and workflow.get("assigned_to") != "Unassigned")
-
-        # Standard 8-stage journey
+        # Standard 8-stage journey reflecting M3 routing
         journey = [
             {"stage": "DETECTED", "status": "DONE"},
             {"stage": "CORRELATED", "status": "DONE"},
-            {"stage": "VALIDATED", "status": "DONE"},
+            {"stage": "VALIDATED", "status": validated_stage_status},
             {"stage": "ENRICHED", "status": "DONE"},
             {"stage": "PRIORITIZED", "status": "DONE"},
             {"stage": "EXPLAINED", "status": "DONE"},
-            {"stage": "ASSIGNED", "status": "DONE" if is_assigned else "PENDING"},
-            {"stage": "REMEDIATED", "status": "DONE" if workflow["status"] == "RESOLVED" else "PENDING"}
+            {"stage": "ASSIGNED", "status": assigned_stage_status},
+            {"stage": "REMEDIATED", "status": remediated_stage_status}
         ]
 
         # Threat intelligence
@@ -165,11 +221,11 @@ class M7ActionableFindingAdapter:
                 "exploit_available": bool(ti.get("exploit_available") or False),
             },
             "asset_context": {
-                "asset_name": str(ac.get("asset_name") or f"asset-{asset_id.lower()}"),
-                "environment": str(ac.get("environment") or "PRODUCTION").upper(),
+                "asset_name": str(ac.get("asset_name") or ("Unresolved Asset" if asset_id == "UNMAPPED" else f"asset-{asset_id.lower()}")),
+                "environment": str(ac.get("environment") or ("UNKNOWN" if asset_id == "UNMAPPED" else "PRODUCTION")).upper(),
                 "criticality": asset_crit,
                 "internet_facing": internet_exp,
-                "data_sensitivity": str(ac.get("data_sensitivity") or "INTERNAL").upper(),
+                "data_sensitivity": str(ac.get("data_sensitivity") or ("UNKNOWN" if asset_id == "UNMAPPED" else "INTERNAL")).upper(),
             },
             "risk_assessment": {
                 "score_breakdown": ra.get("score_breakdown") or {},
@@ -179,6 +235,8 @@ class M7ActionableFindingAdapter:
                 "technical": str(explanation.get("technical") or "Technical risk assessment completed."),
                 "management": str(explanation.get("management") or "Management summary generated."),
                 "top_risk_drivers": list(explanation.get("top_risk_drivers") or []),
+                "generated_at": m6_finding.get("generated_at") or explanation.get("generated_at"),
+                "references": list(remediation.get("references") or explanation.get("references") or []),
             },
             "provenance": {
                 "source_findings": formatted_source_findings,

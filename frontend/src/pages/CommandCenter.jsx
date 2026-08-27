@@ -1,889 +1,892 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDashboard } from '../hooks/useDashboard';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useFindings } from '../hooks/useFindings';
+import { useDashboard } from '../hooks/useDashboard';
+import { getScanRunFindings, getRuntimeStatus, RUNTIME_STATUS, getCurrentUser } from '../services/findingsService';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import {
-  Globe, Shield, Flame, Layers, TrendingUp, AlertTriangle,
-  Clock, User, Lock, Building, Monitor, Database, ArrowRight, Check,
-  DatabaseZap, CheckCircle, Target, Zap, ChevronRight, MoreVertical,
-  Activity, Radio, Server, AlertCircle
+  Shield, Flame, TrendingUp, AlertTriangle,
+  Clock, Globe, Server, ArrowRight, Check,
+  Layers, Target, Zap, ChevronLeft, ChevronRight,
+  Search, RefreshCw, AlertCircle, X, Info,
+  CheckCircle2, ShieldAlert, Activity
 } from 'lucide-react';
 
-/* ── Sparkline SVG Helper ────────────────────────────────────────────────── */
-function Sparkline({ color = '#6366F1', id = 'spk' }) {
+/* ─── SLA helpers ───────────────────────────────────────────────────────── */
+
+function parseSlaRemaining(slaStatus, slaDueAt) {
+  if (!slaDueAt) return null;
+  const now = Date.now();
+  const due = new Date(slaDueAt).getTime();
+  if (isNaN(due)) return null;
+  const diffMs = due - now;
+  const status = (slaStatus || '').toUpperCase();
+  if (status === 'BREACHED' || diffMs < 0) {
+    const abs = Math.abs(diffMs);
+    const h = Math.floor(abs / 3600000);
+    const m = Math.floor((abs % 3600000) / 60000);
+    return { breached: true, label: h > 0 ? `Breached by ${h}h ${m}m` : 'Breached' };
+  }
+  const h = Math.floor(diffMs / 3600000);
+  const m = Math.floor((diffMs % 3600000) / 60000);
+  const d = Math.floor(diffMs / 86400000);
+  if (d >= 2) return { breached: false, atRisk: false, label: `${d}d remaining` };
+  if (h >= 1) return { breached: false, atRisk: status === 'AT_RISK', label: `${h}h ${m}m remaining` };
+  return { breached: false, atRisk: true, label: `${m}m remaining` };
+}
+
+function SlaTag({ slaStatus, slaDueAt }) {
+  const info = parseSlaRemaining(slaStatus, slaDueAt);
+  const status = (slaStatus || '').toUpperCase();
+  if (status === 'BREACHED' || info?.breached) {
+    return (
+      <span className="cc-sla-pill cc-sla-breached">
+        <Clock size={10} aria-hidden="true" /> {info?.label || 'SLA Breached'}
+      </span>
+    );
+  }
+  if (status === 'AT_RISK' || info?.atRisk) {
+    return (
+      <span className="cc-sla-pill cc-sla-atrisk">
+        <AlertTriangle size={10} aria-hidden="true" /> {info?.label || 'SLA At Risk'}
+      </span>
+    );
+  }
+  if (info?.label) {
+    return (
+      <span className="cc-sla-pill cc-sla-healthy">
+        <Check size={10} aria-hidden="true" /> {info.label}
+      </span>
+    );
+  }
   return (
-    <svg className="kpi-sparkline" viewBox="0 0 100 24" preserveAspectRatio="none">
-      <defs>
-        <linearGradient id={`grad-${id}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor={color} stopOpacity="0.25" />
-          <stop offset="100%" stopColor={color} stopOpacity="0.0" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M 0 16 Q 15 12 30 18 T 60 8 T 85 14 L 100 6 L 100 24 L 0 24 Z"
-        fill={`url(#grad-${id})`}
-      />
-      <path
-        d="M 0 16 Q 15 12 30 18 T 60 8 T 85 14 L 100 6"
-        fill="none"
-        stroke={color}
-        strokeWidth="2"
-        strokeLinecap="round"
-      />
-    </svg>
+    <span className="cc-sla-pill cc-sla-healthy">
+      <Check size={10} aria-hidden="true" /> On Track
+    </span>
   );
 }
 
-export default function CommandCenter() {
-  const navigate = useNavigate();
-  const { summary, loading: sl, error: se } = useDashboard();
-  const { findings, loading: fl, error: fe } = useFindings();
+/* ─── Severity helpers ───────────────────────────────────────────────────── */
 
-  if (sl || fl) {
-    return (
-      <div className="empty-state" style={{ minHeight: '60vh' }}>
-        <div className="empty-state-icon">⚡</div>
-        <h3>Loading Command Center…</h3>
-      </div>
-    );
-  }
+function normSeverity(f) {
+  const lvl = (f.risk_level || '').toUpperCase();
+  if (lvl === 'CRITICAL' || lvl === 'HIGH' || lvl === 'MEDIUM' || lvl === 'LOW') return lvl;
+  const score = f.risk_score ?? 0;
+  if (score >= 75) return 'CRITICAL';
+  if (score >= 50) return 'HIGH';
+  if (score >= 25) return 'MEDIUM';
+  return 'LOW';
+}
 
-  if (se || fe) {
-    return (
-      <div className="empty-state" style={{ minHeight: '60vh' }}>
-        <AlertTriangle size={32} color="#EF4444" />
-        <h3>Error loading dashboard</h3>
-        <p>{se || fe}</p>
-      </div>
-    );
-  }
+const SEV_COLOR = { CRITICAL: '#EF4444', HIGH: '#F97316', MEDIUM: '#EAB308', LOW: '#10B981' };
 
-  const s = summary?.summary ?? {};
-  
-  // Donut data
-  const donutData = [
-    { name: 'Critical', value: s.critical ?? 2, color: '#EF4444', pct: '20%' },
-    { name: 'High',     value: s.high     ?? 4, color: '#F97316', pct: '40%' },
-    { name: 'Medium',   value: s.medium   ?? 3, color: '#EAB308', pct: '30%' },
-    { name: 'Low',      value: s.low      ?? 1, color: '#10B981', pct: '10%' },
-  ];
+function SeverityBadge({ severity }) {
+  const sev = (severity || 'MEDIUM').toUpperCase();
+  const color = SEV_COLOR[sev] || '#64748B';
+  return (
+    <span
+      className="cc-sev-badge"
+      style={{ background: `${color}1A`, color, borderColor: `${color}50` }}
+    >
+      {sev}
+    </span>
+  );
+}
 
-  const totalRisks = s.unique_findings ?? 10;
+/* ─── Pipeline stage names (customer-facing only) ─────────────────────── */
 
-  // Pipeline modules
-  const PIPELINE_MODULES = [
-    { id: 'M1', label: 'M1 Normalization' },
-    { id: 'M2', label: 'M2 Deduplication' },
-    { id: 'M3', label: 'M3 Confidence' },
-    { id: 'M4', label: 'M4 Threat Intel' },
-    { id: 'M5', label: 'M5 Risk Scoring' },
-    { id: 'M6', label: 'M6 Explainability' },
-    { id: 'M7', label: 'M7 SLA Automation' },
-    { id: 'M8', label: 'M8 Decision Intelligence', active: true },
-  ];
+const PIPELINE_STAGES = [
+  'Scanner Signals',
+  'Normalization',
+  'Intelligent Deduplication',
+  'Confidence Analysis',
+  'Threat Intelligence',
+  'Risk Scoring',
+  'Explainability',
+  'SLA & Remediation',
+];
+
+function PipelineHealth({ runtimeStatus }) {
+  const isLive = runtimeStatus === RUNTIME_STATUS.LIVE;
+  const isConnecting = runtimeStatus === RUNTIME_STATUS.CONNECTING;
+  const isFallback = runtimeStatus === RUNTIME_STATUS.FALLBACK || runtimeStatus === RUNTIME_STATUS.MOCK;
+  const overallLabel = isLive ? 'Operational' : isConnecting ? 'Connecting…' : isFallback ? 'Using Cached Data' : 'Unavailable';
+  const overallColor = isLive ? '#10B981' : isConnecting ? '#F59E0B' : '#94A3B8';
 
   return (
-    <div className="command-center-container">
-      
-      {/* ═════════════════════════════════════════════════════════════════════
-          TOP PURPLE POP-UP HERO BOX
-          ═════════════════════════════════════════════════════════════════════ */}
-      <div className="hero-purple-box">
-        <div className="hero-content-flex">
-          {/* Left Column: Heading, Subtitle, Buttons */}
-          <div className="hero-left-col">
-            <div className="hero-schema-tag">
-              <Shield size={13} /> M8 Command Center · Schema v1.0
-            </div>
-            <h1 className="hero-main-title">
-              RizIntel
-            </h1>
-            <p className="hero-description">
-              Security Decision Intelligence correlates scanner noise, enriches risk with context,
-              and surfaces what security teams should act on first.
-            </p>
-            <div className="hero-btn-row">
-              <button
-                className="hero-btn-primary"
-                onClick={() => navigate('/findings')}
-                id="hero-investigate-btn"
-              >
-                Investigate Critical Risks <ArrowRight size={14} />
-              </button>
-              <button
-                className="hero-btn-outline"
-                onClick={() => navigate('/intelligence')}
-                id="hero-intelligence-btn"
-              >
-                View Security Intelligence
-              </button>
-            </div>
-          </div>
-
-          {/* Right Column: 3 Step Cards + Reduction Sparkline Card */}
-          <div className="hero-right-col">
-            {/* Step 1 */}
-            <div className="hero-step-card">
-              <div className="hero-step-top">
-                <Target size={20} color="#8B5CF6" />
-                <span className="hero-step-num">{s.raw_findings ?? 18}</span>
-              </div>
-              <div className="hero-step-title">Raw Signals</div>
-              <div className="hero-step-sub">From 3 Scanners</div>
-            </div>
-
-            <div className="hero-arrow">→</div>
-
-            {/* Step 2 */}
-            <div className="hero-step-card">
-              <div className="hero-step-top">
-                <Shield size={20} color="#3B82F6" />
-                <span className="hero-step-num">{s.unique_findings ?? 10}</span>
-              </div>
-              <div className="hero-step-title">Unique Risks</div>
-              <div className="hero-step-sub">Correlated</div>
-            </div>
-
-            <div className="hero-arrow">→</div>
-
-            {/* Step 3 */}
-            <div className="hero-step-card">
-              <div className="hero-step-top">
-                <CheckCircle size={20} color="#8B5CF6" />
-                <span className="hero-step-num">{s.actionable_findings ?? 9}</span>
-              </div>
-              <div className="hero-step-title">Actionable Findings</div>
-              <div className="hero-step-sub">Prioritized</div>
-            </div>
-
-            {/* Reduction Rate Sparkline Card */}
-            <div className="hero-reduction-card">
-              <div>
-                <div className="hero-reduction-num">
-                  {((s.duplicate_reduction_rate ?? 0.444) * 100).toFixed(1)}%
-                </div>
-                <div className="hero-reduction-title">Duplicate Noise Eliminated</div>
-              </div>
-              <svg viewBox="0 0 100 28" style={{ width: '100%', height: 26, marginTop: 4 }}>
-                <path d="M 0 18 Q 20 14 40 22 T 80 10 L 100 6 L 100 28 L 0 28 Z" fill="rgba(139, 92, 246, 0.15)" />
-                <path d="M 0 18 Q 20 14 40 22 T 80 10 L 100 6" fill="none" stroke="#8B5CF6" strokeWidth="2" strokeLinecap="round" />
-              </svg>
-            </div>
-          </div>
+    <div className="cc-panel">
+      <div className="cc-panel-header">
+        <div className="cc-panel-title">
+          <Activity size={15} style={{ color: '#6366F1' }} aria-hidden="true" />
+          Pipeline Health
         </div>
-
-        <div className="hero-footer-tag">
-          Turning noise into clarity. Prioritize with confidence.
-        </div>
+        <span style={{ fontSize: 12, fontWeight: 600, color: overallColor }}>
+          ● {overallLabel}
+        </span>
       </div>
-
-      {/* ═════════════════════════════════════════════════════════════════════
-          6 KPI METRIC CARDS ROW
-          ═════════════════════════════════════════════════════════════════════ */}
-      <div className="kpi-cards-grid">
-        {/* Card 1: Raw Signals */}
-        <div className="kpi-card">
-          <div className="kpi-card-top">
-            <div className="kpi-icon" style={{ background: '#F5F3FF', color: '#7C3AED' }}><Layers size={13} /></div>
-            <span className="kpi-label">RAW SIGNALS</span>
-          </div>
-          <div className="kpi-val">{s.raw_findings ?? 18}</div>
-          <div className="kpi-sub">Total scanner signals</div>
-          <Sparkline color="#6366F1" id="kpi-1" />
-        </div>
-
-        {/* Card 2: Unique Risks */}
-        <div className="kpi-card">
-          <div className="kpi-card-top">
-            <div className="kpi-icon" style={{ background: '#EFF6FF', color: '#3B82F6' }}><Shield size={13} /></div>
-            <span className="kpi-label">UNIQUE RISKS</span>
-          </div>
-          <div className="kpi-val">{s.unique_findings ?? 10}</div>
-          <div className="kpi-sub">After deduplication</div>
-          <Sparkline color="#3B82F6" id="kpi-2" />
-        </div>
-
-        {/* Card 3: Duplicates Correlated */}
-        <div className="kpi-card">
-          <div className="kpi-card-top">
-            <div className="kpi-icon" style={{ background: '#FDF2F8', color: '#DB2777' }}><User size={13} /></div>
-            <span className="kpi-label">DUPLICATES CORRELATED</span>
-          </div>
-          <div className="kpi-val">{s.duplicates_correlated ?? 8}</div>
-          <div className="kpi-sub">Noise consolidated</div>
-          <Sparkline color="#DB2777" id="kpi-3" />
-        </div>
-
-        {/* Card 4: Reduction Rate */}
-        <div className="kpi-card">
-          <div className="kpi-card-top">
-            <div className="kpi-icon" style={{ background: '#ECFDF5', color: '#059669' }}><Zap size={13} /></div>
-            <span className="kpi-label">REDUCTION RATE</span>
-          </div>
-          <div className="kpi-val" style={{ color: '#059669' }}>
-            {((s.duplicate_reduction_rate ?? 0.444) * 100).toFixed(1)}%
-          </div>
-          <div className="kpi-sub">Signal noise eliminated</div>
-          <Sparkline color="#10B981" id="kpi-4" />
-        </div>
-
-        {/* Card 5: Critical Risks */}
-        <div className="kpi-card">
-          <div className="kpi-card-top">
-            <div className="kpi-icon" style={{ background: '#FEF2F2', color: '#EF4444' }}><AlertTriangle size={13} /></div>
-            <span className="kpi-label">CRITICAL RISKS</span>
-          </div>
-          <div className="kpi-val" style={{ color: '#EF4444' }}>{s.critical ?? 2}</div>
-          <div className="kpi-sub">Require immediate action</div>
-          <Sparkline color="#EF4444" id="kpi-5" />
-        </div>
-
-        {/* Card 6: SLA Breached */}
-        <div className="kpi-card">
-          <div className="kpi-card-top">
-            <div className="kpi-icon" style={{ background: '#FFF7ED', color: '#EA580C' }}><Clock size={13} /></div>
-            <span className="kpi-label">SLA BREACHED</span>
-          </div>
-          <div className="kpi-val" style={{ color: '#EA580C' }}>{s.sla_breaches ?? 1}</div>
-          <div className="kpi-sub">Remediation overdue</div>
-          <Sparkline color="#F97316" id="kpi-6" />
-        </div>
-      </div>
-
-      {/* ═════════════════════════════════════════════════════════════════════
-          ATTENTION NOW SECTION
-          ═════════════════════════════════════════════════════════════════════ */}
-      <div className="attention-section-card">
-        <div className="attention-header-flex">
-          <div>
-            <div className="attention-section-title-wrap">
-              <div className="cc-card-title" style={{ margin: 0 }}>Attention Now</div>
-              <span className="attention-live-pill">
-                <span className="attention-live-dot" /> LIVE QUEUE
-              </span>
-            </div>
-            <div style={{ fontSize: 12, color: '#64748B', marginTop: 3 }}>
-              Security decisions requiring immediate analyst focus — prioritized by M8 Decision Engine.
-            </div>
-          </div>
-          <span className="cc-link-action" onClick={() => navigate('/findings')}>
-            View Full Queue ({findings?.length || 10}) →
-          </span>
-        </div>
-
-        <div className="attention-cards-container">
-          {(findings && findings.length >= 4 ? findings.slice(0, 4) : [
-            {
-              finding_id: 'DEDUP-0001',
-              cve_id: 'CVE-2026-1234',
-              vulnerability_name: 'SQL Injection',
-              asset_id: 'ASSET-PAY-001',
-              asset_name: 'payments-prod-api-01',
-              risk_score: 94,
-              risk_level: 'CRITICAL',
-              internet_exposure: true,
-              workflow: { sla_status: 'ON_TRACK' },
-              detail: {
-                threat_intelligence: { epss_score: 0.91, kev_listed: true, exploit_available: true },
-                scanner_consensus: { detected_by_count: 3, total_scanners: 3 },
-                finding_confidence: { score: 0.96, classification: 'CONFIRMED' },
-              }
-            },
-            {
-              finding_id: 'DEDUP-0002',
-              cve_id: 'CVE-2026-5678',
-              vulnerability_name: 'Remote Code Execution',
-              asset_id: 'ASSET-AUTH-002',
-              asset_name: 'auth-prod-api-02',
-              risk_score: 91,
-              risk_level: 'CRITICAL',
-              internet_exposure: true,
-              workflow: { sla_status: 'AT_RISK' },
-              detail: {
-                threat_intelligence: { epss_score: 0.86, kev_listed: true, exploit_available: true },
-                scanner_consensus: { detected_by_count: 2, total_scanners: 3 },
-                finding_confidence: { score: 0.96, classification: 'CONFIRMED' },
-              }
-            },
-            {
-              finding_id: 'DEDUP-0006',
-              cve_id: 'CVE-2026-9012',
-              vulnerability_name: 'Authentication Bypass',
-              asset_id: 'ASSET-ERP-006',
-              asset_name: 'erp-prod-01',
-              risk_score: 88,
-              risk_level: 'HIGH',
-              internet_exposure: false,
-              workflow: { sla_status: 'BREACHED' },
-              detail: {
-                threat_intelligence: { epss_score: 0.79, kev_listed: true, exploit_available: true },
-                scanner_consensus: { detected_by_count: 3, total_scanners: 3 },
-                finding_confidence: { score: 0.92, classification: 'CONFIRMED' },
-              }
-            },
-            {
-              finding_id: 'DEDUP-0009',
-              cve_id: 'CVE-2026-3456',
-              vulnerability_name: 'Server-Side Request Forgery',
-              asset_id: 'ASSET-FEE-009',
-              asset_name: 'fee-api-gateway-01',
-              risk_score: 84,
-              risk_level: 'HIGH',
-              internet_exposure: true,
-              workflow: { sla_status: 'AT_RISK' },
-              detail: {
-                threat_intelligence: { epss_score: 0.74, kev_listed: false, exploit_available: true },
-                scanner_consensus: { detected_by_count: 2, total_scanners: 3 },
-                finding_confidence: { score: 0.90, classification: 'CONFIRMED' },
-              }
-            }
-          ]).map((item, idx) => {
-            const rankNum = idx + 1;
-            const isCritical = item.risk_level === 'CRITICAL' || item.risk_score >= 90;
-            const slaStatus = (item.workflow?.sla_status || 'ON_TRACK').toUpperCase();
-            const ti = item.detail?.threat_intelligence || {};
-            const sc = item.detail?.scanner_consensus || {};
-            const fc = item.detail?.finding_confidence || {};
-            const assetName = item.detail?.asset_context?.asset_name || item.asset_name || item.asset_id;
-
-            return (
-              <div
-                key={item.finding_id || idx}
-                className={`priority-card ${isCritical ? 'severity-critical' : 'severity-high'}`}
-                onClick={() => navigate(`/findings/${item.finding_id}`)}
-              >
-                {/* Top Bar: Rank & CVE */}
-                <div className="priority-card-top-bar">
-                  <div className={`priority-rank-badge ${isCritical ? 'p-crit' : 'p-high'}`}>
-                    <span className="priority-rank-pulse" />
-                    #{String(rankNum).padStart(2, '0')} PRIORITY
-                  </div>
-                  {item.cve_id && (
-                    <span className="priority-cve-pill">{item.cve_id}</span>
-                  )}
-                </div>
-
-                {/* Vulnerability Title & Asset */}
-                <div className="priority-card-title" title={item.vulnerability_name}>
-                  {item.vulnerability_name}
-                </div>
-                <div className="priority-card-asset-row">
-                  {item.internet_exposure ? <Globe size={13} color="#3B82F6" /> : <Server size={13} color="#64748B" />}
-                  <span className="asset-name">{assetName}</span>
-                  <span className="asset-id-dim">· {item.asset_id}</span>
-                </div>
-
-                {/* Metrics Row: Risk Score + SLA */}
-                <div className="priority-metrics-box">
-                  <div className="priority-score-left">
-                    <div className={`priority-score-circle ${isCritical ? 'bg-crit' : 'bg-high'}`}>
-                      {item.risk_score}
-                    </div>
-                    <div className="priority-score-meta">
-                      <span className="priority-score-label">RISK SCORE</span>
-                      <span className={`priority-severity-tag ${isCritical ? 'text-crit' : 'text-high'}`}>
-                        {item.risk_level || (isCritical ? 'CRITICAL' : 'HIGH')}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* SLA Status Badge */}
-                  {slaStatus.includes('BREACH') ? (
-                    <span className="priority-sla-pill sla-breached">
-                      <Clock size={11} /> SLA BREACHED
-                    </span>
-                  ) : slaStatus.includes('RISK') ? (
-                    <span className="priority-sla-pill sla-at-risk">
-                      <AlertTriangle size={11} /> SLA AT RISK
-                    </span>
-                  ) : (
-                    <span className="priority-sla-pill sla-on-track">
-                      <Check size={11} /> SLA ON TRACK
-                    </span>
-                  )}
-                </div>
-
-                {/* Structured Telemetry Intelligence Badges */}
-                <div className="priority-signals-grid">
-                  <div className="intel-badge-row">
-                    {ti.kev_listed && (
-                      <span className="intel-badge cisa-kev" title="Listed on CISA Known Exploited Vulnerabilities Catalog">
-                        <Flame size={12} /> CISA KEV
-                      </span>
-                    )}
-                    {ti.epss_score != null && (
-                      <span className="intel-badge epss-high" title={`Exploit Prediction Scoring System: ${(ti.epss_score * 100).toFixed(0)}%`}>
-                        <TrendingUp size={12} /> EPSS {(ti.epss_score * 100).toFixed(0)}%
-                      </span>
-                    )}
-                    {ti.exploit_available && (
-                      <span className="intel-badge exploit-ready" title="Public exploit code is available">
-                        <Zap size={12} /> Exploit Ready
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="intel-badge-row">
-                    <span className="intel-badge exposure-net">
-                      {item.internet_exposure ? (
-                        <><Globe size={12} /> Internet-Facing</>
-                      ) : (
-                        <><Shield size={12} /> Internal Network</>
-                      )}
-                    </span>
-                    {sc.detected_by_count != null && (
-                      <span className="intel-badge scanners-confirmed" title={`Detected by ${sc.detected_by_count} of ${sc.total_scanners || 3} scanners`}>
-                        <Layers size={12} /> {sc.detected_by_count}/{sc.total_scanners || 3} Scanners
-                      </span>
-                    )}
-                    {fc.score != null && (
-                      <span className="intel-badge confidence-high" title={`Corroborated Finding Confidence: ${(fc.score * 100).toFixed(0)}%`}>
-                        <Target size={12} /> {(fc.score * 100).toFixed(0)}% Conf
-                      </span>
-                    )}
-                  </div>
-                </div>
-
-                {/* Footer / CTA */}
-                <div className="priority-footer-btns">
-                  <button
-                    className="btn-investigate-sleek"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/findings/${item.finding_id}`);
-                    }}
-                  >
-                    <span>Investigate Finding</span>
-                    <ArrowRight size={13} />
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Attention Footer */}
-        <div className="attention-meta-bar">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ fontSize: 12 }}>ℹ️</span>
-            <span>Data reflects the latest integration from M1–M7. Priorities are driven by risk, threat intelligence, asset criticality, exposure and SLA.</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <Clock size={13} />
-            <span>Last updated: 20 Aug 2026 · 14:40 IST</span>
-          </div>
-        </div>
-      </div>
-
-      {/* ═════════════════════════════════════════════════════════════════════
-          ROW 1: THREE EQUAL CARDS (Risk Distribution, SLA Health, Signals)
-          ═════════════════════════════════════════════════════════════════════ */}
-      <div className="cc-grid-3">
-        
-        {/* CARD 1: Risk Distribution */}
-        <div className="cc-card">
-          <div className="cc-card-title">Risk Distribution</div>
-          <div className="donut-container">
-            <div className="donut-chart-wrapper">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={donutData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={46}
-                    outerRadius={65}
-                    paddingAngle={3}
-                    dataKey="value"
-                    strokeWidth={0}
-                  >
-                    {donutData.map((entry, idx) => (
-                      <Cell key={idx} fill={entry.color} />
-                    ))}
-                  </Pie>
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="donut-center-stat">
-                <div className="donut-center-num">{totalRisks}</div>
-                <div className="donut-center-label">Total Risks</div>
-              </div>
-            </div>
-
-            <div className="donut-legend">
-              {donutData.map((item) => (
-                <div key={item.name} className="donut-legend-item">
-                  <div className="donut-legend-left">
-                    <div className="donut-dot" style={{ background: item.color }} />
-                    <span>{item.name}</span>
-                  </div>
-                  <div className="donut-legend-val">
-                    {item.value} <span className="donut-legend-pct">({item.pct})</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="cc-info-pill blue">
-            <span style={{ fontSize: 13 }}>ℹ️</span>
-            <span>2 risks need immediate attention.</span>
-          </div>
-        </div>
-
-        {/* CARD 2: SLA Health Overview */}
-        <div className="cc-card">
-          <div className="cc-card-title">SLA Health Overview</div>
-          <div>
-            <div className="sla-health-progress-bar">
-              <div className="sla-progress-seg" style={{ width: '10%', background: '#EF4444' }} />
-              <div className="sla-progress-seg" style={{ width: '20%', background: '#F97316' }} />
-              <div className="sla-progress-seg" style={{ width: '60%', background: '#10B981' }} />
-              <div className="sla-progress-seg" style={{ width: '10%', background: '#06B6D4' }} />
-            </div>
-
-            <div className="sla-stat-boxes">
-              <div className="sla-stat-box breached">
-                <div className="sla-box-label">Breached</div>
-                <div className="sla-box-num">1</div>
-                <div className="sla-box-pct">(10%)</div>
-              </div>
-              <div className="sla-stat-box at-risk">
-                <div className="sla-box-label">At Risk</div>
-                <div className="sla-box-num">2</div>
-                <div className="sla-box-pct">(20%)</div>
-              </div>
-              <div className="sla-stat-box on-track">
-                <div className="sla-box-label">On Track</div>
-                <div className="sla-box-num">6</div>
-                <div className="sla-box-pct">(60%)</div>
-              </div>
-              <div className="sla-stat-box met">
-                <div className="sla-box-label">Met</div>
-                <div className="sla-box-num">1</div>
-                <div className="sla-box-pct">(10%)</div>
-              </div>
-            </div>
-          </div>
-
-          <div className="cc-info-pill">
-            <Clock size={14} color="#7C3AED" />
-            <span>1 finding has breached SLA. Escalation recommended.</span>
-          </div>
-        </div>
-
-        {/* CARD 3: Security Signal Overview */}
-        <div className="cc-card">
-          <div className="cc-card-title">Security Signal Overview</div>
-          <div className="signal-list">
-            <div className="signal-item">
-              <div className="signal-item-left">
-                <div className="signal-icon-badge blue"><Globe size={14} /></div>
-                <span>Internet-facing findings</span>
-              </div>
-              <span className="signal-val">6</span>
-            </div>
-            <div className="signal-item">
-              <div className="signal-item-left">
-                <div className="signal-icon-badge red"><Shield size={14} /></div>
-                <span>CISA KEV listed findings</span>
-              </div>
-              <span className="signal-val">3</span>
-            </div>
-            <div className="signal-item">
-              <div className="signal-item-left">
-                <div className="signal-icon-badge orange"><Flame size={14} /></div>
-                <span>Public exploit available</span>
-              </div>
-              <span className="signal-val">6</span>
-            </div>
-            <div className="signal-item">
-              <div className="signal-item-left">
-                <div className="signal-icon-badge teal"><Layers size={14} /></div>
-                <span>Multi-scanner confirmed</span>
-              </div>
-              <span className="signal-val">4</span>
-            </div>
-            <div className="signal-item">
-              <div className="signal-item-left">
-                <div className="signal-icon-badge purple"><TrendingUp size={14} /></div>
-                <span>High EPSS (≥ 70%)</span>
-              </div>
-              <span className="signal-val">4</span>
-            </div>
-          </div>
-
-          <div className="cc-info-pill blue">
-            <span style={{ fontSize: 13 }}>ℹ️</span>
-            <span>Insights are from the latest integrated data.</span>
-          </div>
-        </div>
-
-      </div>
-
-      {/* ═════════════════════════════════════════════════════════════════════
-          ROW 2: TOP RISKY ASSETS & INTEGRATION PROVENANCE ACTIVITY
-          ═════════════════════════════════════════════════════════════════════ */}
-      <div className="cc-grid-middle">
-        
-        {/* CARD 1: Top Risky Assets (Clickable -> Asset Risk Context, No Connecting Line) */}
-        <div className="cc-card">
-          <div className="cc-card-header-flex">
-            <div>
-              <div className="cc-card-title" style={{ margin: 0 }}>Top Risky Assets</div>
-              <div style={{ fontSize: 12, color: '#64748B', marginTop: 2 }}>
-                Click any asset to view its complete Asset Risk Context & Blast Radius.
-              </div>
-            </div>
-            <span className="cc-link-action" onClick={() => navigate('/assets')}>
-              View All Assets →
+      <div className="cc-pipeline-stages">
+        {PIPELINE_STAGES.map(stage => (
+          <div key={stage} className="cc-stage-item">
+            <span className="cc-stage-dot" style={{ background: overallColor }} aria-hidden="true" />
+            <span className="cc-stage-label">{stage}</span>
+            <span className="cc-stage-status" style={{ color: overallColor }}>
+              {isLive ? 'Healthy' : isConnecting ? 'Connecting…' : 'Unavailable'}
             </span>
           </div>
-
-          <div className="risky-assets-grid">
-            {/* Asset 1: Payments API */}
-            <div
-              className="risky-asset-card-btn crit"
-              onClick={() => navigate('/assets?asset=ASSET-PAY-001')}
-              title="Click to view Asset Risk Context for ASSET-PAY-001"
-            >
-              <span className="asset-tag purple"><Globe size={10} /> Internet</span>
-              <div className="asset-circle-wrapper">
-                <div className="asset-circle glowing-red">
-                  <Globe size={20} />
-                </div>
-              </div>
-              <div className="asset-name" title="payments-prod-api-01">payments-prod-api-01</div>
-              <div className="asset-id-label">ASSET-PAY-001</div>
-              <div className="asset-score-big" style={{ color: '#DC2626' }}>94</div>
-              <div className="asset-subtext">1 Critical Finding</div>
-              <div className="asset-click-action">Risk Context →</div>
-            </div>
-
-            {/* Asset 2: Auth API */}
-            <div
-              className="risky-asset-card-btn crit"
-              onClick={() => navigate('/assets?asset=ASSET-AUTH-002')}
-              title="Click to view Asset Risk Context for ASSET-AUTH-002"
-            >
-              <span className="asset-tag purple"><Globe size={10} /> Internet</span>
-              <div className="asset-circle-wrapper">
-                <div className="asset-circle purple">
-                  <Lock size={20} />
-                </div>
-              </div>
-              <div className="asset-name" title="auth-prod-api-02">auth-prod-api-02</div>
-              <div className="asset-id-label">ASSET-AUTH-002</div>
-              <div className="asset-score-big" style={{ color: '#DC2626' }}>91</div>
-              <div className="asset-subtext">1 Critical Finding</div>
-              <div className="asset-click-action">Risk Context →</div>
-            </div>
-
-            {/* Asset 3: Faculty ERP */}
-            <div
-              className="risky-asset-card-btn high"
-              onClick={() => navigate('/assets?asset=ASSET-ERP-006')}
-              title="Click to view Asset Risk Context for ASSET-ERP-006"
-            >
-              <span className="asset-tag orange"><Server size={10} /> Internal</span>
-              <div className="asset-circle-wrapper">
-                <div className="asset-circle orange">
-                  <Building size={20} />
-                </div>
-              </div>
-              <div className="asset-name" title="erp-prod-01">erp-prod-01</div>
-              <div className="asset-id-label">ASSET-ERP-006</div>
-              <div className="asset-score-big" style={{ color: '#EA580C' }}>88</div>
-              <div className="asset-subtext">2 High Findings</div>
-              <div className="asset-click-action">Risk Context →</div>
-            </div>
-
-            {/* Asset 4: Student Portal */}
-            <div
-              className="risky-asset-card-btn high"
-              onClick={() => navigate('/assets?asset=ASSET-STUDENT-003')}
-              title="Click to view Asset Risk Context for ASSET-STUDENT-003"
-            >
-              <span className="asset-tag purple"><Globe size={10} /> Internet</span>
-              <div className="asset-circle-wrapper">
-                <div className="asset-circle yellow">
-                  <Monitor size={20} />
-                </div>
-              </div>
-              <div className="asset-name" title="student-portal">student-portal</div>
-              <div className="asset-id-label">ASSET-STUDENT-003</div>
-              <div className="asset-score-big" style={{ color: '#D97706' }}>78</div>
-              <div className="asset-subtext">1 High Finding</div>
-              <div className="asset-click-action">Risk Context →</div>
-            </div>
-
-            {/* Asset 5: Lab Server */}
-            <div
-              className="risky-asset-card-btn med"
-              onClick={() => navigate('/assets?asset=ASSET-LAB-004')}
-              title="Click to view Asset Risk Context for ASSET-LAB-004"
-            >
-              <span className="asset-tag green"><Server size={10} /> Internal</span>
-              <div className="asset-circle-wrapper">
-                <div className="asset-circle green">
-                  <Database size={20} />
-                </div>
-              </div>
-              <div className="asset-name" title="lab-server-01">lab-server-01</div>
-              <div className="asset-id-label">ASSET-LAB-004</div>
-              <div className="asset-score-big" style={{ color: '#16A34A' }}>52</div>
-              <div className="asset-subtext">1 Medium Finding</div>
-              <div className="asset-click-action">Risk Context →</div>
-            </div>
-          </div>
-
-          <div className="risky-assets-legend">
-            <div className="risky-legend-dots">
-              <span style={{ fontWeight: 600, color: '#334155' }}>Risk Threshold:</span>
-              <span><span className="donut-dot" style={{ background: '#EF4444', display: 'inline-block' }} /> Critical (≥90)</span>
-              <span><span className="donut-dot" style={{ background: '#F97316', display: 'inline-block' }} /> High (70–89)</span>
-              <span><span className="donut-dot" style={{ background: '#10B981', display: 'inline-block' }} /> Medium (&lt;70)</span>
-            </div>
-            <span>Click card to inspect asset landscape</span>
-          </div>
-        </div>
-
-        {/* CARD 2: Integration & Provenance Activity Feed */}
-        <div className="cc-card">
-          <div className="cc-card-header-flex">
-            <div>
-              <div className="cc-card-title" style={{ margin: 0 }}>Integration & Provenance Activity</div>
-              <div style={{ fontSize: 12, color: '#64748B', marginTop: 2 }}>
-                Live decision trail from ingestion to SLA remediation.
-              </div>
-            </div>
-            <span className="cc-link-action" onClick={() => navigate('/findings')}>
-              Trace All →
-            </span>
-          </div>
-
-          <div className="provenance-feed-list">
-            {/* Event 1: M2 Deduplication */}
-            <div
-              className="provenance-activity-item"
-              onClick={() => navigate('/findings/DEDUP-0001?tab=journey')}
-              title="Click to trace provenance journey for DEDUP-0001"
-            >
-              <div className="provenance-item-left">
-                <span className="provenance-mod-tag m2">M2 DEDUP</span>
-                <div className="provenance-details">
-                  <div className="provenance-title">Scanner Consensus: 3 Ingestions Correlated</div>
-                  <div className="provenance-sub">ZAP + Nuclei + OpenVAS unified into DEDUP-0001 (SQL Injection)</div>
-                </div>
-              </div>
-              <div className="provenance-item-right">
-                <span className="provenance-time">2m ago</span>
-                <span className="provenance-inspect-btn">Trace <ArrowRight size={10} /></span>
-              </div>
-            </div>
-
-            {/* Event 2: M4 Threat Intelligence */}
-            <div
-              className="provenance-activity-item"
-              onClick={() => navigate('/findings/DEDUP-0001?tab=evidence')}
-              title="Click to view threat intelligence & CISA KEV evidence for CVE-2026-1234"
-            >
-              <div className="provenance-item-left">
-                <span className="provenance-mod-tag m4">M4 INTEL</span>
-                <div className="provenance-details">
-                  <div className="provenance-title">CISA KEV Catalog Match & EPSS 91% Enriched</div>
-                  <div className="provenance-sub">Active exploit code detected in the wild for CVE-2026-1234</div>
-                </div>
-              </div>
-              <div className="provenance-item-right">
-                <span className="provenance-time">8m ago</span>
-                <span className="provenance-inspect-btn">Trace <ArrowRight size={10} /></span>
-              </div>
-            </div>
-
-            {/* Event 3: M5 Dynamic Scoring */}
-            <div
-              className="provenance-activity-item"
-              onClick={() => navigate('/findings/DEDUP-0001?tab=overview')}
-              title="Click to view M5 risk calculation breakdown for DEDUP-0001"
-            >
-              <div className="provenance-item-left">
-                <span className="provenance-mod-tag m5">M5 SCORE</span>
-                <div className="provenance-details">
-                  <div className="provenance-title">M5 Dynamic Risk Calculation: 94 (Critical)</div>
-                  <div className="provenance-sub">Vectors: CVSS (25.5) + EPSS (18.2) + KEV (15.0) + Asset (12.0)</div>
-                </div>
-              </div>
-              <div className="provenance-item-right">
-                <span className="provenance-time">14m ago</span>
-                <span className="provenance-inspect-btn">Trace <ArrowRight size={10} /></span>
-              </div>
-            </div>
-
-            {/* Event 4: M7 SLA Automation */}
-            <div
-              className="provenance-activity-item"
-              onClick={() => navigate('/findings/DEDUP-0006?tab=overview')}
-              title="Click to view SLA breach & escalation details for DEDUP-0006"
-            >
-              <div className="provenance-item-left">
-                <span className="provenance-mod-tag m7">M7 SLA</span>
-                <div className="provenance-details">
-                  <div className="provenance-title">SLA Breach Detected · Level-1 Auto-Escalation</div>
-                  <div className="provenance-sub">DEDUP-0006 (Authentication Bypass) breached 8h remediation window</div>
-                </div>
-              </div>
-              <div className="provenance-item-right">
-                <span className="provenance-time">25m ago</span>
-                <span className="provenance-inspect-btn">Trace <ArrowRight size={10} /></span>
-              </div>
-            </div>
-
-            {/* Event 5: M3 Confidence Filter */}
-            <div
-              className="provenance-activity-item"
-              onClick={() => navigate('/findings/DEDUP-0002?tab=journey')}
-              title="Click to trace confidence corroboration graph for DEDUP-0002"
-            >
-              <div className="provenance-item-left">
-                <span className="provenance-mod-tag m3">M3 CONF</span>
-                <div className="provenance-details">
-                  <div className="provenance-title">Confidence Validated: 96% (Confirmed)</div>
-                  <div className="provenance-sub">DEDUP-0002 noise filtered via multi-scanner corroboration algorithm</div>
-                </div>
-              </div>
-              <div className="provenance-item-right">
-                <span className="provenance-time">1h ago</span>
-                <span className="provenance-inspect-btn">Trace <ArrowRight size={10} /></span>
-              </div>
-            </div>
-
-            {/* Event 6: M8 Human-in-the-Loop */}
-            <div
-              className="provenance-activity-item"
-              onClick={() => navigate('/findings/DEDUP-0002?tab=decision-activity')}
-              title="Click to view decision audit trail for DEDUP-0002"
-            >
-              <div className="provenance-item-left">
-                <span className="provenance-mod-tag m8">M8 AUDIT</span>
-                <div className="provenance-details">
-                  <div className="provenance-title">Analyst Decision Audit Recorded</div>
-                  <div className="provenance-sub">Human-in-the-Loop priority override logged to immutable audit trail</div>
-                </div>
-              </div>
-              <div className="provenance-item-right">
-                <span className="provenance-time">2h ago</span>
-                <span className="provenance-inspect-btn">Trace <ArrowRight size={10} /></span>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        ))}
       </div>
-
-
+      {isFallback && (
+        <p className="cc-pipeline-note">
+          Live pipeline data unavailable. Showing last known findings.
+        </p>
+      )}
     </div>
   );
 }
 
+/* ─── Skeleton ───────────────────────────────────────────────────────────── */
 
+function SkeletonCard() {
+  return (
+    <div className="cc-skeleton-card" aria-hidden="true">
+      <div className="cc-sk-line" style={{ width: '40%', height: 12, marginBottom: 8 }} />
+      <div className="cc-sk-line" style={{ width: '80%', height: 18, marginBottom: 6 }} />
+      <div className="cc-sk-line" style={{ width: '60%', height: 12, marginBottom: 12 }} />
+      <div style={{ display: 'flex', gap: 8 }}>
+        <div className="cc-sk-line" style={{ width: 60, height: 28, borderRadius: 6 }} />
+        <div className="cc-sk-line" style={{ width: 80, height: 28, borderRadius: 6 }} />
+      </div>
+    </div>
+  );
+}
+
+/* ─── Main ───────────────────────────────────────────────────────────────── */
+
+const PAGE_SIZE = 5;
+
+export default function CommandCenter() {
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const scanRunId = searchParams.get('scan_run_id');
+  const orgId     = searchParams.get('org_id');
+
+  /* Scan-run scoped data */
+  const [scopedData,    setScopedData]    = useState(null);
+  const [scopedLoading, setScopedLoading] = useState(!!scanRunId);
+  const [scopedError,   setScopedError]   = useState(null);
+
+  /* Global data */
+  const { findings: globalFindings, loading: findingsLoading, error: findingsError } = useFindings();
+  const { summary:  globalSummary,  loading: summaryLoading,  error: summaryError  } = useDashboard();
+
+  /* Runtime status */
+  const [runtimeStatus, setRuntimeStatus] = useState(() => getRuntimeStatus());
+
+  /* UI filters */
+  const [search,        setSearch]        = useState('');
+  const [filterSev,     setFilterSev]     = useState('ALL');
+  const [filterSla,     setFilterSla]     = useState('ALL');
+  const [filterStatus,  setFilterStatus]  = useState('ALL');
+  const [page,          setPage]          = useState(1);
+  const [refreshKey,    setRefreshKey]    = useState(0);
+
+  const currentUser = useMemo(() => getCurrentUser(), []);
+
+  /* Load scoped findings */
+  useEffect(() => {
+    if (!scanRunId || !orgId) { setScopedLoading(false); return; }
+    let cancelled = false;
+    setScopedLoading(true);
+    setScopedError(null);
+    getScanRunFindings(orgId, scanRunId)
+      .then(data => { if (!cancelled) setScopedData(data); })
+      .catch(err => { if (!cancelled) setScopedError(err.message || `Cannot load results for ${scanRunId}`); })
+      .finally(() => { if (!cancelled) setScopedLoading(false); });
+    return () => { cancelled = true; };
+  }, [scanRunId, orgId, refreshKey]);
+
+  /* Track runtime status */
+  useEffect(() => {
+    const handler = e => setRuntimeStatus(e.detail?.status || getRuntimeStatus());
+    window.addEventListener('rizintel-runtimestatus-change', handler);
+    return () => window.removeEventListener('rizintel-runtimestatus-change', handler);
+  }, []);
+
+  /* Reset page when filters change */
+  useEffect(() => setPage(1), [search, filterSev, filterSla, filterStatus]);
+
+  const isScoped  = !!scanRunId;
+  const isLoading = isScoped ? scopedLoading : (findingsLoading || summaryLoading);
+  const loadError = isScoped ? scopedError   : (findingsError || summaryError);
+
+  const rawFindings = isScoped ? (scopedData?.findings || []) : (globalFindings || []);
+  const summaryData = isScoped
+    ? (scopedData?.summary?.summary ?? scopedData?.summary ?? {})
+    : (globalSummary?.summary ?? {});
+  const scanRunMeta = isScoped ? scopedData : null;
+
+  /* Summary counts derived accurately and consistently from data */
+  const stats = useMemo(() => {
+    let critical = 0, high = 0, medium = 0, low = 0, slaBreached = 0, slaAtRisk = 0;
+    for (const f of rawFindings) {
+      const sev = normSeverity(f);
+      if (sev === 'CRITICAL') critical++;
+      else if (sev === 'HIGH') high++;
+      else if (sev === 'MEDIUM') medium++;
+      else low++;
+      const s = (f.workflow?.sla_status || '').toUpperCase();
+      if (s === 'BREACHED') slaBreached++;
+      else if (s === 'AT_RISK') slaAtRisk++;
+    }
+
+    const hasSummaryBreakdown = summaryData && (
+      (summaryData.critical ?? 0) > 0 ||
+      (summaryData.high ?? 0) > 0 ||
+      (summaryData.medium ?? 0) > 0 ||
+      (summaryData.low ?? 0) > 0
+    );
+
+    const sCrit = hasSummaryBreakdown ? summaryData.critical : critical;
+    const sHigh = hasSummaryBreakdown ? summaryData.high : high;
+    const sMed = hasSummaryBreakdown ? summaryData.medium : medium;
+    const sLow = hasSummaryBreakdown ? summaryData.low : low;
+    const sBreached = (summaryData?.sla_breaches != null && summaryData.sla_breaches > 0) ? summaryData.sla_breaches : slaBreached;
+    const sAtRisk = (summaryData?.sla_at_risk != null && summaryData.sla_at_risk > 0) ? summaryData.sla_at_risk : slaAtRisk;
+    const sActive = (summaryData?.unique_findings != null && summaryData.unique_findings > 0)
+      ? summaryData.unique_findings
+      : (summaryData?.actionable_findings != null && summaryData.actionable_findings > 0)
+        ? summaryData.actionable_findings
+        : (sCrit + sHigh + sMed + sLow > 0 ? (sCrit + sHigh + sMed + sLow) : rawFindings.length);
+
+    return {
+      critical: sCrit,
+      high: sHigh,
+      medium: sMed,
+      low: sLow,
+      slaBreached: sBreached,
+      slaAtRisk: sAtRisk,
+      active: sActive,
+    };
+  }, [rawFindings, summaryData]);
+
+  /* Donut data from real stats */
+  const donutData = useMemo(() => {
+    const total = stats.critical + stats.high + stats.medium + stats.low;
+    const pct = n => total > 0 ? `${Math.round((n / total) * 100)}%` : '0%';
+    return [
+      { name: 'Critical', value: stats.critical, color: '#EF4444', pct: pct(stats.critical) },
+      { name: 'High',     value: stats.high,     color: '#F97316', pct: pct(stats.high) },
+      { name: 'Medium',   value: stats.medium,   color: '#EAB308', pct: pct(stats.medium) },
+      { name: 'Low',      value: stats.low,      color: '#10B981', pct: pct(stats.low) },
+    ];
+  }, [stats]);
+
+  /* SLA overview derived consistently from real stats */
+  const slaOverview = useMemo(() => {
+    const breached = stats.slaBreached;
+    const atRisk = stats.slaAtRisk;
+    const healthy = Math.max(0, stats.active - breached - atRisk);
+    return { BREACHED: breached, AT_RISK: atRisk, HEALTHY: healthy };
+  }, [stats]);
+
+  /* Filtered findings */
+  const filteredFindings = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    return rawFindings.filter(f => {
+      if (q) {
+        const n = (f.vulnerability_name || '').toLowerCase();
+        const c = (f.cve_id || '').toLowerCase();
+        const a = (f.detail?.asset_context?.asset_name || f.asset_id || '').toLowerCase();
+        const h = (f.target_host || f.host || '').toLowerCase();
+        if (!n.includes(q) && !c.includes(q) && !a.includes(q) && !h.includes(q)) return false;
+      }
+      if (filterSev !== 'ALL' && normSeverity(f) !== filterSev) return false;
+      if (filterSla !== 'ALL') {
+        const s = (f.workflow?.sla_status || 'ON_TRACK').toUpperCase();
+        if (filterSla === 'HEALTHY'  && (s === 'BREACHED' || s === 'AT_RISK')) return false;
+        if (filterSla === 'AT_RISK'  && s !== 'AT_RISK')  return false;
+        if (filterSla === 'BREACHED' && s !== 'BREACHED') return false;
+      }
+      if (filterStatus !== 'ALL') {
+        const s = (f.workflow?.status || '').toUpperCase();
+        if (s !== filterStatus) return false;
+      }
+      return true;
+    });
+  }, [rawFindings, search, filterSev, filterSla, filterStatus]);
+
+  const totalPages   = Math.max(1, Math.ceil(filteredFindings.length / PAGE_SIZE));
+  const pagedFindings = filteredFindings.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const hasFilters   = search || filterSev !== 'ALL' || filterSla !== 'ALL' || filterStatus !== 'ALL';
+
+  function resetFilters() {
+    setSearch(''); setFilterSev('ALL'); setFilterSla('ALL'); setFilterStatus('ALL');
+  }
+
+  function handleRefresh() {
+    setRefreshKey(k => k + 1);
+    if (!isScoped) window.dispatchEvent(new CustomEvent('rizintel-datamode-change'));
+  }
+
+  /* Next Best Action (deterministic) */
+  const nba = useMemo(() => {
+    if (!rawFindings.length) return null;
+    const breached = rawFindings.filter(f => (f.workflow?.sla_status || '').toUpperCase() === 'BREACHED');
+    if (breached.length) {
+      const top = breached[0];
+      const asset = top.detail?.asset_context?.asset_name || top.asset_id;
+      return {
+        text: breached.length === 1
+          ? `${top.vulnerability_name} affecting ${asset} has breached its SLA.`
+          : `${breached.length} findings have breached SLA.`,
+        findingId: top.finding_id,
+      };
+    }
+    const atRisk = rawFindings.filter(f => (f.workflow?.sla_status || '').toUpperCase() === 'AT_RISK');
+    if (atRisk.length) {
+      const top = atRisk[0];
+      const asset = top.detail?.asset_context?.asset_name || top.asset_id;
+      return {
+        text: atRisk.length === 1
+          ? `${top.vulnerability_name} affecting ${asset} is approaching SLA.`
+          : `${atRisk.length} findings are approaching SLA.`,
+        findingId: top.finding_id,
+      };
+    }
+    const crits = rawFindings.filter(f => normSeverity(f) === 'CRITICAL');
+    if (crits.length) {
+      const top = crits[0];
+      const asset = top.detail?.asset_context?.asset_name || top.asset_id;
+      const explanation = top.detail?.explanation?.management;
+      return {
+        text: explanation
+          ? `Investigate the critical ${top.vulnerability_name} affecting ${asset}. ${explanation}`
+          : `Investigate the critical ${top.vulnerability_name} affecting ${asset}.`,
+        findingId: top.finding_id,
+      };
+    }
+    const top = rawFindings[0];
+    return top ? { text: `Review the highest-priority finding: ${top.vulnerability_name}.`, findingId: top.finding_id } : null;
+  }, [rawFindings]);
+
+  const totalDonut = donutData.reduce((s, d) => s + d.value, 0);
+
+  /* ── LOADING ────────────────────────────────────────────────────────── */
+  if (isLoading) {
+    return (
+      <div className="cc-page-wrapper">
+        <div className="cc-page-header">
+          <div className="cc-page-header-title-row">
+            <h1 className="cc-page-title">Command Center</h1>
+          </div>
+          <p className="cc-page-subtitle">Loading security findings…</p>
+        </div>
+        <div className="cc-summary-row">
+          {[0,1,2,3,4].map(i => (
+            <div key={i} className="cc-summary-card cc-skeleton-card" aria-hidden="true">
+              <div className="cc-sk-line" style={{ width: '60%', height: 12, marginBottom: 6 }} />
+              <div className="cc-sk-line" style={{ width: '40%', height: 28, marginBottom: 4 }} />
+              <div className="cc-sk-line" style={{ width: '80%', height: 10 }} />
+            </div>
+          ))}
+        </div>
+        <div className="cc-main-grid">
+          <div className="cc-priority-panel">
+            <div className="cc-panel">
+              <div className="cc-panel-title" style={{ marginBottom: 16 }}>Priority Attention</div>
+              {[0,1,2,3].map(i => <SkeletonCard key={i} />)}
+            </div>
+          </div>
+          <div className="cc-sidebar">
+            <SkeletonCard /><SkeletonCard />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* ── ERROR ──────────────────────────────────────────────────────────── */
+  if (loadError && rawFindings.length === 0) {
+    return (
+      <div className="cc-page-wrapper">
+        <div className="cc-error-state" role="alert">
+          <AlertCircle size={40} color="#EF4444" aria-hidden="true" />
+          <h2>Unable to load Command Center</h2>
+          <p>We couldn't retrieve the latest security findings. Please try again.</p>
+          <button className="cc-retry-btn" onClick={handleRefresh} id="cc-retry-btn">
+            <RefreshCw size={14} aria-hidden="true" /> Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  /* ── MAIN RENDER ────────────────────────────────────────────────────── */
+  return (
+    <div className="cc-page-wrapper">
+
+      {/* PAGE HEADER */}
+      <div className="cc-page-header">
+        <div className="cc-page-header-title-row">
+          <h1 className="cc-page-title">Command Center</h1>
+          <span className={`cc-runtime-pill ${runtimeStatus === RUNTIME_STATUS.LIVE ? 'cc-runtime-live' : 'cc-runtime-cached'}`}>
+            <span className="cc-runtime-dot" aria-hidden="true" />
+            {runtimeStatus === RUNTIME_STATUS.LIVE ? 'Pipeline Live' : runtimeStatus === RUNTIME_STATUS.MOCK ? 'Mock Mode' : 'Cached Data'}
+          </span>
+        </div>
+        <p className="cc-page-subtitle">
+          Prioritize security risk, monitor remediation urgency, and investigate the findings that matter most.
+        </p>
+      </div>
+
+      {/* SCAN RUN SCOPE BANNER */}
+      {isScoped && scanRunMeta && (
+        <div className="cc-scope-banner" role="status">
+          <div className="cc-scope-banner-left">
+            <Shield size={14} color="#6366F1" aria-hidden="true" />
+            <div>
+              <div className="cc-scope-banner-title">
+                Viewing results for Scan Run <strong>{scanRunId}</strong>
+              </div>
+              {scanRunMeta.completed_at && (
+                <div className="cc-scope-banner-sub">
+                  Completed on {new Date(scanRunMeta.completed_at).toLocaleString('en-GB', {
+                    day: '2-digit', month: 'short', year: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+          <button
+            className="cc-scope-clear-btn"
+            id="cc-clear-filter-btn"
+            onClick={() => {
+              const next = new URLSearchParams(searchParams);
+              next.delete('scan_run_id');
+              next.delete('org_id');
+              setSearchParams(next);
+              setScopedData(null);
+            }}
+            aria-label="Clear scan run filter"
+          >
+            Clear Filter <X size={12} aria-hidden="true" />
+          </button>
+        </div>
+      )}
+
+      {isScoped && scopedError && (
+        <div className="cc-scope-error" role="alert">
+          <AlertCircle size={14} aria-hidden="true" /> {scopedError}
+        </div>
+      )}
+
+      {/* SUMMARY CARDS */}
+      <div className="cc-summary-row" role="region" aria-label="Security summary metrics">
+        <div className="cc-summary-card cc-sum-critical">
+          <div className="cc-sum-icon"><ShieldAlert size={18} aria-hidden="true" /></div>
+          <div className="cc-sum-num" aria-label={`${stats.critical} critical findings`}>{stats.critical}</div>
+          <div className="cc-sum-label">Critical Risk</div>
+          <div className="cc-sum-sub">Active critical findings</div>
+        </div>
+        <div className="cc-summary-card cc-sum-high">
+          <div className="cc-sum-icon"><AlertTriangle size={18} aria-hidden="true" /></div>
+          <div className="cc-sum-num" aria-label={`${stats.high} high findings`}>{stats.high}</div>
+          <div className="cc-sum-label">High Risk</div>
+          <div className="cc-sum-sub">Active high findings</div>
+        </div>
+        <div className="cc-summary-card cc-sum-sla-risk">
+          <div className="cc-sum-icon"><Clock size={18} aria-hidden="true" /></div>
+          <div className="cc-sum-num" aria-label={`${stats.slaAtRisk} findings at SLA risk`}>{stats.slaAtRisk}</div>
+          <div className="cc-sum-label">SLA At Risk</div>
+          <div className="cc-sum-sub">Due within 24 hours</div>
+        </div>
+        <div className="cc-summary-card cc-sum-sla-breach">
+          <div className="cc-sum-icon"><AlertCircle size={18} aria-hidden="true" /></div>
+          <div className="cc-sum-num" aria-label={`${stats.slaBreached} findings breached SLA`}>{stats.slaBreached}</div>
+          <div className="cc-sum-label">SLA Breached</div>
+          <div className="cc-sum-sub">Past due</div>
+        </div>
+        <div className="cc-summary-card cc-sum-active">
+          <div className="cc-sum-icon"><Layers size={18} aria-hidden="true" /></div>
+          <div className="cc-sum-num" aria-label={`${stats.active} active findings`}>{stats.active}</div>
+          <div className="cc-sum-label">Active Findings</div>
+          <div className="cc-sum-sub">All open findings</div>
+        </div>
+      </div>
+
+      {/* MAIN GRID */}
+      <div className="cc-main-grid">
+
+        {/* LEFT: Priority Attention */}
+        <div className="cc-priority-panel">
+          <div className="cc-panel">
+            <div className="cc-panel-header">
+              <div>
+                <div className="cc-panel-title">
+                  <Target size={15} style={{ color: '#6366F1' }} aria-hidden="true" />
+                  Priority Attention
+                </div>
+                <p className="cc-panel-subtitle">
+                  Findings requiring immediate analyst review, ordered by risk and remediation urgency.
+                </p>
+              </div>
+            </div>
+
+            {/* Filter bar */}
+            <div className="cc-filter-bar" role="search" aria-label="Filter priority findings">
+              <div className="cc-search-wrap">
+                <Search size={14} className="cc-search-icon" aria-hidden="true" />
+                <input
+                  id="cc-search-input"
+                  className="cc-search-input"
+                  type="text"
+                  placeholder="Search by finding, CVE, asset or host…"
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  aria-label="Search findings"
+                />
+                {search && (
+                  <button className="cc-search-clear" onClick={() => setSearch('')} aria-label="Clear search">
+                    <X size={12} aria-hidden="true" />
+                  </button>
+                )}
+              </div>
+              <label htmlFor="cc-filter-sev" className="cc-sr-only">Severity</label>
+              <select id="cc-filter-sev" className="cc-filter-select" value={filterSev} onChange={e => setFilterSev(e.target.value)} aria-label="Filter by severity">
+                <option value="ALL">All Severities</option>
+                <option value="CRITICAL">Critical</option>
+                <option value="HIGH">High</option>
+                <option value="MEDIUM">Medium</option>
+                <option value="LOW">Low</option>
+              </select>
+              <label htmlFor="cc-filter-sla" className="cc-sr-only">SLA Status</label>
+              <select id="cc-filter-sla" className="cc-filter-select" value={filterSla} onChange={e => setFilterSla(e.target.value)} aria-label="Filter by SLA status">
+                <option value="ALL">All SLA States</option>
+                <option value="HEALTHY">Healthy</option>
+                <option value="AT_RISK">At Risk</option>
+                <option value="BREACHED">Breached</option>
+              </select>
+              <label htmlFor="cc-filter-status" className="cc-sr-only">Status</label>
+              <select id="cc-filter-status" className="cc-filter-select" value={filterStatus} onChange={e => setFilterStatus(e.target.value)} aria-label="Filter by status">
+                <option value="ALL">All Statuses</option>
+                <option value="OPEN">Open</option>
+                <option value="IN_PROGRESS">In Progress</option>
+              </select>
+              <button id="cc-refresh-btn" className="cc-refresh-btn" onClick={handleRefresh} aria-label="Refresh findings">
+                <RefreshCw size={14} aria-hidden="true" /> Refresh
+              </button>
+            </div>
+
+            {/* Empty: no findings at all */}
+            {rawFindings.length === 0 && (
+              <div className="cc-empty-state" role="status">
+                <CheckCircle2 size={40} color="#94A3B8" aria-hidden="true" />
+                <h3>No prioritized findings yet</h3>
+                <p>Complete an authorized security scan to generate prioritized and explainable security findings.</p>
+                {currentUser?.config?.canDecide ? (
+                  <button className="cc-empty-action-btn" onClick={() => navigate('/scan-runs')} id="cc-create-scan-btn">
+                    Create Scan Run
+                  </button>
+                ) : (
+                  <p className="cc-empty-viewer-note">
+                    Prioritized findings will appear here after an authorized security scan is completed.
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Empty: findings exist but filters exclude all */}
+            {rawFindings.length > 0 && filteredFindings.length === 0 && (
+              <div className="cc-empty-filtered" role="status">
+                <Search size={32} color="#94A3B8" aria-hidden="true" />
+                <p>No findings match your filters.</p>
+                <button className="cc-reset-filters-btn" onClick={resetFilters} id="cc-reset-filters-btn">
+                  Reset Filters
+                </button>
+              </div>
+            )}
+
+            {/* Finding cards */}
+            {pagedFindings.map((item, idx) => {
+              const rank = (page - 1) * PAGE_SIZE + idx + 1;
+              const sev  = normSeverity(item);
+              const ti   = item.detail?.threat_intelligence || {};
+              const sc   = item.detail?.scanner_consensus   || {};
+              const fc   = item.detail?.finding_confidence  || {};
+              const assetName = item.detail?.asset_context?.asset_name || item.asset_id || 'Unmapped Asset';
+              const explanation = item.detail?.explanation?.management;
+              const isCrit = sev === 'CRITICAL';
+
+              return (
+                <div
+                  key={item.finding_id || idx}
+                  className={`cc-finding-card ${isCrit ? 'cc-fc-crit' : sev === 'HIGH' ? 'cc-fc-high' : 'cc-fc-med'}`}
+                  role="article"
+                  aria-label={`Priority ${rank}: ${item.vulnerability_name}`}
+                >
+                  {/* Top bar */}
+                  <div className="cc-fc-topbar">
+                    <span className={`cc-rank-badge ${isCrit ? 'cc-rank-crit' : 'cc-rank-high'}`}>#{rank}</span>
+                    <SeverityBadge severity={sev} />
+                    {item.cve_id && <span className="cc-cve-pill">{item.cve_id}</span>}
+                    {ti.kev_listed && (
+                      <span className="cc-kev-badge" title="CISA Known Exploited Vulnerability">
+                        <Flame size={10} aria-hidden="true" /> KEV
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Name + asset */}
+                  <div className="cc-fc-name">{item.vulnerability_name || '—'}</div>
+                  <div className="cc-fc-asset-row">
+                    {item.internet_exposure
+                      ? <Globe size={12} color="#3B82F6" aria-hidden="true" />
+                      : <Server size={12} color="#64748B" aria-hidden="true" />}
+                    <span className="cc-fc-asset">{assetName}</span>
+                    {(item.target_host || item.host) && (
+                      <span className="cc-fc-host">· {item.target_host || item.host}</span>
+                    )}
+                  </div>
+
+                  {/* Metrics */}
+                  <div className="cc-fc-metrics">
+                    {item.risk_score != null && (
+                      <div className="cc-metric">
+                        <span className="cc-metric-lbl">Risk Score</span>
+                        <span className={`cc-risk-score ${isCrit ? 'cc-rs-crit' : 'cc-rs-high'}`}>{item.risk_score}</span>
+                      </div>
+                    )}
+                    {fc.score != null && (
+                      <div className="cc-metric">
+                        <span className="cc-metric-lbl">Confidence</span>
+                        <span className="cc-metric-val">{Math.round(fc.score * 100)}%</span>
+                      </div>
+                    )}
+                    <div className="cc-metric">
+                      <span className="cc-metric-lbl">SLA</span>
+                      <SlaTag slaStatus={item.workflow?.sla_status} slaDueAt={item.workflow?.sla_due_at} />
+                    </div>
+                    {sc.detected_by_count != null && (
+                      <div className="cc-metric">
+                        <span className="cc-metric-lbl">Sources</span>
+                        <span className="cc-metric-val">{sc.detected_by_count} Scanner{sc.detected_by_count !== 1 ? 's' : ''}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* TI badges */}
+                  {(ti.epss_score != null || ti.exploit_available || item.internet_exposure != null || ti.cvss_score != null) && (
+                    <div className="cc-fc-ti-row">
+                      {ti.epss_score != null && (
+                        <span className="cc-ti-badge cc-ti-epss" title={`EPSS ${Math.round(ti.epss_score*100)}%`}>
+                          <TrendingUp size={10} aria-hidden="true" /> EPSS {Math.round(ti.epss_score*100)}%
+                        </span>
+                      )}
+                      {ti.exploit_available && (
+                        <span className="cc-ti-badge cc-ti-exploit" title="Public exploit available">
+                          <Zap size={10} aria-hidden="true" /> Exploit Available
+                        </span>
+                      )}
+                      {item.internet_exposure === true && (
+                        <span className="cc-ti-badge cc-ti-exposure" title="Internet-facing asset">
+                          <Globe size={10} aria-hidden="true" /> Internet-Facing
+                        </span>
+                      )}
+                      {ti.cvss_score != null && (
+                        <span className="cc-ti-badge cc-ti-cvss" title={`CVSS ${ti.cvss_score}`}>
+                          CVSS {ti.cvss_score}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Explanation (backend-provided only) */}
+                  {explanation && (
+                    <div className="cc-fc-explanation">
+                      <Info size={11} aria-hidden="true" />
+                      <span>{explanation}</span>
+                    </div>
+                  )}
+
+                  {/* Footer CTA */}
+                  <div className="cc-fc-footer">
+                    <button
+                      className="cc-investigate-btn"
+                      id={`cc-investigate-${item.finding_id}`}
+                      onClick={() => navigate(isScoped && scanRunId && orgId ? `/findings/${item.finding_id}?scan_run_id=${encodeURIComponent(scanRunId)}&org_id=${encodeURIComponent(orgId)}` : `/findings/${item.finding_id}`)}
+                      aria-label={`Investigate: ${item.vulnerability_name}`}
+                    >
+                      Investigate <ArrowRight size={13} aria-hidden="true" />
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Pagination */}
+            {filteredFindings.length > PAGE_SIZE && (
+              <div className="cc-pagination" role="navigation" aria-label="Findings pagination">
+                <span className="cc-pag-info">
+                  Showing {(page-1)*PAGE_SIZE+1}–{Math.min(page*PAGE_SIZE, filteredFindings.length)} of {filteredFindings.length} findings
+                </span>
+                <div className="cc-pag-controls">
+                  <button className="cc-page-btn" onClick={() => setPage(p => Math.max(1,p-1))} disabled={page===1} aria-label="Previous page">
+                    <ChevronLeft size={14} aria-hidden="true" />
+                  </button>
+                  {Array.from({length: totalPages}, (_,i) => i+1).map(p => (
+                    <button
+                      key={p}
+                      className={`cc-page-btn ${p===page ? 'cc-page-active' : ''}`}
+                      onClick={() => setPage(p)}
+                      aria-label={`Page ${p}`}
+                      aria-current={p===page ? 'page' : undefined}
+                    >{p}</button>
+                  ))}
+                  <button className="cc-page-btn" onClick={() => setPage(p => Math.min(totalPages,p+1))} disabled={page===totalPages} aria-label="Next page">
+                    <ChevronRight size={14} aria-hidden="true" />
+                  </button>
+                </div>
+                <div className="cc-pag-size">
+                  Rows per page: <strong>{PAGE_SIZE}</strong>
+                </div>
+              </div>
+            )}
+            {filteredFindings.length > 0 && filteredFindings.length <= PAGE_SIZE && (
+              <div className="cc-findings-count" aria-live="polite">
+                Showing {filteredFindings.length} of {rawFindings.length} finding{rawFindings.length !== 1 ? 's' : ''}
+                {hasFilters && (
+                  <button className="cc-reset-inline-btn" onClick={resetFilters}>Reset filters</button>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* RIGHT SIDEBAR */}
+        <div className="cc-sidebar">
+
+          {rawFindings.length > 0 && (
+            <>
+              {/* Risk Distribution */}
+              <div className="cc-panel" role="region" aria-label="Risk distribution">
+                <div className="cc-panel-header">
+                  <div className="cc-panel-title">
+                    <Shield size={14} style={{ color: '#6366F1' }} aria-hidden="true" />
+                    Risk Distribution
+                  </div>
+                  {totalDonut > 0 && (
+                    <span style={{ fontSize: 11, color: '#94A3B8' }}>
+                      <Info size={12} aria-hidden="true" />
+                    </span>
+                  )}
+                </div>
+                {totalDonut > 0 ? (
+                  <div className="cc-donut-wrap">
+                    <ResponsiveContainer width="100%" height={140}>
+                      <PieChart>
+                        <Pie
+                          data={donutData.filter(d => d.value > 0)}
+                          cx="50%" cy="50%"
+                          innerRadius={42} outerRadius={60}
+                          paddingAngle={2} dataKey="value" strokeWidth={0}
+                        >
+                          {donutData.filter(d => d.value > 0).map((e,i) => (
+                            <Cell key={i} fill={e.color} />
+                          ))}
+                        </Pie>
+                      </PieChart>
+                    </ResponsiveContainer>
+                    <div className="cc-donut-legend">
+                      {donutData.map(d => (
+                        <div key={d.name} className="cc-donut-row">
+                          <div className="cc-donut-row-left">
+                            <span className="cc-donut-dot" style={{ background: d.color }} aria-hidden="true" />
+                            <span>{d.name}</span>
+                          </div>
+                          <span className="cc-donut-val">
+                            {d.value} <span className="cc-donut-pct">({d.pct})</span>
+                          </span>
+                        </div>
+                      ))}
+                      <div className="cc-donut-total">Total {totalDonut}</div>
+                    </div>
+                  </div>
+                ) : (
+                  <p className="cc-sidebar-empty">No risk data available.</p>
+                )}
+              </div>
+
+              {/* SLA Overview */}
+              <div className="cc-panel" role="region" aria-label="SLA overview">
+                <div className="cc-panel-header" style={{ marginBottom: 12 }}>
+                  <div className="cc-panel-title">
+                    <Clock size={14} style={{ color: '#6366F1' }} aria-hidden="true" />
+                    SLA Overview
+                  </div>
+                  <button
+                    className="cc-sla-view-btn"
+                    id="cc-sla-open-monitor-btn"
+                    onClick={() => navigate(isScoped && scanRunId && orgId ? `/sla?scan_run_id=${encodeURIComponent(scanRunId)}&org_id=${encodeURIComponent(orgId)}` : '/sla')}
+                    title="Open full SLA Monitor page"
+                  >
+                    Open Monitor <ArrowRight size={11} aria-hidden="true" />
+                  </button>
+                </div>
+                <div className="cc-sla-overview-list">
+                  {[
+                    { key: 'BREACHED', label: 'Breached', dotClass: 'cc-sla-dot-breach', filter: 'BREACHED' },
+                    { key: 'AT_RISK',  label: 'At Risk',  dotClass: 'cc-sla-dot-risk',   filter: 'AT_RISK'  },
+                    { key: 'HEALTHY',  label: 'Healthy',  dotClass: 'cc-sla-dot-ok',     filter: 'HEALTHY'  },
+                  ].map(({ key, label, dotClass, filter }) => (
+                    <div
+                      key={key}
+                      className="cc-sla-ov-row"
+                      onClick={() => {
+                        setFilterSla(filter);
+                        setFilterSev('ALL');
+                        setPage(1);
+                      }}
+                      title={`Click to filter priority findings by ${label}`}
+                    >
+                      <div className="cc-sla-ov-left">
+                        <span className={`cc-sla-dot ${dotClass}`} aria-hidden="true" />
+                        <span>{label}</span>
+                      </div>
+                      <div className="cc-sla-ov-right">
+                        <span className="cc-sla-count">{slaOverview[key]} finding{slaOverview[key] !== 1 ? 's' : ''}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
+
+          {/* Pipeline Health */}
+          <PipelineHealth runtimeStatus={runtimeStatus} />
+        </div>
+      </div>
+
+      {/* NEXT BEST ACTION */}
+      {nba && (
+        <div className="cc-nba-bar" role="complementary" aria-label="Next best action">
+          <div className="cc-nba-left">
+            <span className="cc-nba-star" aria-hidden="true">★</span>
+            <span className="cc-nba-label">Next Best Action</span>
+            <span className="cc-nba-text">{nba.text}</span>
+          </div>
+          <button
+            className="cc-nba-btn"
+            id="cc-nba-btn"
+            onClick={() => navigate(`/findings/${nba.findingId}`)}
+            aria-label={`View finding details: ${nba.text}`}
+          >
+            View Finding Details <ArrowRight size={13} aria-hidden="true" />
+          </button>
+        </div>
+      )}
+
+    </div>
+  );
+}

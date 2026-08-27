@@ -259,10 +259,15 @@ def test_end_to_end_pipeline_execution():
         assert isinstance(f, FindingSchema)
         assert 0 <= f.risk_score <= 100
         assert f.risk_level in {"CRITICAL", "HIGH", "MEDIUM", "LOW"}
-        assert f.workflow.ticket_id is not None
+        if f.workflow.status == "OPEN":
+            assert f.workflow.ticket_id is not None
+        else:
+            assert f.workflow.status in {"PENDING_REVIEW", "SUPPRESSED"}
+            assert f.workflow.ticket_id is None
         assert len(f.detail.provenance.journey) == 8
         assert len(f.detail.provenance.source_findings) > 0
         assert f.detail.risk_assessment.scoring_version == "M5-v1.0"
+
 
 
 def test_assigned_status_is_pending_when_unassigned():
@@ -376,8 +381,13 @@ def test_fastapi_integration_endpoints():
     """Verify FastAPI integration router endpoints respond with valid Schema v1.0 data."""
     from fastapi.testclient import TestClient
     from main import app
+    from users import get_user_by_email
+    from auth import create_access_token
 
     client = TestClient(app)
+    lead_user = get_user_by_email("lead@rizintel.demo")
+    token = create_access_token(lead_user)
+    headers = {"Authorization": f"Bearer {token}"}
 
     # 1. Health check
     health_resp = client.get("/api/integration/health")
@@ -387,7 +397,7 @@ def test_fastapi_integration_endpoints():
     assert len(health_data["modules"]) == 8
 
     # 2. Run pipeline endpoint
-    run_resp = client.post("/api/integration/pipeline/run", json={})
+    run_resp = client.post("/api/integration/pipeline/run", headers=headers, json={"use_demo_dataset": True})
     assert run_resp.status_code == 200
     run_data = run_resp.json()
     assert run_data["status"] == "SUCCESS"
@@ -395,14 +405,14 @@ def test_fastapi_integration_endpoints():
     assert len(run_data["findings"]) == run_data["total_findings"]
 
     # 3. Get findings endpoint
-    findings_resp = client.get("/api/integration/pipeline/findings")
+    findings_resp = client.get("/api/integration/pipeline/findings", headers=headers)
     assert findings_resp.status_code == 200
     findings_list = findings_resp.json()
     assert len(findings_list) > 0
     first_fid = findings_list[0]["finding_id"]
 
     # 4. Get single finding detail
-    single_resp = client.get(f"/api/integration/pipeline/findings/{first_fid}")
+    single_resp = client.get(f"/api/integration/pipeline/findings/{first_fid}", headers=headers)
     assert single_resp.status_code == 200
     single_finding = single_resp.json()
     assert single_finding["finding_id"] == first_fid
@@ -410,9 +420,8 @@ def test_fastapi_integration_endpoints():
     assert single_finding["detail"]["risk_assessment"]["scoring_version"] == "M5-v1.0"
 
     # 5. Get pipeline summary
-    summary_resp = client.get("/api/integration/pipeline/summary")
+    summary_resp = client.get("/api/integration/pipeline/summary", headers=headers)
     assert summary_resp.status_code == 200
     summary_data = summary_resp.json()
     assert summary_data["schema_version"] == "1.0"
     assert "summary" in summary_data
-

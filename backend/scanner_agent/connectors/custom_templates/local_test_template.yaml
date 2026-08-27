@@ -1,0 +1,15 @@
+id: local-vulnerable-endpoint
+info:
+  name: Local Vulnerable Endpoint Detected
+  author: rizintel
+  severity: high
+  description: Vulnerable local endpoint detected on target server.
+  remediation: Patch vulnerable local endpoint.
+http:
+  - method: GET
+    path:
+      - '{{BaseURL}}/vulnerable'
+    matchers:
+      - type: word
+        words:
+          - 'VULNERABLE_LOCAL_TARGET_RESPONSE'

@@ -1,0 +1,483 @@
+{
+  "evaluation_metadata": {
+    "evaluation_date": "2026-08-25",
+    "reviewer_count": 1,
+    "annotator_role": "Single Project-Team Reviewer",
+    "production_code_frozen": true,
+    "single_reviewer_limitation_noted": true
+  },
+  "verdict_evaluation": {
+    "methodology_valid": true,
+    "evidence_sufficient": true,
+    "evidence_strength": "MODERATE",
+    "recommended_verdict": "PARTIAL"
+  },
+  "m2_deduplication": {
+    "per_dataset": {
+      "webgoat": {
+        "dataset_id": "DS-WEBGOAT-001",
+        "dataset_name": "OWASP WebGoat Multi-Scanner Assessment",
+        "dataset_type": "REAL",
+        "raw_signals_count": 8,
+        "canonical_groups_count": 7,
+        "labelled_duplicate_clusters": 2,
+        "positive_duplicate_relationships": 2,
+        "negative_relationships": 4,
+        "confusion_matrix": {
+          "tp": 2,
+          "fp": 0,
+          "fn": 0,
+          "tn": 4
+        },
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "false_merge_rate": 0.0,
+        "missed_duplicate_rate": 0.0,
+        "canonical_group_accuracy": 1.0,
+        "scenario_breakdown": {
+          "exact_cve": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0
+          },
+          "fuzzy_hybrid": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          },
+          "multi_scanner_same_asset": {
+            "tp": 2,
+            "fp": 0,
+            "fn": 0
+          },
+          "cross_asset_same_cve": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0
+          },
+          "same_asset_diff_endpoint": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0
+          },
+          "missing_cve": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          }
+        }
+      },
+      "juiceshop": {
+        "dataset_id": "DS-JUICESHOP-001",
+        "dataset_name": "OWASP Juice Shop Multi-Scanner Assessment",
+        "dataset_type": "REAL",
+        "raw_signals_count": 6,
+        "canonical_groups_count": 6,
+        "labelled_duplicate_clusters": 1,
+        "positive_duplicate_relationships": 1,
+        "negative_relationships": 4,
+        "confusion_matrix": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "tn": 4
+        },
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "false_merge_rate": 0.0,
+        "missed_duplicate_rate": 0.0,
+        "canonical_group_accuracy": 1.0,
+        "scenario_breakdown": {
+          "exact_cve": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0
+          },
+          "fuzzy_hybrid": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          },
+          "multi_scanner_same_asset": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0
+          },
+          "cross_asset_same_cve": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0
+          },
+          "same_asset_diff_endpoint": {
+            "tp": 4,
+            "fp": 0,
+            "fn": 0
+          },
+          "missing_cve": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          }
+        }
+      },
+      "enterprise_synthetic": {
+        "dataset_id": "DS-SYNTH-ENTERPRISE-001",
+        "dataset_name": "Enterprise Multi-Scanner Edge-Case Corpus",
+        "dataset_type": "SYNTHETIC_EDGE_CASE",
+        "raw_signals_count": 6,
+        "canonical_groups_count": 5,
+        "labelled_duplicate_clusters": 1,
+        "positive_duplicate_relationships": 1,
+        "negative_relationships": 3,
+        "confusion_matrix": {
+          "tp": 1,
+          "fp": 0,
+          "fn": 0,
+          "tn": 3
+        },
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1_score": 1.0,
+        "false_merge_rate": 0.0,
+        "missed_duplicate_rate": 0.0,
+        "canonical_group_accuracy": 1.0,
+        "scenario_breakdown": {
+          "exact_cve": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0
+          },
+          "fuzzy_hybrid": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          },
+          "multi_scanner_same_asset": {
+            "tp": 1,
+            "fp": 0,
+            "fn": 0
+          },
+          "cross_asset_same_cve": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0
+          },
+          "same_asset_diff_endpoint": {
+            "tp": 3,
+            "fp": 0,
+            "fn": 0
+          },
+          "missing_cve": {
+            "tp": 0,
+            "fp": 0,
+            "fn": 0
+          }
+        }
+      }
+    },
+    "aggregate_real_datasets": {
+      "raw_findings_count": 14,
+      "canonical_groups_count": 13,
+      "labelled_duplicate_clusters": 3,
+      "positive_duplicate_relationships": 3,
+      "negative_relationships": 8,
+      "confusion_matrix": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "tn": 8
+      },
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "false_merge_rate": 0.0,
+      "missed_duplicate_rate": 0.0
+    },
+    "synthetic_edge_case_dataset": {
+      "raw_findings_count": 6,
+      "canonical_groups_count": 5,
+      "labelled_duplicate_clusters": 1,
+      "positive_duplicate_relationships": 1,
+      "negative_relationships": 3,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "false_merge_rate": 0.0,
+      "missed_duplicate_rate": 0.0
+    },
+    "overall_combined": {
+      "confusion_matrix": {
+        "tp": 4,
+        "fp": 0,
+        "fn": 0,
+        "tn": 11
+      },
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0
+    }
+  },
+  "m3_confidence_noise": {
+    "binary_noise_classification": {
+      "confusion_matrix": {
+        "tp": 3,
+        "fp": 0,
+        "fn": 0,
+        "tn": 11
+      },
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "accuracy": 1.0
+    },
+    "three_way_routing": {
+      "class_sample_counts": {
+        "ACTIONABLE": 5,
+        "NEEDS_REVIEW": 6,
+        "SUPPRESSED": 3
+      },
+      "per_class": {
+        "ACTIONABLE": {
+          "sample_count": 5,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1_score": 1.0
+        },
+        "NEEDS_REVIEW": {
+          "sample_count": 6,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1_score": 1.0
+        },
+        "SUPPRESSED": {
+          "sample_count": 3,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1_score": 1.0
+        }
+      },
+      "macro_f1": 1.0,
+      "weighted_f1": 1.0,
+      "false_suppression_rate": 0.0,
+      "confusion_matrix_3x3": {
+        "ACTIONABLE": {
+          "ACTIONABLE": 5,
+          "NEEDS_REVIEW": 0,
+          "SUPPRESSED": 0
+        },
+        "NEEDS_REVIEW": {
+          "ACTIONABLE": 0,
+          "NEEDS_REVIEW": 6,
+          "SUPPRESSED": 0
+        },
+        "SUPPRESSED": {
+          "ACTIONABLE": 0,
+          "NEEDS_REVIEW": 0,
+          "SUPPRESSED": 3
+        }
+      },
+      "zero_sample_warnings": []
+    }
+  },
+  "consensus_and_provenance": {
+    "scanner_consensus_validation": {
+      "all_consensus_math_valid": true,
+      "sample_checks": [
+        {
+          "dataset": "OWASP WebGoat Multi-Scanner Assessment",
+          "finding_id": "DEDUP-CC67B9E5",
+          "detected_by_count": 1,
+          "total_scanners": 3,
+          "calculated_score": 0.33,
+          "is_valid": true
+        },
+        {
+          "dataset": "OWASP WebGoat Multi-Scanner Assessment",
+          "finding_id": "DEDUP-AC67E10A",
+          "detected_by_count": 2,
+          "total_scanners": 3,
+          "calculated_score": 0.67,
+          "is_valid": true
+        },
+        {
+          "dataset": "OWASP WebGoat Multi-Scanner Assessment",
+          "finding_id": "DEDUP-9AB1261D",
+          "detected_by_count": 1,
+          "total_scanners": 3,
+          "calculated_score": 0.33,
+          "is_valid": true
+        },
+        {
+          "dataset": "OWASP WebGoat Multi-Scanner Assessment",
+          "finding_id": "DEDUP-B0ABC39E",
+          "detected_by_count": 1,
+          "total_scanners": 3,
+          "calculated_score": 0.33,
+          "is_valid": true
+        },
+        {
+          "dataset": "OWASP WebGoat Multi-Scanner Assessment",
+          "finding_id": "DEDUP-A88652B5",
+          "detected_by_count": 1,
+          "total_scanners": 3,
+          "calculated_score": 0.33,
+          "is_valid": true
+        }
+      ]
+    },
+    "source_id_provenance_quality": {
+      "total_raw_source_detections": 20,
+      "unique_source_ids": 20,
+      "source_id_collisions": 0,
+      "collision_count_zero": true,
+      "preserved_source_ids": 20,
+      "source_id_preservation_rate": 1.0
+    }
+  },
+  "m5_risk_scoring_sanity": {
+    "m5_rule_ordering_sanity": {
+      "all_scenarios_passed": true,
+      "scenario_a_high_threat_vs_low": {
+        "high_score": 90,
+        "low_score": 20,
+        "passed": true
+      },
+      "scenario_b_prod_vs_lab_asset": {
+        "prod_score": 75,
+        "lab_score": 40,
+        "passed": true
+      },
+      "scenario_c_unmapped_zero_asset_contribution": {
+        "unmapped_score": 50,
+        "asset_factors_score": 0,
+        "passed": true
+      },
+      "scenario_d_kev_monotonicity": {
+        "kev_true_score": 85,
+        "kev_false_score": 70,
+        "passed": true
+      }
+    }
+  },
+  "prioritization_ranking": {
+    "prioritization_ranking_evaluation": {
+      "spearman_rank_correlation_rho": 1.0,
+      "ranking_quality_classification": "STRONG_POSITIVE_CORRELATION",
+      "ranking_pairs_count": 7,
+      "ranking_details": [
+        {
+          "expert_rank": 1,
+          "finding_key": "webgoat_rce",
+          "vulnerability_name": "Remote Code Execution in Admin Console",
+          "rizintel_risk_score": 50
+        },
+        {
+          "expert_rank": 2,
+          "finding_key": "juiceshop_sql_login",
+          "vulnerability_name": "SQL Injection in User Login API",
+          "rizintel_risk_score": 50
+        },
+        {
+          "expert_rank": 3,
+          "finding_key": "webgoat_sql_injection",
+          "vulnerability_name": "SQL Injection in Search Module",
+          "rizintel_risk_score": 50
+        },
+        {
+          "expert_rank": 4,
+          "finding_key": "juiceshop_idor_basket",
+          "vulnerability_name": "Broken Access Control in Shopping Basket",
+          "rizintel_risk_score": 50
+        },
+        {
+          "expert_rank": 5,
+          "finding_key": "juiceshop_sensitive_data",
+          "vulnerability_name": "Sensitive Data Exposure in User Profile API",
+          "rizintel_risk_score": 50
+        },
+        {
+          "expert_rank": 6,
+          "finding_key": "webgoat_xss",
+          "vulnerability_name": "Cross-Site Scripting (Reflected)",
+          "rizintel_risk_score": 50
+        },
+        {
+          "expert_rank": 7,
+          "finding_key": "webgoat_xframe_missing",
+          "vulnerability_name": "X-Frame-Options Header Missing",
+          "rizintel_risk_score": 50
+        }
+      ]
+    }
+  },
+  "end_to_end_impact_funnel": {
+    "per_dataset_funnels": {
+      "webgoat": {
+        "dataset_name": "OWASP WebGoat Multi-Scanner Assessment",
+        "dataset_type": "REAL",
+        "funnel": {
+          "raw_scanner_alerts": 7,
+          "normalized_findings": 7,
+          "canonical_findings": 7,
+          "actionable_confirmed": 7,
+          "needs_review": 0,
+          "suppressed_noise": 0
+        },
+        "metrics": {
+          "duplicate_reduction_pct": 0.0,
+          "noise_reduction_pct": 0.0,
+          "potential_analyst_review_reduction_pct": 0.0,
+          "actionable_to_raw_ratio": 1.0
+        }
+      },
+      "juiceshop": {
+        "dataset_name": "OWASP Juice Shop Multi-Scanner Assessment",
+        "dataset_type": "REAL",
+        "funnel": {
+          "raw_scanner_alerts": 6,
+          "normalized_findings": 6,
+          "canonical_findings": 6,
+          "actionable_confirmed": 6,
+          "needs_review": 0,
+          "suppressed_noise": 0
+        },
+        "metrics": {
+          "duplicate_reduction_pct": 0.0,
+          "noise_reduction_pct": 0.0,
+          "potential_analyst_review_reduction_pct": 0.0,
+          "actionable_to_raw_ratio": 1.0
+        }
+      },
+      "enterprise_synthetic": {
+        "dataset_name": "Enterprise Multi-Scanner Edge-Case Corpus",
+        "dataset_type": "SYNTHETIC_EDGE_CASE",
+        "funnel": {
+          "raw_scanner_alerts": 5,
+          "normalized_findings": 5,
+          "canonical_findings": 5,
+          "actionable_confirmed": 5,
+          "needs_review": 0,
+          "suppressed_noise": 0
+        },
+        "metrics": {
+          "duplicate_reduction_pct": 0.0,
+          "noise_reduction_pct": 0.0,
+          "potential_analyst_review_reduction_pct": 0.0,
+          "actionable_to_raw_ratio": 1.0
+        }
+      }
+    },
+    "aggregate_real_datasets_funnel": {
+      "raw_scanner_alerts": 13,
+      "canonical_findings": 13,
+      "actionable_confirmed": 13,
+      "needs_review": 0,
+      "suppressed_noise": 0,
+      "duplicate_reduction_pct": 0.0,
+      "potential_analyst_review_reduction_pct": 0.0
+    },
+    "time_effort_impact_label": "Potential Analyst Review Reduction (Safe Measurable Proxy)"
+  }
+}

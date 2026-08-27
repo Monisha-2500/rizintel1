@@ -68,12 +68,67 @@ class StandardFinding(BaseModel):
         return v
 
 
+def _normalize_host(host: str) -> str:
+    """
+    Canonicalize a host/URL for stable hashing.
+    Strips scheme, lowercases, removes trailing slashes.
+    e.g. 'http://127.0.0.1:8001/WebGoat/login' -> '127.0.0.1:8001/webgoat/login'
+    """
+    from urllib.parse import urlparse
+    host = (host or "").strip()
+    if "://" in host:
+        parsed = urlparse(host)
+        netloc = parsed.netloc.lower()
+        path = parsed.path.rstrip("/") or "/"
+        return f"{netloc}{path}"
+    return host.lower().rstrip("/")
+
+
+def _normalize_endpoint(endpoint: str) -> str:
+    """Lowercase and strip endpoint path, ensuring leading slash, no trailing slash."""
+    ep = (endpoint or "").strip().lower()
+    if not ep.startswith("/"):
+        ep = "/" + ep if ep else "/"
+    return ep.rstrip("/") or "/"
+
+
+def generate_source_id(
+    scanner: str,
+    host: str,
+    vuln_name: str,
+    endpoint: str = "",
+    port: str = "",
+    discriminator: str = "",
+) -> str:
+    """
+    Deterministic, unique, reproducible source finding ID.
+
+    Canonical key (all lowercased, in fixed order):
+      SCANNER | normalized_host | port | normalized_endpoint | vuln_name | discriminator
+
+    ``discriminator`` is a scanner-specific sub-identifier that distinguishes
+    multiple firings of the same template/alert on the same URL:
+      - Nuclei:  ``matcher-name`` (e.g. 'content-security-policy', 'bootstrap')
+      - ZAP:     ZAP instance ``id`` field when all other fields are identical
+      - Wapiti:  ``parameter`` or empty
+
+    Returns "SCANNER-<sha1[:12]>" (human-readable, scanner-namespaced).
+    """
+    scanner_ns = (scanner or "GENERIC").upper()
+    norm_host = _normalize_host(host)
+    norm_ep = _normalize_endpoint(endpoint)
+    port_s = str(port).strip() if port else ""
+    vuln_s = (vuln_name or "").strip().lower()
+    disc_s = (discriminator or "").strip().lower()
+
+    canonical = f"{scanner_ns}|{norm_host}|{port_s}|{norm_ep}|{vuln_s}|{disc_s}"
+    digest = hashlib.sha1(canonical.encode("utf-8")).hexdigest()[:12]
+    return f"{scanner_ns}-{digest}"
+
+
 def generate_finding_id(scanner: str, host: str, vuln_name: str, endpoint: str = "", parameter: str = "") -> str:
     """
-    Deterministic ID so the SAME underlying issue always hashes to the SAME id,
-    even across separate pipeline runs. This is what makes Member 2's deduplication
-    step possible later (two scanners flagging the same bug on the same endpoint
-    should be recognizable as 'the same finding').
+    Backward-compatible wrapper kept for any callers that still use the old signature.
+    New code should call generate_source_id() directly.
     """
-    raw = f"{scanner}|{host}|{vuln_name}|{endpoint}|{parameter}".lower().strip()
-    return "FIND-" + hashlib.sha1(raw.encode()).hexdigest()[:12]
+    return generate_source_id(scanner, host, vuln_name, endpoint, port="", discriminator=parameter)

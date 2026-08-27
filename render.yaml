@@ -10,12 +10,26 @@ services:
         value: production
       - key: HOST
         value: 0.0.0.0
+      - key: PORT
+        value: 10000
       - key: RIZINTEL_ALLOWED_ORIGINS
-        value: "https://*.vercel.app,http://localhost:5173,http://127.0.0.1:5173"
-      # To enable persistent storage on Render Disks:
-      # - key: RIZINTEL_DB_PATH
-      #   value: /var/data/audit_trail.db
-      # disk:
-      #   name: rizintel-data
-      #   mountPath: /var/data
-      #   sizeGB: 1
+        value: "https://*.onrender.com,https://*.vercel.app,http://localhost:5173,http://127.0.0.1:5173"
+      - key: RIZINTEL_JWT_SECRET
+        generateValue: true
+
+  - type: web
+    name: rizintel-frontend
+    runtime: static
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./frontend/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: rizintel-backend
+          property: host
+

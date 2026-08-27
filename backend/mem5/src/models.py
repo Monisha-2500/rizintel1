@@ -8,14 +8,20 @@ from typing import List, Optional, Any, Dict, Union
 from pydantic import BaseModel, Field, StrictBool, field_validator, ConfigDict
 
 
+
 # ============================================================================
 # Asset Context Model (Canonical Fields)
 # ============================================================================
 
 class AssetContext(BaseModel):
     """Asset Context schema following Interface Contract v1.0.
-    
+
     Represents the business and network context of the target asset.
+
+    For genuinely unresolved assets (asset_id='UNMAPPED'), asset_criticality
+    may be 'UNKNOWN' and internet_exposure may be None. In both cases the
+    scoring engine contributes 0 points for that factor, preserving full
+    score accuracy for known assets.
     """
     model_config = ConfigDict(strict=True, extra="forbid")
 
@@ -29,27 +35,32 @@ class AssetContext(BaseModel):
     )
     environment: str = Field(
         ...,
-        description="Deployment environment (e.g., PRODUCTION, STAGING, DEVELOPMENT)"
+        description="Deployment environment (e.g., PRODUCTION, STAGING, DEVELOPMENT, UNKNOWN)"
     )
     asset_criticality: str = Field(
         ...,
-        description="Business criticality tier (e.g., CRITICAL, HIGH, MEDIUM, LOW)"
+        description="Business criticality tier (CRITICAL, HIGH, MEDIUM, LOW) or UNKNOWN for unresolved assets"
     )
-    internet_exposure: StrictBool = Field(
+    internet_exposure: Optional[StrictBool] = Field(
         ...,
-        description="JSON boolean indicating whether the asset is directly internet-facing (true/false)"
+        description="True/False for known assets; None (null) for unresolved assets with unknown exposure"
     )
     data_sensitivity: str = Field(
         ...,
-        description="Classification of data handled by the asset (e.g., RESTRICTED, CONFIDENTIAL, INTERNAL, PUBLIC)"
+        description="Classification of data handled (RESTRICTED, CONFIDENTIAL, INTERNAL, PUBLIC, or UNKNOWN)"
     )
 
     @field_validator("asset_criticality")
     @classmethod
     def validate_asset_criticality(cls, v: str) -> str:
-        allowed = {"CRITICAL", "HIGH", "MEDIUM", "LOW"}
+        # UNKNOWN is the explicit representation of genuinely unresolved asset tier.
+        # Known tiers are unchanged: LOW=2pts, MEDIUM=5pts, HIGH=8pts, CRITICAL=10pts.
+        # UNKNOWN=0pts (no fabricated business tier).
+        allowed = {"CRITICAL", "HIGH", "MEDIUM", "LOW", "UNKNOWN"}
         if v.upper() not in allowed:
-            raise ValueError(f"Invalid asset_criticality '{v}'. Must be one of {sorted(allowed)}.")
+            raise ValueError(
+                f"Invalid asset_criticality '{v}'. Must be one of {sorted(allowed)}."
+            )
         return v.upper()
 
 
@@ -182,9 +193,12 @@ class FactorBreakdown(BaseModel):
     """Transparent contribution breakdown for an individual scoring factor."""
     model_config = ConfigDict(strict=True, extra="forbid")
 
-    input: Union[float, int, str, bool] = Field(
+    input: Optional[Union[float, int, str, bool]] = Field(
         ...,
-        description="Original input value of the scoring factor"
+        description=(
+            "Original input value of the scoring factor. "
+            "None indicates a genuinely unknown value (contributes 0 points)."
+        )
     )
     points: int = Field(
         ...,

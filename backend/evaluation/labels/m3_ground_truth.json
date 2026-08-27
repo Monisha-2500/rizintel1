@@ -1,0 +1,122 @@
+{
+  "metadata": {
+    "annotation_date": "2026-08-25",
+    "reviewer_count": 1,
+    "annotator_role": "Single Project-Team Reviewer",
+    "notes": "Independent ground-truth labeling for M3 noise routing & confidence by 1 project-team reviewer."
+  },
+  "findings": [
+    {
+      "finding_key": "webgoat_sql_injection",
+      "dataset_id": "DS-WEBGOAT-001",
+      "vulnerability_name": "SQL Injection in Search Module",
+      "cve_id": "CVE-2026-9999",
+      "binary_noise_label": "NOT_NOISE",
+      "three_way_label": "ACTIONABLE"
+    },
+    {
+      "finding_key": "webgoat_rce",
+      "dataset_id": "DS-WEBGOAT-001",
+      "vulnerability_name": "Remote Code Execution in Admin Console",
+      "cve_id": "CVE-2026-8888",
+      "binary_noise_label": "NOT_NOISE",
+      "three_way_label": "ACTIONABLE"
+    },
+    {
+      "finding_key": "webgoat_xss",
+      "dataset_id": "DS-WEBGOAT-001",
+      "vulnerability_name": "Cross-Site Scripting (Reflected)",
+      "cve_id": null,
+      "binary_noise_label": "NOT_NOISE",
+      "three_way_label": "NEEDS_REVIEW"
+    },
+    {
+      "finding_key": "webgoat_path_traversal",
+      "dataset_id": "DS-WEBGOAT-001",
+      "vulnerability_name": "Path Traversal in Download Endpoint",
+      "cve_id": null,
+      "binary_noise_label": "NOT_NOISE",
+      "three_way_label": "NEEDS_REVIEW"
+    },
+    {
+      "finding_key": "webgoat_csrf",
+      "dataset_id": "DS-WEBGOAT-001",
+      "vulnerability_name": "CSRF",
+      "cve_id": null,
+      "binary_noise_label": "NOT_NOISE",
+      "three_way_label": "NEEDS_REVIEW"
+    },
+    {
+      "finding_key": "webgoat_xframe_missing",
+      "dataset_id": "DS-WEBGOAT-001",
+      "vulnerability_name": "X-Frame-Options Header Missing",
+      "cve_id": null,
+      "binary_noise_label": "LIKELY_NOISE",
+      "three_way_label": "SUPPRESSED"
+    },
+    {
+      "finding_key": "juiceshop_sql_login",
+      "dataset_id": "DS-JUICESHOP-001",
+      "vulnerability_name": "SQL Injection in User Login API",
+      "cve_id": "CVE-2026-7777",
+      "binary_noise_label": "NOT_NOISE",
+      "three_way_label": "ACTIONABLE"
+    },
+    {
+      "finding_key": "juiceshop_idor_basket",
+      "dataset_id": "DS-JUICESHOP-001",
+      "vulnerability_name": "Broken Access Control in Shopping Basket",
+      "cve_id": "CVE-2026-6666",
+      "binary_noise_label": "NOT_NOISE",
+      "three_way_label": "ACTIONABLE"
+    },
+    {
+      "finding_key": "juiceshop_sensitive_data",
+      "dataset_id": "DS-JUICESHOP-001",
+      "vulnerability_name": "Sensitive Data Exposure in User Profile API",
+      "cve_id": null,
+      "binary_noise_label": "NOT_NOISE",
+      "three_way_label": "NEEDS_REVIEW"
+    },
+    {
+      "finding_key": "juiceshop_dom_xss",
+      "dataset_id": "DS-JUICESHOP-001",
+      "vulnerability_name": "DOM-Based Cross-Site Scripting",
+      "cve_id": "CVE-2026-4444",
+      "binary_noise_label": "NOT_NOISE",
+      "three_way_label": "NEEDS_REVIEW"
+    },
+    {
+      "finding_key": "juiceshop_banner_exposure",
+      "dataset_id": "DS-JUICESHOP-001",
+      "vulnerability_name": "Server Banner Exposure",
+      "cve_id": null,
+      "binary_noise_label": "LIKELY_NOISE",
+      "three_way_label": "SUPPRESSED"
+    },
+    {
+      "finding_key": "enterprise_sql_tx",
+      "dataset_id": "DS-SYNTH-ENTERPRISE-001",
+      "vulnerability_name": "SQL Injection in Transaction Query",
+      "cve_id": "CVE-2026-5555",
+      "binary_noise_label": "NOT_NOISE",
+      "three_way_label": "ACTIONABLE"
+    },
+    {
+      "finding_key": "enterprise_sql_refund",
+      "dataset_id": "DS-SYNTH-ENTERPRISE-001",
+      "vulnerability_name": "SQL Injection in Refund Endpoint",
+      "cve_id": null,
+      "binary_noise_label": "NOT_NOISE",
+      "three_way_label": "NEEDS_REVIEW"
+    },
+    {
+      "finding_key": "enterprise_banner_disclosure",
+      "dataset_id": "DS-SYNTH-ENTERPRISE-001",
+      "vulnerability_name": "Server Banner Disclosure",
+      "cve_id": null,
+      "binary_noise_label": "LIKELY_NOISE",
+      "three_way_label": "SUPPRESSED"
+    }
+  ]
+}

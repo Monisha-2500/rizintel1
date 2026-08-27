@@ -22,6 +22,7 @@ backend/data/*.sqlite3
 
 # Python virtual environments & Bytecode
 .venv/
+.venv_mac/
 venv/
 ENV/
 env/
@@ -32,11 +33,22 @@ __pycache__/
 *.egg-info/
 .eggs/
 
+# Binary executables and large local scanner dumps
+*.exe
+*.bin
+backend/nuclei.exe
+backend/*.jsonl
+backend/nuclei_out.jsonl
+backend/nuclei_test_result.jsonl
+backend/data/submissions/
+
 # Testing & Coverage Artifacts
 .pytest_cache/
 .coverage
 htmlcov/
 .vitest/
+frontend/test-results/
+m7_remediation_engine 3/
 
 # Logs
 *.log
@@ -64,3 +76,4 @@ ehthumbs.db
 Thumbs.db
 .idea/
 .vscode/
+

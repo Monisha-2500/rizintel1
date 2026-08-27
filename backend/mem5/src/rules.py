@@ -89,12 +89,14 @@ EXPLOIT_AVAILABLE_POINTS: Dict[bool, int] = {
 # MEDIUM    → 5 points
 # HIGH      → 8 points
 # CRITICAL  → 10 points
+# UNKNOWN   → 0 points  (genuinely unresolved asset — no fabricated tier)
 
 ASSET_CRITICALITY_POINTS: Dict[str, int] = {
     "LOW": 2,
     "MEDIUM": 5,
     "HIGH": 8,
     "CRITICAL": 10,
+    "UNKNOWN": 0,
 }
 
 
@@ -204,13 +206,25 @@ def get_exploit_points(exploit_available: bool) -> int:
 
 
 def get_criticality_points(criticality: str) -> int:
-    """Map asset criticality tier to rule-based points."""
-    return ASSET_CRITICALITY_POINTS.get(criticality.upper(), 2)
+    """Map asset criticality tier to rule-based points.
+
+    Known tiers (LOW/MEDIUM/HIGH/CRITICAL) are unchanged.
+    UNKNOWN returns 0 — no fabricated business impact for unresolved assets.
+    Unrecognised values also return 0 (fail-safe).
+    """
+    return ASSET_CRITICALITY_POINTS.get(criticality.upper(), 0)
 
 
-def get_exposure_points(internet_exposure: bool) -> int:
-    """Map internet exposure boolean to rule-based points."""
-    return INTERNET_EXPOSURE_POINTS.get(internet_exposure, 0)
+def get_exposure_points(internet_exposure) -> int:
+    """Map internet exposure to rule-based points.
+
+    True  → 10 points (confirmed internet-facing).
+    False → 0 points (confirmed internal).
+    None  → 0 points (genuinely unknown — no assumed exposure for unresolved assets).
+    """
+    if internet_exposure is None:
+        return 0
+    return INTERNET_EXPOSURE_POINTS.get(bool(internet_exposure), 0)
 
 
 def get_confidence_points(score: float) -> int:

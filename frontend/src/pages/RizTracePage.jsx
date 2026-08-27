@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   GitCommit, ArrowLeft, ChevronDown, ChevronUp, CheckCircle2, AlertCircle, Clock,
   Layers, Search, Zap, Target, ShieldAlert, FileText, UserCheck, Copy, Check,
@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { getFindingById, getFeedbackForFinding } from '../services/findingsService';
 import { buildDecisionProvenanceChain } from '../utils/provenanceGraph';
+import './RizTracePage.css';
 
 const STAGE_ICONS = {
   1: Search,
@@ -22,26 +23,45 @@ const STAGE_ICONS = {
 export default function RizTracePage() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const scanRunId = searchParams.get('scan_run_id');
+  const orgId = searchParams.get('org_id');
+  const focusStage = searchParams.get('stage') || searchParams.get('focus');
 
   const [finding, setFinding] = useState(null);
   const [feedbackHistory, setFeedbackHistory] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [traversalMode, setTraversalMode] = useState('BFS');
-  const [expandedNodes, setExpandedNodes] = useState({});
+  const [expandedNodes, setExpandedNodes] = useState(() => {
+    if (focusStage === 'stage_explanation' || focusStage === 'explainability') {
+      return { stage_explanation: true };
+    }
+    return {};
+  });
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
+    if (focusStage === 'stage_explanation' || focusStage === 'explainability') {
+      setExpandedNodes(prev => ({ ...prev, stage_explanation: true }));
+    }
+  }, [focusStage]);
+
+  useEffect(() => {
     setLoading(true);
-    getFindingById(id).then(data => {
+    getFindingById(id, scanRunId, orgId).then(data => {
       setFinding(data);
       setLoading(false);
       if (data) {
         const history = getFeedbackForFinding(data.finding_id);
         setFeedbackHistory(history);
       }
+    }).catch(err => {
+      console.error('Failed to load finding for RizTrace:', err);
+      setFinding(null);
+      setLoading(false);
     });
-  }, [id]);
+  }, [id, scanRunId, orgId]);
 
   const provenanceData = useMemo(() => {
     if (!finding) return { nodes: new Map(), edges: new Map(), bfsOrder: [], dfsOrder: [] };
@@ -328,6 +348,25 @@ export default function RizTracePage() {
                               </div>
                             );
                           })}
+                          {nodeId === 'stage_explanation' && (
+                            <div className="riztrace-detail-item full-width" style={{ marginTop: '10px' }}>
+                              <button
+                                className="riztrace-tool-btn primary"
+                                onClick={() => {
+                                  const query = new URLSearchParams();
+                                  query.set('tab', 'explainability');
+                                  if (scanRunId) query.set('scan_run_id', scanRunId);
+                                  if (orgId) query.set('org_id', orgId);
+                                  navigate(`/findings/${finding.finding_id}?${query.toString()}`);
+                                }}
+                                aria-label="Open in Finding360 Explainability Tab"
+                                style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                              >
+                                <FileText size={14} />
+                                <span>Open in Finding360 Explainability Tab →</span>
+                              </button>
+                            </div>
+                          )}
                         </div>
                       )}
                     </div>

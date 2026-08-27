@@ -1,0 +1,103 @@
+{
+  "dataset_id": "DS-JUICESHOP-001",
+  "dataset_name": "OWASP Juice Shop Multi-Scanner Assessment",
+  "dataset_type": "REAL",
+  "organization_id": "ORG-EVAL-JUICESHOP",
+  "asset": {
+    "asset_id": "ASSET-JUICESHOP-01",
+    "asset_name": "juiceshop-prod-portal",
+    "host": "juiceshop.demo.corp",
+    "port": 3000,
+    "environment": "PRODUCTION",
+    "criticality": "CRITICAL",
+    "internet_facing": true,
+    "data_sensitivity": "RESTRICTED"
+  },
+  "raw_reports": {
+    "ZAP": {
+      "site": [
+        {
+          "@name": "https://juiceshop.demo.corp:3000",
+          "@host": "juiceshop.demo.corp",
+          "@port": "3000",
+          "alerts": [
+            {
+              "pluginid": "40018",
+              "alert": "SQL Injection in User Login API",
+              "riskcode": "3",
+              "confidence": "3",
+              "cweid": "89",
+              "desc": "SQL Injection vulnerability in Juice Shop authentication endpoint.",
+              "instances": [
+                { "uri": "https://juiceshop.demo.corp:3000/rest/user/login", "method": "POST", "param": "email" }
+              ]
+            },
+            {
+              "pluginid": "10021",
+              "alert": "Sensitive Data Exposure in User Profile API",
+              "riskcode": "2",
+              "confidence": "3",
+              "cweid": "200",
+              "desc": "User password hashes returned in REST API response.",
+              "instances": [
+                { "uri": "https://juiceshop.demo.corp:3000/api/Users", "method": "GET", "param": "" }
+              ]
+            },
+            {
+              "pluginid": "10037",
+              "alert": "Server Banner Exposure",
+              "riskcode": "0",
+              "confidence": "3",
+              "cweid": "200",
+              "desc": "Express.js server header version disclosure.",
+              "instances": [
+                { "uri": "https://juiceshop.demo.corp:3000/", "method": "GET", "param": "" }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "NUCLEI": [
+      {
+        "template-id": "juiceshop-sql-login",
+        "info": {
+          "name": "SQL Injection in User Login API",
+          "severity": "critical",
+          "description": "SQL Injection vulnerability in Juice Shop authentication endpoint.",
+          "classification": { "cve-id": ["CVE-2026-7777"], "cwe-id": ["CWE-89"] }
+        },
+        "type": "http",
+        "host": "juiceshop.demo.corp",
+        "matched-at": "https://juiceshop.demo.corp:3000/rest/user/login",
+        "ip": "127.0.0.1"
+      },
+      {
+        "template-id": "juiceshop-unauth-basket",
+        "info": {
+          "name": "Broken Access Control in Shopping Basket",
+          "severity": "high",
+          "description": "IDOR in shopping basket endpoint allowing unauthorized basket inspection.",
+          "classification": { "cve-id": ["CVE-2026-6666"], "cwe-id": ["CWE-284"] }
+        },
+        "type": "http",
+        "host": "juiceshop.demo.corp",
+        "matched-at": "https://juiceshop.demo.corp:3000/rest/basket/1",
+        "ip": "127.0.0.1"
+      },
+      {
+        "template-id": "juiceshop-dom-xss",
+        "info": {
+          "name": "DOM-Based Cross-Site Scripting",
+          "severity": "medium",
+          "description": "DOM XSS in client-side search query handling.",
+          "classification": { "cve-id": ["CVE-2026-4444"], "cwe-id": ["CWE-79"] }
+        },
+        "type": "http",
+        "host": "juiceshop.demo.corp",
+        "matched-at": "https://juiceshop.demo.corp:3000/#/search",
+        "ip": "127.0.0.1"
+      }
+    ]
+  }
+}

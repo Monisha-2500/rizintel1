@@ -1,0 +1,139 @@
+{
+  "metadata": {
+    "annotation_date": "2026-08-25",
+    "reviewer_count": 1,
+    "annotator_role": "Single Project-Team Reviewer",
+    "notes": "Independent ground-truth labeling for M2 correlation by 1 project-team reviewer. Multi-annotator inter-rater reliability not computed."
+  },
+  "webgoat_clusters": [
+    {
+      "cluster_id": "GT-WG-CLUSTER-1",
+      "ground_truth_label": "SAME_REMEDIATION_INSTANCE",
+      "description": "SQL Injection on WebGoat search endpoint detected by ZAP and Nuclei",
+      "source_signals": [
+        { "scanner": "ZAP", "vulnerability_name": "SQL Injection in Search Module", "path": "/WebGoat/search" },
+        { "scanner": "NUCLEI", "vulnerability_name": "SQL Injection in Search Module", "path": "/WebGoat/search" }
+      ]
+    },
+    {
+      "cluster_id": "GT-WG-CLUSTER-2",
+      "ground_truth_label": "SAME_REMEDIATION_INSTANCE",
+      "description": "Reflected XSS in profile comment detected by ZAP and Wapiti",
+      "source_signals": [
+        { "scanner": "ZAP", "vulnerability_name": "Cross-Site Scripting (Reflected)", "path": "/WebGoat/profile" },
+        { "scanner": "WAPITI", "vulnerability_name": "Cross Site Scripting", "path": "/WebGoat/profile" }
+      ]
+    },
+    {
+      "cluster_id": "GT-WG-DISTINCT-1",
+      "ground_truth_label": "DIFFERENT_REMEDIATION_INSTANCE",
+      "description": "Remote Code Execution on Admin Console (Distinct from SQL Injection)",
+      "source_signals": [
+        { "scanner": "NUCLEI", "vulnerability_name": "Remote Code Execution in Admin Console", "path": "/WebGoat/admin/exec" }
+      ]
+    },
+    {
+      "cluster_id": "GT-WG-DISTINCT-2",
+      "ground_truth_label": "DIFFERENT_REMEDIATION_INSTANCE",
+      "description": "X-Frame-Options Missing on Login Page",
+      "source_signals": [
+        { "scanner": "ZAP", "vulnerability_name": "X-Frame-Options Header Missing", "path": "/WebGoat/login" }
+      ]
+    },
+    {
+      "cluster_id": "GT-WG-DISTINCT-3",
+      "ground_truth_label": "DIFFERENT_REMEDIATION_INSTANCE",
+      "description": "Path Traversal in Download Endpoint",
+      "source_signals": [
+        { "scanner": "ZAP", "vulnerability_name": "Path Traversal in Download Endpoint", "path": "/WebGoat/download" }
+      ]
+    },
+    {
+      "cluster_id": "GT-WG-DISTINCT-4",
+      "ground_truth_label": "DIFFERENT_REMEDIATION_INSTANCE",
+      "description": "CSRF in changePassword Endpoint",
+      "source_signals": [
+        { "scanner": "WAPITI", "vulnerability_name": "CSRF", "path": "/WebGoat/changePassword" }
+      ]
+    }
+  ],
+  "juiceshop_clusters": [
+    {
+      "cluster_id": "GT-JS-CLUSTER-1",
+      "ground_truth_label": "SAME_REMEDIATION_INSTANCE",
+      "description": "SQL Injection in User Login API detected by ZAP and Nuclei",
+      "source_signals": [
+        { "scanner": "ZAP", "vulnerability_name": "SQL Injection in User Login API", "path": "/rest/user/login" },
+        { "scanner": "NUCLEI", "vulnerability_name": "SQL Injection in User Login API", "path": "/rest/user/login" }
+      ]
+    },
+    {
+      "cluster_id": "GT-JS-DISTINCT-1",
+      "ground_truth_label": "DIFFERENT_REMEDIATION_INSTANCE",
+      "description": "Sensitive Data Exposure in User Profile API",
+      "source_signals": [
+        { "scanner": "ZAP", "vulnerability_name": "Sensitive Data Exposure in User Profile API", "path": "/api/Users" }
+      ]
+    },
+    {
+      "cluster_id": "GT-JS-DISTINCT-2",
+      "ground_truth_label": "DIFFERENT_REMEDIATION_INSTANCE",
+      "description": "Broken Access Control in Shopping Basket",
+      "source_signals": [
+        { "scanner": "NUCLEI", "vulnerability_name": "Broken Access Control in Shopping Basket", "path": "/rest/basket/1" }
+      ]
+    },
+    {
+      "cluster_id": "GT-JS-DISTINCT-3",
+      "ground_truth_label": "DIFFERENT_REMEDIATION_INSTANCE",
+      "description": "DOM-Based Cross-Site Scripting",
+      "source_signals": [
+        { "scanner": "NUCLEI", "vulnerability_name": "DOM-Based Cross-Site Scripting", "path": "/#/search" }
+      ]
+    },
+    {
+      "cluster_id": "GT-JS-DISTINCT-4",
+      "ground_truth_label": "DIFFERENT_REMEDIATION_INSTANCE",
+      "description": "Server Banner Exposure",
+      "source_signals": [
+        { "scanner": "ZAP", "vulnerability_name": "Server Banner Exposure", "path": "/" }
+      ]
+    }
+  ],
+  "enterprise_clusters": [
+    {
+      "cluster_id": "GT-ENT-CLUSTER-1",
+      "ground_truth_label": "SAME_REMEDIATION_INSTANCE",
+      "description": "SQL Injection in Transaction Query detected by ZAP, Nuclei, and Wapiti",
+      "source_signals": [
+        { "scanner": "ZAP", "vulnerability_name": "SQL Injection in Transaction Query", "path": "/v1/tx/search" },
+        { "scanner": "NUCLEI", "vulnerability_name": "SQL Injection in Transaction Query", "path": "/v1/tx/search" },
+        { "scanner": "WAPITI", "vulnerability_name": "SQL Injection", "path": "/v1/tx/search" }
+      ]
+    },
+    {
+      "cluster_id": "GT-ENT-DISTINCT-1",
+      "ground_truth_label": "DIFFERENT_REMEDIATION_INSTANCE",
+      "description": "SQL Injection in Refund Endpoint (Same asset, different path /v1/refund/process)",
+      "source_signals": [
+        { "scanner": "ZAP", "vulnerability_name": "SQL Injection in Refund Endpoint", "path": "/v1/refund/process" }
+      ]
+    },
+    {
+      "cluster_id": "GT-ENT-DISTINCT-2",
+      "ground_truth_label": "DIFFERENT_REMEDIATION_INSTANCE",
+      "description": "SQL Injection on Auth Asset (Same CVE, DIFFERENT asset auth.corp.internal)",
+      "source_signals": [
+        { "scanner": "NUCLEI", "vulnerability_name": "SQL Injection in Transaction Query", "host": "auth.corp.internal" }
+      ]
+    },
+    {
+      "cluster_id": "GT-ENT-DISTINCT-3",
+      "ground_truth_label": "DIFFERENT_REMEDIATION_INSTANCE",
+      "description": "Server Banner Disclosure (Info noise finding)",
+      "source_signals": [
+        { "scanner": "ZAP", "vulnerability_name": "Server Banner Disclosure", "path": "/" }
+      ]
+    }
+  ]
+}

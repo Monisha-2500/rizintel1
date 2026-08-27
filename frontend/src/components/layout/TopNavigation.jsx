@@ -1,81 +1,33 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import {
-  LayoutDashboard, ListChecks, Server, Clock,
+  Building2, Play, LayoutDashboard, ListChecks, Server, Clock,
   BarChart3, Bell, Shield, Moon, Sun,
   AlertTriangle, ShieldAlert, Clock4, TrendingUp,
-  CheckCircle2, X, CheckCheck, Info
+  CheckCircle2, X, CheckCheck, Info, LogOut, Lock, UserCheck, Key
 } from 'lucide-react';
 
 import {
   ROLES,
   getCurrentUser,
-  setCurrentUser,
+  logout,
   DATA_MODES,
+  RUNTIME_STATUS,
   getDataMode,
-  setDataMode
+  setDataMode,
+  getRuntimeStatus,
+  getFindings,
 } from '../../services/findingsService';
 
 const NAV_ITEMS = [
-  { label: 'Command Center', path: '/', icon: LayoutDashboard },
+  { label: 'Workspace', path: '/', icon: Building2 },
+  { label: 'Asset Registry', path: '/asset-registry', icon: Server },
+  { label: 'Scan Runs', path: '/scan-runs', icon: Play },
+  { label: 'Scanner Agents', path: '/scanner-agents', icon: Key },
+  { label: 'Command Center', path: '/command-center', icon: LayoutDashboard },
   { label: 'Findings', path: '/findings', icon: ListChecks },
-  { label: 'Assets', path: '/assets', icon: Server },
   { label: 'SLA Monitor', path: '/sla', icon: Clock },
   { label: 'Security Intelligence', path: '/intelligence', icon: BarChart3 },
-];
-
-/* ── Mock notifications relevant to the security platform ── */
-const INITIAL_NOTIFICATIONS = [
-  {
-    id: 'n1',
-    type: 'critical',
-    icon: ShieldAlert,
-    title: 'Critical Finding Detected',
-    message: 'SQL Injection (CVE-2026-1234) on asset-pay-001 — risk score 94. Immediate patching required.',
-    time: '2 min ago',
-    read: false,
-    link: '/findings',
-  },
-  {
-    id: 'n2',
-    type: 'sla',
-    icon: Clock4,
-    title: 'SLA Breach Warning',
-    message: 'Finding DEDUP-0003 is approaching SLA deadline. 1 hour remaining before breach escalation.',
-    time: '18 min ago',
-    read: false,
-    link: '/sla',
-  },
-  {
-    id: 'n3',
-    type: 'escalation',
-    icon: TrendingUp,
-    title: 'Finding Escalated to L2',
-    message: 'RCE vulnerability DEDUP-0005 auto-escalated after SLA breach. Assigned to senior analyst.',
-    time: '45 min ago',
-    read: false,
-    link: '/findings',
-  },
-  {
-    id: 'n4',
-    type: 'info',
-    icon: Info,
-    title: 'Scan Pipeline Complete',
-    message: 'ZAP, Nuclei & OpenVAS scans finished for ASSET-WEB-003. 4 new findings ingested.',
-    time: '1 hr ago',
-    read: true,
-    link: '/',
-  },
-  {
-    id: 'n5',
-    type: 'resolved',
-    icon: CheckCircle2,
-    title: 'Finding Resolved',
-    message: 'XSS vulnerability DEDUP-0008 marked as remediated by analyst. Awaiting verification scan.',
-    time: '3 hrs ago',
-    read: true,
-    link: '/findings',
-  },
 ];
 
 const TYPE_COLORS = {
@@ -95,39 +47,103 @@ export default function TopNavigation() {
   const [currentUser, setCurUser] = useState(() => getCurrentUser());
   const [showRoleMenu, setShowRoleMenu] = useState(false);
   const [dataMode, setMode] = useState(() => getDataMode());
+  const [runtimeStatus, setRuntime] = useState(() => getRuntimeStatus());
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     const handleAuthChange = () => {
       setCurUser(getCurrentUser());
+      loadNotifications();
     };
     const handleDataModeChange = (e) => {
       setMode(e.detail?.mode || getDataMode());
+      setRuntime(getRuntimeStatus());
+      loadNotifications();
     };
+    const handleRuntimeStatusChange = (e) => {
+      setRuntime(e.detail?.status || getRuntimeStatus());
+      setMode(e.detail?.mode || getDataMode());
+    };
+
+    async function loadNotifications() {
+      try {
+        const findings = await getFindings().catch(() => []);
+        const items = [];
+
+        if (Array.isArray(findings) && findings.length > 0) {
+          findings.forEach((f, idx) => {
+            const isCritical = (f.risk_level || '').toUpperCase() === 'CRITICAL' || (f.risk_score || 0) >= 80;
+            const isSlaWarning = (f.sla_status || '').toUpperCase() === 'BREACHED' || (f.sla_status || '').toUpperCase() === 'WARNING';
+            const isEscalated = (f.workflow?.status || '').toUpperCase() === 'ESCALATED';
+            const isResolved = (f.workflow?.status || '').toUpperCase() === 'RESOLVED';
+
+            if (isCritical) {
+              items.push({
+                id: `notif-crit-${f.id || idx}`,
+                type: 'critical',
+                icon: ShieldAlert,
+                title: 'Critical Finding Detected',
+                message: `${f.title || 'Critical vulnerability'} on ${f.asset_id || 'target asset'} — risk score ${f.risk_score || 90}. Immediate patching required.`,
+                time: 'Recent',
+                read: false,
+                link: '/findings',
+              });
+            } else if (isSlaWarning) {
+              items.push({
+                id: `notif-sla-${f.id || idx}`,
+                type: 'sla',
+                icon: Clock4,
+                title: 'SLA Breach Warning',
+                message: `Finding ${f.id || ''} status is ${f.sla_status}. Action required before escalation.`,
+                time: 'Recent',
+                read: false,
+                link: '/sla',
+              });
+            } else if (isEscalated) {
+              items.push({
+                id: `notif-esc-${f.id || idx}`,
+                type: 'escalation',
+                icon: TrendingUp,
+                title: 'Finding Escalated',
+                message: `Finding ${f.id || ''} has been escalated for senior analyst review.`,
+                time: 'Recent',
+                read: false,
+                link: '/findings',
+              });
+            } else if (isResolved) {
+              items.push({
+                id: `notif-res-${f.id || idx}`,
+                type: 'resolved',
+                icon: CheckCircle2,
+                title: 'Finding Resolved',
+                message: `Vulnerability ${f.id || ''} marked as remediated.`,
+                time: 'Recent',
+                read: true,
+                link: '/findings',
+              });
+            }
+          });
+        }
+
+        setNotifications(items);
+      } catch {
+        setNotifications([]);
+      }
+    }
+
+    loadNotifications();
+
     window.addEventListener('rizintel-auth-change', handleAuthChange);
     window.addEventListener('rizintel-datamode-change', handleDataModeChange);
+    window.addEventListener('rizintel-runtimestatus-change', handleRuntimeStatusChange);
     return () => {
       window.removeEventListener('rizintel-auth-change', handleAuthChange);
       window.removeEventListener('rizintel-datamode-change', handleDataModeChange);
+      window.removeEventListener('rizintel-runtimestatus-change', handleRuntimeStatusChange);
     };
   }, []);
 
-  const handleToggleDataMode = () => {
-    const nextMode = dataMode === DATA_MODES.INTEGRATED ? DATA_MODES.MOCK : DATA_MODES.INTEGRATED;
-    setDataMode(nextMode);
-    setMode(nextMode);
-  };
-
-  const handleSelectRole = (roleId) => {
-    const names = {
-      VIEWER: 'Auditor View',
-      ANALYST: 'SA Analyst',
-      SECURITY_LEAD: 'SOC Lead',
-      ADMIN: 'Sec Admin',
-    };
-    setCurrentUser(roleId, names[roleId] || 'User');
-    setShowRoleMenu(false);
-  };
-
+  const [showNotifications, setShowNotifications] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     try {
       if (typeof window !== 'undefined' && window.localStorage) {
@@ -140,8 +156,17 @@ export default function TopNavigation() {
     }
   });
 
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [notifications, setNotifications] = useState(INITIAL_NOTIFICATIONS);
+  const handleToggleDataMode = () => {
+    const nextMode = dataMode === DATA_MODES.INTEGRATED ? DATA_MODES.MOCK : DATA_MODES.INTEGRATED;
+    setDataMode(nextMode);
+    setMode(nextMode);
+    setRuntime(getRuntimeStatus());
+  };
+
+  const handleLogout = () => {
+    setShowRoleMenu(false);
+    logout();
+  };
 
   const unreadCount = notifications.filter(n => !n.read).length;
 
@@ -151,11 +176,13 @@ export default function TopNavigation() {
       const root = document.documentElement;
       if (darkMode) {
         root.setAttribute('data-theme', 'dark');
+        root.classList.add('dark');
         if (typeof window !== 'undefined' && window.localStorage) {
           window.localStorage.setItem('rizintel-theme', 'dark');
         }
       } else {
         root.removeAttribute('data-theme');
+        root.classList.remove('dark');
         if (typeof window !== 'undefined' && window.localStorage) {
           window.localStorage.setItem('rizintel-theme', 'light');
         }
@@ -248,39 +275,98 @@ export default function TopNavigation() {
 
         {/* Right Controls */}
         <div className="nav-right">
-          {/* Data Mode Switch (Live Integrated vs Safe Mock Fallback) */}
+          {/* Data Mode Switch (Live Integrated vs Honest Mock Fallback) */}
           <div className="data-mode-toggle-wrap">
-            <button
-              id="data-mode-switch-btn"
-              className={`data-mode-pill ${dataMode === DATA_MODES.INTEGRATED ? 'mode-live' : 'mode-mock'}`}
-              onClick={handleToggleDataMode}
-              title={`Active Data Mode: ${dataMode === DATA_MODES.INTEGRATED ? 'Real Integrated Pipeline (M1→M7 APIs)' : 'Mock Dataset (Fallback)'}. Click to switch mode.`}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '4px 10px',
-                borderRadius: '20px',
-                fontSize: '11.5px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                border: dataMode === DATA_MODES.INTEGRATED ? '1px solid rgba(34, 197, 94, 0.45)' : '1px solid rgba(148, 163, 184, 0.35)',
-                backgroundColor: dataMode === DATA_MODES.INTEGRATED ? (darkMode ? 'rgba(34, 197, 94, 0.15)' : 'rgba(34, 197, 94, 0.08)') : (darkMode ? 'rgba(148, 163, 184, 0.15)' : 'rgba(148, 163, 184, 0.08)'),
-                color: dataMode === DATA_MODES.INTEGRATED ? '#16A34A' : '#64748B',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              <span
-                style={{
-                  width: '7px',
-                  height: '7px',
-                  borderRadius: '50%',
-                  backgroundColor: dataMode === DATA_MODES.INTEGRATED ? '#22C55E' : '#94A3B8',
-                  boxShadow: dataMode === DATA_MODES.INTEGRATED ? '0 0 6px #22C55E' : 'none',
-                }}
-              />
-              <span>{dataMode === DATA_MODES.INTEGRATED ? 'Live M1→M7' : 'Mock Fallback'}</span>
-            </button>
+            {(() => {
+              const statusConfig = {
+                [RUNTIME_STATUS.LIVE]: {
+                  label: 'Pipeline Live',
+                  dotColor: '#22C55E',
+                  glow: '0 0 6px #22C55E',
+                  border: '1px solid rgba(34, 197, 94, 0.45)',
+                  bg: darkMode ? 'rgba(34, 197, 94, 0.15)' : 'rgba(34, 197, 94, 0.08)',
+                  color: '#16A34A',
+                  className: 'mode-live',
+                  title: 'Active Data Mode: Pipeline Live (Connected to live pipeline APIs). Click to switch to Mock.',
+                },
+                [RUNTIME_STATUS.MOCK]: {
+                  label: 'Mock Data',
+                  dotColor: '#94A3B8',
+                  glow: 'none',
+                  border: '1px solid rgba(148, 163, 184, 0.35)',
+                  bg: darkMode ? 'rgba(148, 163, 184, 0.15)' : 'rgba(148, 163, 184, 0.08)',
+                  color: '#64748B',
+                  className: 'mode-mock',
+                  title: 'Active Data Mode: Mock Data (Offline demo dataset). Click to switch to Live.',
+                },
+                [RUNTIME_STATUS.FALLBACK]: {
+                  label: 'Mock Fallback',
+                  dotColor: '#F59E0B',
+                  glow: '0 0 6px #F59E0B',
+                  border: '1px solid rgba(245, 158, 11, 0.45)',
+                  bg: darkMode ? 'rgba(245, 158, 11, 0.15)' : 'rgba(245, 158, 11, 0.08)',
+                  color: '#D97706',
+                  className: 'mode-fallback',
+                  title: 'Active Data Mode: Mock Fallback (Live backend API unavailable, showing fallback mock data). Click to retry.',
+                },
+                [RUNTIME_STATUS.CONNECTING]: {
+                  label: 'Connecting...',
+                  dotColor: '#3B82F6',
+                  glow: '0 0 6px #3B82F6',
+                  border: '1px solid rgba(59, 130, 246, 0.45)',
+                  bg: darkMode ? 'rgba(59, 130, 246, 0.15)' : 'rgba(59, 130, 246, 0.08)',
+                  color: '#2563EB',
+                  className: 'mode-connecting',
+                  title: 'Connecting to live backend pipeline...',
+                },
+                [RUNTIME_STATUS.ERROR]: {
+                  label: 'Live Unavailable',
+                  dotColor: '#EF4444',
+                  glow: '0 0 6px #EF4444',
+                  border: '1px solid rgba(239, 68, 68, 0.45)',
+                  bg: darkMode ? 'rgba(239, 68, 68, 0.15)' : 'rgba(239, 68, 68, 0.08)',
+                  color: '#DC2626',
+                  className: 'mode-error',
+                  title: 'Live backend pipeline unavailable. Click to switch to Mock.',
+                },
+              };
+
+              const currentConfig = statusConfig[runtimeStatus] || statusConfig[RUNTIME_STATUS.FALLBACK];
+
+              return (
+                <button
+                  id="data-mode-switch-btn"
+                  className={`data-mode-pill ${currentConfig.className}`}
+                  onClick={handleToggleDataMode}
+                  title={currentConfig.title}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '4px 10px',
+                    borderRadius: '20px',
+                    fontSize: '11.5px',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    border: currentConfig.border,
+                    backgroundColor: currentConfig.bg,
+                    color: currentConfig.color,
+                    transition: 'all 0.2s ease',
+                  }}
+                >
+                  <span
+                    style={{
+                      width: '7px',
+                      height: '7px',
+                      borderRadius: '50%',
+                      backgroundColor: currentConfig.dotColor,
+                      boxShadow: currentConfig.glow,
+                    }}
+                  />
+                  <span>{currentConfig.label}</span>
+                </button>
+              );
+            })()}
           </div>
 
           {/* Dark Mode Toggle */}
@@ -394,55 +480,74 @@ export default function TopNavigation() {
             )}
           </div>
 
-          {/* RBAC User Profile & Role Switcher */}
+          {/* RBAC User Profile & Authenticated Session Menu */}
           <div className="nav-user-wrapper" ref={roleMenuRef}>
             <button
               className="nav-user-profile"
               onClick={() => setShowRoleMenu(prev => !prev)}
-              title="Click to switch RBAC Role"
-              aria-label="Switch User Role"
+              title="Click to view Authenticated Identity"
+              aria-label="View User Profile"
+              id="nav-user-profile-btn"
             >
-              <div className={`nav-avatar role-${currentUser.role.toLowerCase()}`}>
-                {currentUser.role === 'VIEWER' ? 'VR' :
-                 currentUser.role === 'SECURITY_LEAD' ? 'SL' :
-                 currentUser.role === 'ADMIN' ? 'AD' : 'SA'}
+              <div className={`nav-avatar role-${(currentUser?.role || 'ANALYST').toLowerCase()}`}>
+                {currentUser?.role === 'VIEWER' ? 'VR' :
+                 currentUser?.role === 'SECURITY_LEAD' ? 'SL' :
+                 currentUser?.role === 'ADMIN' ? 'AD' : 'SA'}
               </div>
               <div className="nav-user-info">
-                <span className="nav-user-name">{currentUser.name}</span>
-                <span className={`nav-user-role-badge badge-${currentUser.config.badge}`}>
-                  {currentUser.config.shortLabel}
+                <span className="nav-user-name">{currentUser?.name || 'User'}</span>
+                <span className={`nav-user-role-badge badge-${currentUser?.config?.badge || 'blue'}`}>
+                  {currentUser?.config?.shortLabel || currentUser?.role || 'ANALYST'}
                 </span>
               </div>
             </button>
 
-            {/* Role Dropdown */}
+            {/* Authenticated Profile Dropdown */}
             {showRoleMenu && (
-              <div className="role-dropdown-panel fade-in">
+              <div className="role-dropdown-panel auth-profile-panel fade-in" role="menu">
                 <div className="role-dropdown-header">
                   <div className="role-dropdown-title">
                     <Shield size={14} className="text-purple" />
-                    <span>Role-Based Access Control (RBAC)</span>
+                    <span>Authenticated Identity</span>
                   </div>
-                  <p className="role-dropdown-subtitle">Switch active identity to test backend-enforced permissions</p>
+                  <p className="role-dropdown-subtitle">Verified by HMAC-SHA256 JWT Token</p>
                 </div>
 
-                <div className="role-options-list">
-                  {Object.values(ROLES).map(r => {
-                    const isSelected = r.id === currentUser.role;
-                    return (
-                      <button
-                        key={r.id}
-                        className={`role-option-card ${r.id.toLowerCase()}${isSelected ? ' active' : ''}`}
-                        onClick={() => handleSelectRole(r.id)}
-                      >
-                        <div className="role-card-top">
-                          <span className={`role-pill badge-${r.badge}`}>{r.shortLabel}</span>
-                          {isSelected && <span className="role-active-check">Active ✓</span>}
-                        </div>
-                        <p className="role-card-desc">{r.description}</p>
-                      </button>
-                    );
-                  })}
+                {/* Active User Card */}
+                <div className="auth-profile-details">
+                  <div className="auth-user-header">
+                    <div className={`nav-avatar large role-${(currentUser?.role || 'ANALYST').toLowerCase()}`}>
+                      {currentUser?.role === 'VIEWER' ? 'VR' :
+                       currentUser?.role === 'SECURITY_LEAD' ? 'SL' :
+                       currentUser?.role === 'ADMIN' ? 'AD' : 'SA'}
+                    </div>
+                    <div className="auth-user-text">
+                      <div className="auth-name-row">
+                        <span className="auth-display-name">{currentUser?.name || 'User'}</span>
+                        <span className={`role-pill badge-${currentUser?.config?.badge || 'blue'}`}>
+                          {currentUser?.config?.shortLabel || currentUser?.role || 'ANALYST'}
+                        </span>
+                      </div>
+                      <span className="auth-user-email">{currentUser?.email || `${(currentUser?.name || 'user').toLowerCase().replace(/\s+/g, '.')}@rizintel.demo`}</span>
+                    </div>
+                  </div>
+
+                  <div className="auth-permissions-summary">
+                    <span className="permissions-title">RBAC Authority Scope:</span>
+                    <p className="permissions-desc">{currentUser?.config?.description || 'Standard analyst permissions.'}</p>
+                  </div>
+                </div>
+
+                {/* Logout Button */}
+                <div className="auth-menu-footer">
+                  <button
+                    className="auth-signout-btn"
+                    onClick={handleLogout}
+                    id="btn-nav-logout"
+                  >
+                    <LogOut size={14} />
+                    <span>Sign Out</span>
+                  </button>
                 </div>
               </div>
             )}

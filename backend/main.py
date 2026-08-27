@@ -10,14 +10,18 @@ if backend_dir not in sys.path:
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-from routers import findings, dashboard, assets, sla, integration
+from routers import findings, dashboard, assets, sla, integration, auth, remediation
+from routers.v1 import organizations as v1_organizations
+from routers.v1 import agents as v1_agents
+from routers.v1 import agent_machine as v1_agent_machine
+import services.org_service  # noqa: F401 — triggers demo org seeding on startup
 
 logger = logging.getLogger("rizintel")
 
 app = FastAPI(
-    title="RizIntel M8 Backend Layer",
-    description="FastAPI Service providing validated endpoints for RizIntel operations.",
-    version="1.0.0",
+    title="RizIntel Security Platform",
+    description="FastAPI Service providing validated endpoints for RizIntel M1-M8 pipeline and Phase 1 operational layer.",
+    version="1.1.0",
     # Disable /docs and /redoc in production to limit attack surface
     docs_url="/docs" if os.getenv("RIZINTEL_ENV", "development") == "development" else None,
     redoc_url=None,
@@ -35,8 +39,8 @@ if _RAW_ORIGINS.strip() == "*":
         allow_origins=["*"],
         allow_credentials=True,
         allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allow_headers=["Content-Type", "X-User-Role", "X-User-Name", "Authorization"],
-        expose_headers=["X-RizIntel-Chain-Valid"],
+        allow_headers=["Content-Type", "X-User-Role", "X-User-Name", "Authorization", "Last-Event-ID", "Cache-Control"],
+        expose_headers=["X-RizIntel-Chain-Valid", "Last-Event-ID"],
         max_age=600,
     )
 else:
@@ -47,8 +51,8 @@ else:
         allow_origin_regex=r"https://.*\.vercel\.app",
         allow_credentials=True,
         allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allow_headers=["Content-Type", "X-User-Role", "X-User-Name", "Authorization"],
-        expose_headers=["X-RizIntel-Chain-Valid"],
+        allow_headers=["Content-Type", "X-User-Role", "X-User-Name", "Authorization", "Last-Event-ID", "Cache-Control"],
+        expose_headers=["X-RizIntel-Chain-Valid", "Last-Event-ID"],
         max_age=600,
     )
 
@@ -61,16 +65,46 @@ async def generic_exception_handler(request: Request, exc: Exception):
         content={"detail": "An internal server error occurred. Please contact your security administrator."},
     )
 
-# Mount Routers
+# Mount Routers — existing M1-M8 (frozen)
+app.include_router(auth.router, prefix="/api")
 app.include_router(findings.router, prefix="/api")
 app.include_router(dashboard.router, prefix="/api")
 app.include_router(assets.router, prefix="/api")
 app.include_router(sla.router, prefix="/api")
+app.include_router(remediation.router, prefix="/api")
 app.include_router(integration.router, prefix="/api")
 
+# Phase 1 — Versioned operational API
+app.include_router(v1_organizations.router)
+
+# Phase 4 — Scanner Agent Management & Machine Execution APIs
+app.include_router(v1_agents.router)
+app.include_router(v1_agent_machine.router)
+
 @app.get("/health")
+@app.get("/api/health")
+@app.get("/api/v1/health")
 def health_check():
-    return {"status": "healthy", "service": "RizIntel M8 Backend"}
+    from database import _get_conn
+    db_status = "HEALTHY"
+    try:
+        conn = _get_conn()
+        conn.execute("SELECT 1")
+        conn.close()
+    except Exception as e:
+        db_status = f"UNHEALTHY ({type(e).__name__})"
+
+    storage_path = os.getenv("RIZINTEL_STORAGE_PATH", "backend/data/submissions")
+    storage_status = "HEALTHY" if os.path.exists(os.path.dirname(storage_path) or ".") else "DEGRADED"
+
+    return {
+        "status": "healthy" if db_status == "HEALTHY" else "degraded",
+        "service": "RizIntel M8 Backend",
+        "version": "1.1.0",
+        "environment": os.getenv("RIZINTEL_ENV", "development"),
+        "database": db_status,
+        "storage": storage_status,
+    }
 
 if __name__ == "__main__":
     import uvicorn

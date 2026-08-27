@@ -1,0 +1,737 @@
+/* ==========================================================================
+   RizTrace — Decision Provenance Full Page & Modal CSS
+   ========================================================================== */
+
+.riztrace-page {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 64px);
+  background: var(--bg-base, #F8FAFC);
+  color: var(--text-primary, #0F172A);
+  font-family: var(--font-sans, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* ── Loading and Error States ── */
+.riztrace-page-loading,
+.riztrace-page-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 16px;
+  color: var(--text-secondary, #64748B);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.riztrace-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(79, 70, 229, 0.15);
+  border-top-color: #4F46E5;
+  border-radius: 50%;
+  animation: riztrace-spin 0.8s linear infinite;
+}
+
+@keyframes riztrace-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Top Header Bar ── */
+.riztrace-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 32px;
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--border-color, #E2E8F0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.riztrace-page-header-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.riztrace-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid #E2E8F0;
+  background: #F8FAFC;
+  color: #475569;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.riztrace-back-btn:hover {
+  background: #EEF2FF;
+  color: #4F46E5;
+  border-color: #C7D2FE;
+  transform: translateX(-2px);
+}
+
+.riztrace-page-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.riztrace-brand-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.25);
+  flex-shrink: 0;
+}
+
+.riztrace-modal-title {
+  font-size: 19px;
+  font-weight: 700;
+  color: #0F172A;
+  letter-spacing: -0.3px;
+  line-height: 1.2;
+}
+
+.riztrace-modal-subtitle {
+  font-size: 12.5px;
+  color: #64748B;
+  margin-top: 3px;
+}
+
+.riztrace-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.riztrace-meta-pills {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.riztrace-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.riztrace-pill.mono {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  background: #F1F5F9;
+  color: #334155;
+  border: 1px solid #E2E8F0;
+}
+
+.riztrace-pill.cve {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+}
+
+.riztrace-pill.score {
+  font-weight: 700;
+}
+
+.riztrace-pill.score.critical {
+  background: #FEE2E2;
+  color: #DC2626;
+  border: 1px solid #FECACA;
+}
+
+.riztrace-pill.score.high {
+  background: #FFEDD5;
+  color: #EA580C;
+  border: 1px solid #FED7AA;
+}
+
+.riztrace-pill.score.medium {
+  background: #FEF9C3;
+  color: #CA8A04;
+  border: 1px solid #FEF08A;
+}
+
+.riztrace-pill.score.low {
+  background: #DCFCE7;
+  color: #16A34A;
+  border: 1px solid #BBF7D0;
+}
+
+/* ── Toolbar ── */
+.riztrace-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 14px 32px;
+  background: #FFFFFF;
+  border-bottom: 1px solid #E2E8F0;
+}
+
+.riztrace-mode-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.riztrace-mode-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.riztrace-mode-btns {
+  display: flex;
+  align-items: center;
+  background: #F1F5F9;
+  padding: 3px;
+  border-radius: 10px;
+  border: 1px solid #E2E8F0;
+  gap: 4px;
+}
+
+.riztrace-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  border-radius: 7px;
+  border: none;
+  background: transparent;
+  color: #64748B;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.riztrace-mode-btn:hover {
+  color: #1E293B;
+}
+
+.riztrace-mode-btn.active {
+  background: #FFFFFF;
+  color: #4F46E5;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.riztrace-traversal-hint {
+  font-size: 12px;
+  color: #6366F1;
+  background: #EEF2FF;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid #E0E7FF;
+}
+
+.riztrace-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.riztrace-tool-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
+  color: #475569;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.riztrace-tool-btn:hover {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+  color: #1E293B;
+}
+
+.riztrace-tool-btn.primary {
+  background: linear-gradient(135deg, #4F46E5 0%, #6366F1 100%);
+  color: #FFFFFF;
+  border: none;
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
+}
+
+.riztrace-tool-btn.primary:hover {
+  background: linear-gradient(135deg, #4338CA 0%, #4F46E5 100%);
+}
+
+/* ── Pipeline Step Rail (Horizontal Stepper) ── */
+.riztrace-pipeline-summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: #F8FAFC;
+  border-bottom: 1px solid #E2E8F0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.riztrace-step-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.riztrace-step-pill:hover {
+  border-color: #C7D2FE;
+  background: #EEF2FF;
+  color: #4F46E5;
+}
+
+.riztrace-step-pill.open {
+  background: #4F46E5;
+  color: #FFFFFF;
+  border-color: #4F46E5;
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
+}
+
+.riztrace-pipeline-arrow {
+  color: #94A3B8;
+  flex-shrink: 0;
+}
+
+/* ── Body Container ── */
+.riztrace-page-body {
+  flex: 1;
+  padding: 32px 32px 60px;
+  max-width: 1080px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.riztrace-graph-nodes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.riztrace-node-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* ── Node Card ── */
+.riztrace-node-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.riztrace-node-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+}
+
+.riztrace-node-card.available {
+  border-left: 4px solid #10B981;
+}
+
+.riztrace-node-card.pending {
+  border-left: 4px solid #6366F1;
+}
+
+.riztrace-node-card.not_available {
+  border-left: 4px solid #94A3B8;
+  opacity: 0.85;
+}
+
+/* Node Header */
+.riztrace-node-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+
+.riztrace-node-header:hover {
+  background: #F8FAFC;
+}
+
+.riztrace-node-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+}
+
+.riztrace-step-number {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: #4F46E5;
+  background: #EEF2FF;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid #E0E7FF;
+}
+
+.riztrace-node-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: #F1F5F9;
+  color: #475569;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.riztrace-node-card.available .riztrace-node-icon-box {
+  background: #ECFDF5;
+  color: #059669;
+}
+
+.riztrace-node-card.pending .riztrace-node-icon-box {
+  background: #EEF2FF;
+  color: #4F46E5;
+}
+
+.riztrace-node-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.riztrace-node-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.riztrace-node-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.riztrace-cat-chip {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748B;
+  background: #F1F5F9;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.riztrace-node-summary {
+  font-size: 13px;
+  color: #64748B;
+  line-height: 1.4;
+}
+
+.riztrace-node-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.riztrace-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.riztrace-status-badge.available {
+  background: #ECFDF5;
+  color: #059669;
+  border: 1px solid #A7F3D0;
+}
+
+.riztrace-status-badge.pending {
+  background: #EEF2FF;
+  color: #4F46E5;
+  border: 1px solid #C7D2FE;
+}
+
+.riztrace-status-badge.not_available {
+  background: #F1F5F9;
+  color: #64748B;
+  border: 1px solid #E2E8F0;
+}
+
+.riztrace-expand-toggle {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.riztrace-expand-toggle:hover {
+  background: #EEF2FF;
+  color: #4F46E5;
+  border-color: #C7D2FE;
+}
+
+/* ── Node Expanded Details ── */
+.riztrace-node-details {
+  border-top: 1px solid #F1F5F9;
+  padding: 20px 24px;
+  background: #F8FAFC;
+}
+
+.riztrace-not-available-box,
+.riztrace-pending-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.riztrace-not-available-box {
+  background: #FEF3C7;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+}
+
+.riztrace-pending-box {
+  background: #EEF2FF;
+  color: #3730A3;
+  border: 1px solid #C7D2FE;
+}
+
+.riztrace-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.riztrace-detail-item {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.riztrace-detail-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.riztrace-detail-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #64748B;
+}
+
+.riztrace-detail-value {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #0F172A;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.riztrace-json-code {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 12px;
+  background: #0F172A;
+  color: #A5B4FC;
+  padding: 14px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 6px 0 0;
+  line-height: 1.5;
+}
+
+.riztrace-chips-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.riztrace-chips-group .chip {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.chip-purple {
+  background: #F3E8FF;
+  color: #7E22CE;
+  border: 1px solid #E9D5FF;
+}
+
+/* ── Connection Rail Between Stages ── */
+.riztrace-relation-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 0;
+  position: relative;
+}
+
+.riztrace-rail-line {
+  width: 2px;
+  height: 14px;
+  background: #CBD5E1;
+}
+
+.riztrace-relation-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: #EEF2FF;
+  border: 1px solid #C7D2FE;
+  color: #4F46E5;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 3px 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+/* ── Footer Notice ── */
+.riztrace-page-footer-notice {
+  margin-top: 40px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  font-size: 12.5px;
+  color: #64748B;
+  line-height: 1.6;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+/* ── Dark Theme Overrides ── */
+[data-theme="dark"] .riztrace-page {
+  background: #0B0F17;
+  color: #F8FAFC;
+}
+
+[data-theme="dark"] .riztrace-page-header,
+[data-theme="dark"] .riztrace-toolbar,
+[data-theme="dark"] .riztrace-pipeline-summary,
+[data-theme="dark"] .riztrace-node-card,
+[data-theme="dark"] .riztrace-page-footer-notice {
+  background: #111827;
+  border-color: #1F2937;
+}
+
+[data-theme="dark"] .riztrace-modal-title,
+[data-theme="dark"] .riztrace-node-title,
+[data-theme="dark"] .riztrace-detail-value {
+  color: #F8FAFC;
+}
+
+[data-theme="dark"] .riztrace-back-btn,
+[data-theme="dark"] .riztrace-tool-btn,
+[data-theme="dark"] .riztrace-step-pill,
+[data-theme="dark"] .riztrace-expand-toggle,
+[data-theme="dark"] .riztrace-detail-item {
+  background: #1F2937;
+  border-color: #374151;
+  color: #CBD5E1;
+}
+
+[data-theme="dark"] .riztrace-mode-btns {
+  background: #1F2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .riztrace-mode-btn.active {
+  background: #374151;
+  color: #818CF8;
+}
+
+[data-theme="dark"] .riztrace-node-details {
+  background: #0F172A;
+  border-top-color: #1F2937;
+}
+
+[data-theme="dark"] .riztrace-node-header:hover {
+  background: #1E293B;
+}
+
+[data-theme="dark"] .riztrace-step-number {
+  background: rgba(99, 102, 241, 0.15);
+  color: #818CF8;
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+[data-theme="dark"] .riztrace-relation-tag {
+  background: #1E1B4B;
+  border-color: #312E81;
+  color: #A5B4FC;
+}
+
+[data-theme="dark"] .riztrace-rail-line {
+  background: #374151;
+}

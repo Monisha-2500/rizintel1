@@ -5,7 +5,10 @@ This is a KEY differentiator for the hackathon.
 Shows how many scanners agree on each vulnerability.
 """
 from typing import List, Dict
-from src.models import NormalizedFinding
+try:
+    from .models import NormalizedFinding
+except (ImportError, ValueError):
+    from src.models import NormalizedFinding
 
 
 def calculate_scanner_consensus(findings: List[NormalizedFinding]) -> Dict:
@@ -25,11 +28,10 @@ def calculate_scanner_consensus(findings: List[NormalizedFinding]) -> Dict:
     scanner_names = list(set(f.scanner for f in findings))
     detected_by_count = len(scanner_names)
     
-    # For now, assume we know total scanners (3: ZAP, Nuclei, OpenVAS)
-    # In production, this would come from configuration
-    TOTAL_SCANNERS = 3
+    # Dynamically scale total_scanners if more scanners detected the finding
+    TOTAL_SCANNERS = max(3, detected_by_count)
     
-    consensus_score = detected_by_count / TOTAL_SCANNERS
+    consensus_score = min(1.0, detected_by_count / TOTAL_SCANNERS)
     
     return {
         "scanner_names": scanner_names,

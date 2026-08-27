@@ -15,7 +15,17 @@ from app.services.llm_service import LLMExplanationResult
 
 
 def _fmt(value, unit: str = "") -> str:
-    return f"{value}{unit}" if value is not None else "not available"
+    if value is None:
+        return "not specified"
+    if isinstance(value, bool):
+        return "Yes" if value else "No"
+    s = str(value).strip()
+    if s.upper() == "UNKNOWN":
+        return "not specified"
+    if "." in s and s.isupper():
+        # Handle enum representations like CONFIDENCECLASSIFICATION.HIGH_CONFIDENCE
+        s = s.split(".")[-1]
+    return f"{s}{unit}"
 
 
 def build_fallback_explanation(finding: RiskAssessedFinding) -> LLMExplanationResult:
@@ -27,45 +37,58 @@ def build_fallback_explanation(finding: RiskAssessedFinding) -> LLMExplanationRe
 
     vuln_name = finding.vulnerability_name or "This finding"
     cve = finding.cve_id or "an unidentified CVE"
-    asset_name = ac.asset_name or ac.asset_id
+    asset_name = ac.asset_name or ac.asset_id or "Registered Asset"
 
     # --- technical (security analyst view) -------------------------------
     tech_parts = [
         f"{vuln_name} ({cve}) on asset {asset_name} was scored "
-        f"{ra.risk_score}/100 ({ra.risk_level}) by the risk engine (M5)."
+        f"{ra.risk_score}/100 ({ra.risk_level}) contextual risk score."
     ]
 
     if ti:
-        tech_parts.append(
-            "Evidence: CVSS "
-            + _fmt(ti.cvss_score)
-            + (f" ({ti.cvss_vector})" if ti.cvss_vector else "")
-            + ", EPSS " + _fmt(ti.epss_score)
-            + (f" ({ti.epss_percentile * 100:.0f}th percentile)" if ti.epss_percentile is not None else "")
-            + ", CISA KEV listed = " + _fmt(ti.kev_listed)
-            + ", exploit available = " + _fmt(ti.exploit_available)
-            + (f" (sources: {', '.join(ti.exploit_sources)})" if ti.exploit_sources else "")
-            + "."
-        )
+        evidence_items = []
+        if ti.cvss_score is not None:
+            evidence_items.append(f"CVSS {ti.cvss_score}" + (f" ({ti.cvss_vector})" if ti.cvss_vector else ""))
+        if ti.epss_score is not None:
+            pct_str = f" ({ti.epss_percentile * 100:.0f}th percentile)" if ti.epss_percentile is not None else ""
+            evidence_items.append(f"EPSS {ti.epss_score}{pct_str}")
+        if ti.kev_listed is not None:
+            evidence_items.append("CISA KEV listed" if ti.kev_listed else "not in CISA KEV")
+        if ti.exploit_available is not None:
+            exploit_str = "known exploit available" if ti.exploit_available else "no known public exploit"
+            if ti.exploit_sources:
+                exploit_str += f" (sources: {', '.join(ti.exploit_sources)})"
+            evidence_items.append(exploit_str)
+
+        if evidence_items:
+            tech_parts.append(f"Evidence: {', '.join(evidence_items)}.")
     else:
-        tech_parts.append("Threat intelligence evidence was not supplied by M5 for this finding.")
+        tech_parts.append("Threat intelligence evidence was not supplied for this finding.")
+
+    env_str = ac.environment or "not specified"
+    crit_str = ac.criticality or "not specified"
+    exp_str = "Internet-facing" if ac.internet_facing is True else ("Internal" if ac.internet_facing is False else "not specified")
+    data_str = ac.data_sensitivity if (ac.data_sensitivity and ac.data_sensitivity.upper() != "UNKNOWN") else "not specified"
 
     tech_parts.append(
-        f"Asset context: criticality = {_fmt(ac.criticality)}, "
-        f"environment = {_fmt(ac.environment)}, "
-        f"internet-facing = {_fmt(ac.internet_facing)}, "
-        f"data sensitivity = {_fmt(ac.data_sensitivity)}."
+        f"Asset context: criticality = {crit_str}, "
+        f"environment = {env_str}, "
+        f"exposure = {exp_str}, "
+        f"data classification = {data_str}."
     )
 
     if sc:
+        scanner_count = sc.detected_by_count or 0
+        scanner_word = "scanner" if scanner_count == 1 else "scanners"
         tech_parts.append(
-            f"Detected by {_fmt(sc.detected_by_count)} of {_fmt(sc.total_scanners)} scanners "
-            f"(consensus score {_fmt(sc.score)})."
+            f"Detected by {scanner_count} of {sc.total_scanners or 1} configured {scanner_word} "
+            f"(consensus score {sc.score or 0.0})."
         )
 
     if fc:
+        conf_label = _fmt(fc.classification).replace("_", " ").title()
         tech_parts.append(
-            f"Finding confidence: {_fmt(fc.score)} ({_fmt(fc.classification)})."
+            f"Finding confidence: {fc.score or 0.0} ({conf_label})."
         )
 
     tech_parts.append(
@@ -84,17 +107,22 @@ def build_fallback_explanation(finding: RiskAssessedFinding) -> LLMExplanationRe
         "LOW": "can be tracked at low priority",
     }.get((ra.risk_level or "").upper(), "should be reviewed by the security team")
 
-    crit_phrase = f"a {ac.criticality.lower()} asset" if ac.criticality else "an unclassified asset"
+    crit = (ac.criticality or "").strip().upper()
+    if crit and crit != "UNKNOWN":
+        crit_phrase = f"a {crit.lower()} asset"
+    else:
+        crit_phrase = "an active system"
+
     mgmt_parts = [
-        f"A {ra.risk_level.lower() if ra.risk_level else 'unclassified'} severity "
-        f"security issue ({vuln_name}) was found on {asset_name}, which is "
+        f"A {ra.risk_level.lower() if ra.risk_level else 'unclassified'}-risk "
+        f"security finding ({vuln_name}) was identified on {asset_name}, which is "
         f"{crit_phrase}"
         + (f" and internet-facing" if ac.internet_facing else "")
         + "."
     ]
-    if ac.data_sensitivity:
+    if ac.data_sensitivity and str(ac.data_sensitivity).strip().upper() != "UNKNOWN":
         mgmt_parts.append(f"This system handles {ac.data_sensitivity}-classified data.")
-    mgmt_parts.append(f"This finding {urgency}, based on the risk score assigned by the risk engine.")
+    mgmt_parts.append(f"This finding {urgency}, based on the contextual risk score.")
     if ti and ti.kev_listed:
         mgmt_parts.append("This vulnerability is confirmed to be actively exploited in the wild (CISA KEV).")
 

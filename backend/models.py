@@ -1,11 +1,11 @@
 from pydantic import BaseModel, Field, field_validator, model_validator, ConfigDict
-from typing import List, Optional
+from typing import List, Optional, Any
 import re
 
 # ── Constants ────────────────────────────────────────────────────────────────
 _VALID_FINDING_ID = re.compile(r"^[A-Za-z0-9_\-]{1,64}$")
 _VALID_ACTION = re.compile(r"^[A-Z_]{1,100}$")
-_ALLOWED_ACTIONS = {"ACCEPT_PRIORITY", "ESCALATE", "DOWNGRADE", "NEEDS_REVIEW", "FALSE_POSITIVE"}
+_ALLOWED_ACTIONS = {"ACCEPT_PRIORITY", "ESCALATE", "DOWNGRADE", "NEEDS_REVIEW", "FALSE_POSITIVE", "APPROVE_REVIEW", "CONFIRM"}
 
 # Schema v1.0 contract models
 
@@ -18,13 +18,13 @@ class JourneyStage(BaseModel):
     status: str = Field(..., min_length=1, max_length=50)
 
 class ScannerConsensus(BaseModel):
-    score: float = Field(..., ge=0.0, le=100.0)
+    score: float = Field(..., ge=0.0, le=1.0)
     scanner_names: List[str]
     detected_by_count: int = Field(..., ge=0)
     total_scanners: int = Field(..., ge=0)
 
 class FindingConfidence(BaseModel):
-    score: float = Field(..., ge=0.0, le=100.0)
+    score: float = Field(..., ge=0.0, le=1.0)
     classification: str
 
 class ThreatIntelligence(BaseModel):
@@ -37,7 +37,7 @@ class AssetContext(BaseModel):
     asset_name: str = Field(..., min_length=1, max_length=200)
     environment: str = Field(..., min_length=1, max_length=50)
     criticality: str = Field(..., min_length=1, max_length=50)
-    internet_facing: bool
+    internet_facing: Optional[bool] = None   # None = genuinely unknown for UNMAPPED assets
     data_sensitivity: str = Field(..., min_length=1, max_length=50)
 
 class RiskAssessment(BaseModel):
@@ -47,7 +47,9 @@ class RiskAssessment(BaseModel):
 class Explanation(BaseModel):
     technical: str
     management: str
-    top_risk_drivers: List[str] = []
+    top_risk_drivers: List[str] = Field(default_factory=list)
+    generated_at: Optional[str] = None
+    references: List[str] = Field(default_factory=list)
 
 class Provenance(BaseModel):
     source_findings: List[ScannerFinding] = []
@@ -88,6 +90,8 @@ class Workflow(BaseModel):
 class FindingSchema(BaseModel):
     schema_version: str = "1.0"
     finding_id: str = Field(..., min_length=1, max_length=64)
+    scan_run_id: Optional[str] = None
+    organization_id: Optional[str] = None
     cve_id: Optional[str] = None
     asset_id: str
     vulnerability_name: str
@@ -96,13 +100,12 @@ class FindingSchema(BaseModel):
     risk_level: str
     confidence_classification: str
     asset_criticality: str
-    internet_exposure: bool
+    internet_exposure: Optional[bool] = None  # None = genuinely unknown for UNMAPPED assets
     recommended_action: str
     workflow: Workflow
     discovered_at: str
     updated_at: str
     detail: FindingDetail
-
     @field_validator("finding_id")
     @classmethod
     def validate_finding_id(cls, v: str) -> str:
@@ -134,6 +137,27 @@ def _validate_action(v: Optional[str], field_name: str) -> str:
     return cleaned
 
 
+import hashlib
+
+def compute_finding_fingerprint(finding: Any) -> str:
+    """
+    Computes a deterministic SHA-256 snapshot fingerprint of the finding state at decision time.
+    """
+    if not finding:
+        return ""
+    fid = str(getattr(finding, "finding_id", "")).strip()
+    risk = str(getattr(finding, "risk_score", 0))
+    lvl = str(getattr(finding, "risk_level", "")).strip().upper()
+    vname = str(getattr(finding, "vulnerability_name", "")).strip()
+    aid = str(getattr(finding, "asset_id", "")).strip()
+    wf = getattr(finding, "workflow", None)
+    wf_status = str(getattr(wf, "status", "")).strip().upper() if wf else ""
+    sla_status = str(getattr(wf, "sla_status", "")).strip().upper() if wf else ""
+
+    canonical = f"{fid}|{risk}|{lvl}|{vname}|{aid}|{wf_status}|{sla_status}"
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:16]
+
+
 class AuditEventCreate(BaseModel):
     finding_id: Optional[str] = Field(None, max_length=64)
     m5_risk_score: Optional[int] = Field(None, ge=0, le=100)
@@ -143,6 +167,8 @@ class AuditEventCreate(BaseModel):
     reason: Optional[str] = Field(default="", max_length=2000)     # alias
     role: Optional[str] = Field(default="security_analyst", max_length=128)
     timestamp: Optional[str] = Field(None, max_length=50)
+    data_source: Optional[str] = Field(default="LIVE", max_length=20)
+    finding_snapshot_hash: Optional[str] = Field(default=None, max_length=64)
 
     @field_validator("finding_id")
     @classmethod
@@ -185,6 +211,8 @@ class AuditEventResponse(BaseModel):
     rationale: Optional[str] = ""
     role: str = "security_analyst"
     timestamp: str
+    data_source: str = "LIVE"
+    finding_snapshot_hash: str = ""
     previous_hash: str
     event_hash: str
 
@@ -207,6 +235,8 @@ class AnalystFeedbackInput(BaseModel):
     rationale: Optional[str] = Field(default="", max_length=2000)
     role: Optional[str] = Field(default="security_analyst", max_length=128)
     timestamp: Optional[str] = Field(None, max_length=50)
+    data_source: Optional[str] = Field(default="LIVE", max_length=20)
+    finding_snapshot_hash: Optional[str] = Field(default=None, max_length=64)
 
     @field_validator("analyst_decision", "analyst_action", mode="before")
     @classmethod

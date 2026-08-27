@@ -1,64 +1,65 @@
 {
   "schema_version": "1.0",
-  "generated_at": "2026-08-20T09:10:00Z",
+  "generated_at": "2026-08-26T21:00:00Z",
   "summary": {
-    "raw_findings": 18,
-    "unique_findings": 10,
-    "duplicates_correlated": 8,
-    "duplicate_reduction_rate": 0.4444,
-    "likely_noise_findings": 1,
-    "actionable_findings": 9,
-    "critical": 2,
-    "high": 4,
-    "medium": 3,
+    "raw_findings": 12,
+    "unique_findings": 5,
+    "duplicates_correlated": 7,
+    "duplicate_reduction_rate": 0.583,
+    "likely_noise_findings": 0,
+    "actionable_findings": 5,
+    "critical": 1,
+    "high": 3,
+    "medium": 0,
     "low": 1,
-    "open_tickets": 9,
-    "sla_breaches": 1
+    "open_tickets": 5,
+    "sla_breaches": 0,
+    "sla_at_risk": 1
   },
   "top_risks": [
     {
       "finding_id": "DEDUP-0001",
       "vulnerability_name": "SQL Injection",
       "asset_id": "ASSET-PAY-001",
-      "risk_score": 94,
-      "risk_level": "CRITICAL",
-      "confidence_classification": "CONFIRMED",
+      "risk_score": 78,
+      "risk_level": "HIGH",
+      "confidence_classification": "HIGH_CONFIDENCE",
       "sla_status": "ON_TRACK"
     },
     {
       "finding_id": "DEDUP-0002",
-      "vulnerability_name": "Remote Code Execution",
-      "asset_id": "ASSET-AUTH-002",
-      "risk_score": 91,
+      "vulnerability_name": "Apache Log4j Remote Code Execution (Log4Shell)",
+      "asset_id": "ASSET-WEB-001",
+      "risk_score": 94,
       "risk_level": "CRITICAL",
-      "confidence_classification": "CONFIRMED",
-      "sla_status": "AT_RISK"
-    },
-    {
-      "finding_id": "DEDUP-0006",
-      "vulnerability_name": "Authentication Bypass",
-      "asset_id": "ASSET-ERP-006",
-      "risk_score": 88,
-      "risk_level": "HIGH",
-      "confidence_classification": "CONFIRMED",
-      "sla_status": "BREACHED"
-    },
-    {
-      "finding_id": "DEDUP-0009",
-      "vulnerability_name": "Server-Side Request Forgery",
-      "asset_id": "ASSET-FEE-009",
-      "risk_score": 84,
-      "risk_level": "HIGH",
       "confidence_classification": "CONFIRMED",
       "sla_status": "AT_RISK"
     },
     {
       "finding_id": "DEDUP-0003",
-      "vulnerability_name": "Cross-Site Scripting",
-      "asset_id": "ASSET-STUDENT-003",
-      "risk_score": 78,
+      "vulnerability_name": "Spring Framework RCE (Spring4Shell)",
+      "asset_id": "ASSET-WEB-001",
+      "risk_score": 88,
+      "risk_level": "HIGH",
+      "confidence_classification": "CONFIRMED",
+      "sla_status": "ON_TRACK"
+    },
+    {
+      "finding_id": "DEDUP-0004",
+      "vulnerability_name": "OpenSSL Buffer Overflow in X.509 Certificate Verification",
+      "asset_id": "ASSET-PAY-001",
+      "risk_score": 65,
       "risk_level": "HIGH",
       "confidence_classification": "HIGH_CONFIDENCE",
+      "sla_status": "ON_TRACK"
+    },
+    {
+      "finding_id": "DEDUP-0005",
+      "vulnerability_name": "X-Content-Type-Options Header Missing",
+      "asset_id": "ASSET-PAY-001",
+      "risk_score": 18,
+      "risk_level": "LOW",
+      "confidence_classification": "NEEDS_REVIEW",
       "sla_status": "ON_TRACK"
     }
   ]

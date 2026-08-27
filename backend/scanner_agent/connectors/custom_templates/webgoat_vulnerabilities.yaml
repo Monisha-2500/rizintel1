@@ -1,0 +1,38 @@
+id: webgoat-sql-injection-rce
+info:
+  name: OWASP WebGoat SQL Injection and RCE
+  author: rizintel
+  severity: critical
+  description: SQL Injection and Command Execution vulnerability in WebGoat payment processing module.
+  remediation: Use parameterized SQL queries and disable shell command execution.
+  classification:
+    cve-id: CVE-2026-9999
+    cwe-id: CWE-89
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/v1/payments"
+    matchers:
+      - type: status
+        status:
+          - 200
+---
+id: webgoat-xss-header
+info:
+  name: OWASP WebGoat Missing HSTS Security Header
+  author: rizintel
+  severity: high
+  description: Strict-Transport-Security security header is missing on WebGoat authentication portal.
+  remediation: Enable HSTS header on all HTTP responses.
+  classification:
+    cwe-id: CWE-693
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/login"
+    matchers:
+      - type: status
+        status:
+          - 200

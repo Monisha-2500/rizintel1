@@ -38,7 +38,7 @@ import re
 from datetime import datetime
 from typing import List, Optional
 
-from schema import StandardFinding, Severity, generate_finding_id
+from schema import StandardFinding, Severity, generate_source_id
 from scanner_adapters.base import BaseAdapter, register_adapter
 
 # Wapiti's "level" is an integer, 1-3 in practice (occasionally higher).
@@ -89,8 +89,22 @@ class WapitiAdapter(BaseAdapter):
                     level = inst.get("level", 1)
                     severity = _WAPITI_LEVEL_MAP.get(level, Severity.INFO)
 
+                    # Extract port from host URL if available
+                    _port = ""
+                    if "://" in host:
+                        from urllib.parse import urlparse
+                        _parsed = urlparse(host)
+                        _port = str(_parsed.port) if _parsed.port else ""
+
                     findings.append(StandardFinding(
-                        finding_id=generate_finding_id("Wapiti", host + path, vuln_type, "", param or ""),
+                        finding_id=generate_source_id(
+                            scanner="WAPITI",
+                            host=host,
+                            vuln_name=vuln_type,
+                            endpoint=path,
+                            port=_port,
+                            discriminator=param or "",
+                        ),
                         scanner="Wapiti",
                         cve=cve,
                         cwe=cwe,

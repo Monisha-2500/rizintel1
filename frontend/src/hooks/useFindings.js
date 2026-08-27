@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { getFindings } from '../services/findingsService';
+import { getFindings, getScanRunFindings } from '../services/findingsService';
 import { sortFindings } from '../utils/priorityQueue';
 
-export function useFindings() {
+export function useFindings(scanRunId = null, orgId = null) {
   const [findings, setFindings]   = useState([]);
   const [loading,  setLoading]    = useState(true);
   const [error,    setError]      = useState(null);
@@ -10,21 +10,29 @@ export function useFindings() {
   useEffect(() => {
     let cancelled = false;
 
-    const loadData = () => {
+    const loadData = async () => {
       setLoading(true);
-      getFindings()
-        .then(data => {
-          if (!cancelled) {
-            setFindings(sortFindings(data));
-            setLoading(false);
-          }
-        })
-        .catch(err => {
-          if (!cancelled) {
-            setError(err.message);
-            setLoading(false);
-          }
-        });
+      setError(null);
+      try {
+        let rawFindings = [];
+        if (scanRunId && orgId) {
+          const scoped = await getScanRunFindings(orgId, scanRunId);
+          rawFindings = scoped.findings || [];
+        } else if (orgId || scanRunId) {
+          rawFindings = await getFindings({ org_id: orgId, scan_run_id: scanRunId });
+        } else {
+          rawFindings = await getFindings();
+        }
+        if (!cancelled) {
+          setFindings(sortFindings(rawFindings));
+          setLoading(false);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err.message || 'Failed to load findings');
+          setLoading(false);
+        }
+      }
     };
 
     loadData();
@@ -38,7 +46,7 @@ export function useFindings() {
       cancelled = true;
       window.removeEventListener('rizintel-datamode-change', handleModeChange);
     };
-  }, []);
+  }, [scanRunId, orgId]);
 
   return { findings, loading, error };
 }
