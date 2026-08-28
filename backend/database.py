@@ -429,8 +429,7 @@ def init_db():
             conn.execute("CREATE INDEX IF NOT EXISTS idx_tickets_org_finding ON tickets(organization_id, finding_id);")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_tickets_org_status ON tickets(organization_id, status);")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_tickets_due_at ON tickets(due_at ASC);")
-            conn.execute("CREATE INDEX IF NOT EXISTS idx_ticket_history_ticket ON ticket_history(ticket_id, id);")
-
+            
             # Seed a mock scanner agent with all capabilities if not present (for demo/eval ease)
             existing_mock = conn.execute(
                 "SELECT 1 FROM scanner_agents WHERE agent_id = 'mock-scanner-agent-001'"
