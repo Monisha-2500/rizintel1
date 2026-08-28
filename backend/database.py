@@ -429,7 +429,35 @@ def init_db():
             conn.execute("CREATE INDEX IF NOT EXISTS idx_tickets_org_finding ON tickets(organization_id, finding_id);")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_tickets_org_status ON tickets(organization_id, status);")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_tickets_due_at ON tickets(due_at ASC);")
-            
+            conn.execute("CREATE INDEX IF NOT EXISTS idx_ticket_history_ticket ON ticket_history(ticket_id, id);")
+            # Seed the demo organization if not present (ensures foreign keys do not fail in production env)
+            existing_org = conn.execute(
+                "SELECT 1 FROM organizations WHERE organization_id = 'ORG-DEMO-001'"
+            ).fetchone()
+            if not existing_org:
+                conn.execute(
+                    """
+                    INSERT INTO organizations (organization_id, display_name, created_at, is_active)
+                    VALUES ('ORG-DEMO-001', 'RizIntel Demo Organization', ?, 1)
+                    """,
+                    (datetime.now(timezone.utc).isoformat(),),
+                )
+                
+                # Seed memberships for demo users
+                role_map = {
+                    "usr-viewer-001": "VIEWER",
+                    "usr-analyst-002": "ANALYST",
+                    "usr-lead-003": "SECURITY_LEAD",
+                    "usr-admin-004": "ADMIN",
+                }
+                for user_id, role in role_map.items():
+                    conn.execute(
+                        """
+                        INSERT OR IGNORE INTO organization_memberships (membership_id, organization_id, user_id, role, created_at, is_active)
+                        VALUES (?, 'ORG-DEMO-001', ?, ?, ?, 1)
+                        """,
+                        (f"MEM-ORG-DEMO-001-{user_id}", user_id, role, datetime.now(timezone.utc).isoformat()),
+                    )
             # Seed a mock scanner agent with all capabilities if not present (for demo/eval ease)
             existing_mock = conn.execute(
                 "SELECT 1 FROM scanner_agents WHERE agent_id = 'mock-scanner-agent-001'"
