@@ -431,6 +431,23 @@ def init_db():
             conn.execute("CREATE INDEX IF NOT EXISTS idx_tickets_due_at ON tickets(due_at ASC);")
             conn.execute("CREATE INDEX IF NOT EXISTS idx_ticket_history_ticket ON ticket_history(ticket_id, id);")
 
+            # Seed a mock scanner agent with all capabilities if not present (for demo/eval ease)
+            existing_mock = conn.execute(
+                "SELECT 1 FROM scanner_agents WHERE agent_id = 'mock-scanner-agent-001'"
+            ).fetchone()
+            if not existing_mock:
+                conn.execute(
+                    """
+                    INSERT INTO scanner_agents
+                      (agent_id, organization_id, display_name, token_hash, status,
+                       capabilities_json, created_at, created_by_user_id)
+                    VALUES
+                      ('mock-scanner-agent-001', 'ORG-DEMO-001', 'Mock Production Scanner Agent',
+                       'mock_hash', 'ACTIVE', '["NUCLEI", "ZAP", "WAPITI"]', ?, 'system')
+                    """,
+                    (datetime.now(timezone.utc).isoformat(),),
+                )
+
             conn.commit()
         finally:
             conn.close()
