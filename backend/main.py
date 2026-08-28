@@ -50,8 +50,8 @@ else:
         allow_origins=_origins,
         allow_origin_regex=r"https://.*\.vercel\.app",
         allow_credentials=True,
-        allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        allow_headers=["Content-Type", "X-User-Role", "X-User-Name", "Authorization", "Last-Event-ID", "Cache-Control"],
+        allow_methods=["*"],
+        allow_headers=["*"],
         expose_headers=["X-RizIntel-Chain-Valid", "Last-Event-ID"],
         max_age=600,
     )
